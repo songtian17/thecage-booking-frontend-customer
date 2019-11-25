@@ -1,4 +1,4 @@
-# thecage-booking-frontend-customer
+# TheCage Mobile/Web Booking Application - Frontend (Customer Interface)
 
 ## Project setup
 ```
