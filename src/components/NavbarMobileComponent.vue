@@ -11,7 +11,7 @@
     <transition name="scale-in">
       <div v-if="menuActive" class="menu">
         <router-link to="/calendar" @click.native="closeMenu">Booking Calendar</router-link>
-        <router-link to="/about" @click.native="closeMenu">Contact Us</router-link>
+        <a href="https://thecage.com.sg/contact.html" target="_blank" @click="closeMenu">Contact Us</a>
         <router-link to="/signin" @click.native="closeMenu">Sign In</router-link>
       </div>
     </transition>

@@ -5,7 +5,7 @@
     </router-link>
     <span class="nav-links">
       <router-link to="/calendar">Booking Calendar</router-link>
-      <router-link to="/about">Contact Us</router-link>
+      <a href="https://thecage.com.sg/contact.html" target="_blank">Contact Us</a>
       <router-link to="/signin">Sign In</router-link>
     </span>
   </div>
