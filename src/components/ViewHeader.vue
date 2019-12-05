@@ -1,15 +1,18 @@
 <template>
-  <div class="header">
-    <p>
-      THE CAGE <br />
-      BOOKING SYSTEM.
-    </p>
+  <div class="header" :class="{ main }">
+    <slot></slot>
   </div>
 </template>
 
 <script>
 export default {
   name: 'ViewHeader',
+  props: {
+    main: {
+      default: () => true,
+      type: Boolean,
+    },
+  },
 };
 </script>
 
@@ -17,13 +20,13 @@ export default {
 .header {
   width: 100%;
   background-color: $primary;
+  padding: 20px 24px;
+  @include montserrat(20px, 600);
+  color: white;
 
-  p {
+  &.main {
     padding: 40px 24px;
-    font-family: "Montserrat", sans-serif;
-    font-size: 23px;
-    font-weight: 700;
-    color: white;
+    @include montserrat(22px, 700);
   }
 }
 </style>

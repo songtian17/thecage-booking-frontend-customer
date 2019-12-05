@@ -1,6 +1,9 @@
 <template>
   <div>
-    <view-header></view-header>
+    <view-header>
+      THE CAGE <br />
+      BOOKING SYSTEM
+    </view-header>
     <div class="container">
       <div class="header">Sign In</div>
       <form @submit.prevent="submit">
