@@ -47,12 +47,12 @@ export default {
   margin: 15px 30px;
 
   .line {
-    width: 40px;
+    width: 30px;
     height: 5px;
     display: block;
     background-color: black;
     border-radius: 3px;
-    margin: 7px auto;
+    margin: 5px auto;
     transition: all 0.2s ease-in-out;
   }
 
@@ -61,7 +61,7 @@ export default {
   }
 
   &.active .line:nth-child(1) {
-    transform: translateY(12px) rotate(45deg);
+    transform: translateY(10px) rotate(45deg);
   }
 
   &.active .line:nth-child(2) {
@@ -69,7 +69,7 @@ export default {
   }
 
   &.active .line:nth-child(3) {
-    transform: translateY(-12px) rotate(-45deg);
+    transform: translateY(-10px) rotate(-45deg);
   }
 }
 
@@ -82,16 +82,7 @@ export default {
   animation: scale-in-ver-top 0.3s reverse;
 }
 
-@keyframes scale-in-ver-top {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  100% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-}
+@include animation-scale-in;
 // --- end of scale-in transition ---
 
 // mobile menu
