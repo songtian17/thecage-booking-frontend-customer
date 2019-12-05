@@ -36,15 +36,15 @@ export default {
 }
 
 #connect-with-us {
-  @include montserrat(16px, 600);
+  @include montserrat($h4, 600);
 }
 
 .contact {
-  @include montserrat(14px, 400);
+  @include montserrat($h5, 400);
 }
 
 .copyright {
-  @include montserrat(12px, 400);
+  @include montserrat($h6, 400);
   background-color: black;
 }
 </style>

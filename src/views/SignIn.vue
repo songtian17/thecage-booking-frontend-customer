@@ -72,14 +72,14 @@ export default {
     background-color: $primary;
     color: white;
     padding: 16px;
-    @include montserrat(20px, 600);
+    @include montserrat($h3, 600);
   }
 
   form {
     padding: 16px;
 
     label {
-      @include montserrat(14px, 400);
+      @include montserrat($h5, 400);
     }
 
     input:not(#submit) {
@@ -96,7 +96,7 @@ export default {
       a {
         @media screen and (max-width: 400px) {
           margin-right: 10px;
-          @include montserrat(12px, 500);
+          @include montserrat($h6, 500);
         }
 
         margin-right: 24px;
@@ -104,7 +104,7 @@ export default {
         display: inline-block;
         text-decoration: none;
         color: #428bca;
-        @include montserrat(14px, 500);
+        @include montserrat($h5, 500);
       }
 
       #submit {
@@ -113,7 +113,7 @@ export default {
         padding: 6px 12px;
         border-radius: 4px;
         float: right;
-        @include montserrat(16px, 500);
+        @include montserrat($h4, 500);
       }
     }
   }

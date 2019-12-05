@@ -95,7 +95,7 @@ export default {
   background-color: white;
 
   a {
-    @include montserrat(18px, 500, italic);
+    @include montserrat($h3, 500, italic);
     text-decoration-line: none;
     display: block;
     padding: 24px;

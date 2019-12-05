@@ -111,7 +111,7 @@ hr {
     }
 
   .collapsable {
-    @include montserrat(18px, 600);
+    @include montserrat($h3, 600);
     color: $primary;
 
     &:hover {
@@ -127,9 +127,8 @@ hr {
   .field {
     margin: 0.4em 2em;
 
-
     a {
-      @include montserrat(18px, 500);
+      @include montserrat($h4, 500);
       color: black;
       text-decoration: none;
     }

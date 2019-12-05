@@ -38,8 +38,8 @@ export default {
 
   // links excluding TheCage logo
   .nav-links a {
-    $fontSize: 18px;
-    @include montserrat($fontSize, 500);
+    $fontSize: $h4;
+    @include montserrat($fontSize, 600);
     float: right;
     color: black;
     margin-top: ($navbarHeight - $fontSize) / 2;

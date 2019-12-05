@@ -21,12 +21,12 @@ export default {
   width: 100%;
   background-color: $primary;
   padding: 20px 24px;
-  @include montserrat(20px, 600);
+  @include montserrat($h2, 600);
   color: white;
 
   &.main {
     padding: 40px 24px;
-    @include montserrat(22px, 700);
+    @include montserrat($h1, 700);
   }
 }
 </style>
