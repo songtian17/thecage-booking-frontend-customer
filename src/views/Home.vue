@@ -1,6 +1,9 @@
 <template>
   <div>
-    <view-header></view-header>
+    <view-header :main="true">
+      THE CAGE <br />
+      BOOKING SYSTEM
+    </view-header>
     <div class="home">
       <div class="announcement" v-html="announcement1"></div>
       <div class="main">
