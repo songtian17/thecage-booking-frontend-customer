@@ -13,7 +13,7 @@
           <div v-for="venue in venues" :key="venue.name" class="venue">
             <div class="collapsable" @click="venue.active = !venue.active">
               {{ venue.name }} Calendar
-              <v-icon>{{ venue.active ? 'mdi-minus' : 'mdi-plus' }}</v-icon>
+              <v-icon>{{ venue.active ? "mdi-minus" : "mdi-plus" }}</v-icon>
             </div>
             <transition-expand>
               <div v-if="venue.active" class="field-list">
@@ -40,8 +40,7 @@ export default {
   data() {
     return {
       // TODO: replace mock data with data from backend
-      announcement1:
-        '<h1>Hot Deals!</h1><p>Special 30% discount for students now!</p>',
+      announcement1: '<h1>Hot Deals!</h1><p>Special 30% discount for students now!</p>',
       announcement2:
         '<h1>News</h1><p>Kalling 5-A-Side field will be shortly closed due to maintenance</p>',
       venues: [
@@ -106,9 +105,9 @@ hr {
 .venue {
   margin: 14px 40px;
 
-    @media screen and (max-width: 400px) {
-      margin: 14px 0;
-    }
+  @media screen and (max-width: 400px) {
+    margin: 14px 0;
+  }
 
   .collapsable {
     @include montserrat($h3, 600);

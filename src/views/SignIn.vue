@@ -51,12 +51,12 @@ export default {
     box-shadow: none;
   }
 
-  margin-top: 40px;
+  margin: 40px auto;
   width: 400px;
   padding: 0;
   border-radius: 4px;
-  box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2),
-    0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12);
+  box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14),
+    0px 5px 22px 4px rgba(0, 0, 0, 0.12);
 
   .header {
     @media screen and (max-width: 400px) {
@@ -114,6 +114,7 @@ export default {
         border-radius: 4px;
         float: right;
         @include montserrat($h4, 500);
+        cursor: pointer;
       }
     }
   }

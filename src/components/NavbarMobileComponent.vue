@@ -11,7 +11,9 @@
     <transition name="scale-in">
       <div v-if="menuActive" class="menu">
         <router-link to="/calendar" @click.native="closeMenu">Booking Calendar</router-link>
-        <a href="https://thecage.com.sg/contact.html" target="_blank" @click="closeMenu">Contact Us</a>
+        <a href="https://thecage.com.sg/contact.html" target="_blank" @click="closeMenu"
+          >Contact Us</a
+        >
         <router-link to="/signin" @click.native="closeMenu">Sign In</router-link>
       </div>
     </transition>
@@ -37,12 +39,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// $navbarHeight: 68px;
-
 // hamburger menu icon
 .nav-icon {
-  height: 40px;
-  width: 40px;
   float: right;
   margin: 15px 30px;
 
@@ -98,7 +96,7 @@ export default {
     @include montserrat($h3, 500, italic);
     text-decoration-line: none;
     display: block;
-    padding: 24px;
+    padding: 12px 24px;
     margin: 1px 0;
     width: 100%;
     background-color: $primary;
