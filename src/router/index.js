@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import SignIn from '@/views/SignIn.vue';
 import SignUp from '@/views/SignUp.vue';
+import ForgetPassword from '@/views/ForgetPassword.vue';
 
 Vue.use(VueRouter);
 
@@ -21,6 +22,11 @@ const routes = [
     path: '/signup',
     name: 'signup',
     component: SignUp,
+  },
+  {
+    path: '/resetpassword',
+    name: 'forgetpassword',
+    component: ForgetPassword,
   },
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
