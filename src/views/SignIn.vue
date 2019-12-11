@@ -6,14 +6,14 @@
     </view-header>
     <div class="container">
       <div class="header">Sign In</div>
-      <form @submit.prevent="submit">
+      <form @submit.prevent="submitForm">
         <label for="email">Email</label>
         <br />
-        <input id="email" type="text" name="email" />
+        <input id="email" v-model="email" type="text" name="email" />
         <br />
         <label for="password">Password</label>
         <br />
-        <input id="password" type="password" name="password" />
+        <input id="password" v-model="password" type="password" name="password" />
         <br />
         <div class="actions">
           <router-link to="/resetpassword">Forget Password?</router-link>
@@ -33,11 +33,19 @@ export default {
   components: {
     ViewHeader,
   },
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
   methods: {
-    submit() {
-      // TODO: submit form data to back end,
-      // add jwt token to localstorage,
-      // push router back by 1
+    submitForm() {
+      this.$store.dispatch('login', { user: this.email, password: this.password }).then(() => {
+        this.$router.back(1);
+      }).catch((err) => {
+        console.log(err);
+      });
     },
   },
 };
