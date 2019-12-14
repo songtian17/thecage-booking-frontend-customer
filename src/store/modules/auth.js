@@ -4,7 +4,7 @@ import axios from 'axios';
 const state = {
   token: localStorage.getItem('user-token') || '',
   status: '',
-  user: {},
+  user: localStorage.getItem('user-name') || '',
 };
 
 const getters = {
@@ -16,17 +16,29 @@ const getters = {
 const actions = {
   login: ({ commit }, credentials) => new Promise((resolve, reject) => {
     commit('authRequest');
-    axios.post(`${process.env.VUE_APP_API}/login`, credentials).then((resp) => {
-      const { token, user } = resp.data;
-      localStorage.setItem('user-token', token);
-      axios.defaults.headers.common.Authorization = token;
-      commit('authSuccess', { token, user });
-      resolve(resp);
-    }).catch((err) => {
-      commit('authError');
-      localStorage.removeItem('user-token');
-      reject(err);
-    });
+    axios
+      .post(`${process.env.VUE_APP_API}/login`, credentials)
+      .then((resp) => {
+        const { token, user } = resp.data;
+        localStorage.setItem('user-token', token);
+        localStorage.setItem('user-name', user);
+        axios.defaults.headers.common.Authorization = token;
+        commit('authSuccess', { token, user });
+        resolve(resp);
+      })
+      .catch((err) => {
+        commit('authError');
+        localStorage.removeItem('user-token');
+        localStorage.removeItem('user-name');
+        reject(err);
+      });
+  }),
+  logout: ({ commit }) => new Promise((resolve) => {
+    commit('logout');
+    localStorage.removeItem('user-token');
+    localStorage.removeItem('user-name');
+    delete axios.defaults.headers.common.Authorization;
+    resolve();
   }),
 };
 
@@ -41,6 +53,11 @@ const mutations = {
   },
   authError: (state) => {
     state.status = 'error';
+  },
+  logout: (state) => {
+    state.status = '';
+    state.token = '';
+    state.user = {};
   },
 };
 
