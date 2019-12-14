@@ -6,7 +6,18 @@
     <span class="nav-links">
       <router-link to="/calendar">Booking Calendar</router-link>
       <a href="https://thecage.com.sg/contact.html" target="_blank">Contact Us</a>
-      <router-link to="/signin">Sign In</router-link>
+      <router-link v-if="!isLoggedIn" to="/signin">Sign In</router-link>
+      <div v-else class="dropdown">
+        <span @click="dropdownExpanded = !dropdownExpanded"
+          >{{ user }} <v-icon>mdi-chevron-down</v-icon>
+        </span>
+        <div v-if="dropdownExpanded" class="dropdown-menu">
+          <a class="dropdown-item">Cart</a>
+          <a class="dropdown-item">Account Settings</a>
+          <a class="dropdown-item">Upcoming Games</a>
+          <a class="dropdown-item" @click="logout">Sign Out</a>
+        </div>
+      </div>
     </span>
   </div>
 </template>
@@ -14,6 +25,26 @@
 <script>
 export default {
   name: 'NavbarDesktopComponent',
+  data() {
+    return {
+      dropdownExpanded: 'false',
+    };
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
+    user() {
+      return this.$store.getters.currentUser;
+    },
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch('logout').then(() => {
+        this.$router.push('/');
+      });
+    },
+  },
 };
 </script>
 
@@ -21,19 +52,18 @@ export default {
 // navbar
 .nav {
   background-color: whitesmoke;
-  overflow: hidden;
   height: $navbarHeight;
-  display: inline-block;
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   .logo {
-    display: inline-block;
+    margin-left: 24px;
     height: 100%;
   }
 
   img {
     height: $navbarHeight;
-    padding-left: 24px;
   }
 
   // links excluding TheCage logo
@@ -41,13 +71,41 @@ export default {
     $fontSize: $h4;
     @include montserrat($fontSize, 600);
     line-height: $fontSize;
-    float: right;
-    margin-top: ($navbarHeight - $fontSize) / 2;
+    margin-right: 30px;
 
     a {
       color: black;
-      margin-right: 60px;
+      margin: 0 30px;
       text-decoration-line: none;
+    }
+
+    .dropdown {
+      display: inline-flex;
+      cursor: pointer;
+      flex-direction: column;
+      padding: 0 30px;
+
+      .dropdown-menu {
+        position: absolute;
+        top: $navbarHeight;
+        margin: 0;
+        z-index: 10;
+        right: 0;
+        padding-right: 50px;
+        background-color: grey;
+
+        a {
+          display: block;
+          padding: 0;
+        }
+
+        .dropdown-item {
+          padding: 8px 0;
+          text-align: center;
+          @include montserrat($h5, 500);
+          width: 100%;
+        }
+      }
     }
   }
 }
