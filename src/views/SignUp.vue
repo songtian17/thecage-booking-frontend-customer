@@ -6,7 +6,7 @@
     </view-header>
     <div class="container">
       <div class="header">Sign Up</div>
-      <form @submit.prevent="submit">
+      <form @submit.prevent="submitForm">
         <label for="email">Email</label>
         <br />
         <input id="email" type="text" name="email" />
@@ -36,14 +36,30 @@ import ViewHeader from '@/components/ViewHeader.vue';
 
 export default {
   name: 'SignUp',
+  data() {
+    return {
+      email: '',
+      name: '',
+      phone: '',
+      password: '',
+      confirmPassword: '',
+    };
+  },
   components: {
     ViewHeader,
   },
   methods: {
-    submit() {
-      // TODO: submit form data to back end,
-      // add jwt token to localstorage,
-      // push router back by 1
+    submitForm() {
+      this.$axios.post(`${process.env.VUE_APP_API}/register`, {
+        email: this.email,
+        name: this.name,
+        phone: this.phone,
+        password: this.password,
+      }).then(() => {
+        this.$router.push('/');
+      }).catch((err) => {
+        console.log(err);
+      });
     },
   },
 };
