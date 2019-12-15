@@ -13,7 +13,7 @@
         </span>
         <div v-if="dropdownExpanded" class="dropdown-menu">
           <a class="dropdown-item">Cart</a>
-          <a class="dropdown-item">Account Settings</a>
+          <router-link to="/account" class="dropdown-item">Account Settings</router-link>
           <a class="dropdown-item">Upcoming Games</a>
           <a class="dropdown-item" @click="logout">Sign Out</a>
         </div>

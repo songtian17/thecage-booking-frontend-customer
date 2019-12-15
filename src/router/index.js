@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue';
 import SignIn from '@/views/SignIn.vue';
 import SignUp from '@/views/SignUp.vue';
 import ForgetPassword from '@/views/ForgetPassword.vue';
+import AccountSettings from '@/views/AccountSettings.vue';
 
 Vue.use(VueRouter);
 
@@ -27,6 +28,11 @@ const routes = [
     path: '/resetpassword',
     name: 'forgetpassword',
     component: ForgetPassword,
+  },
+  {
+    path: '/account',
+    name: 'accountsettings',
+    component: AccountSettings,
   },
   {
     path: '/calendar',
