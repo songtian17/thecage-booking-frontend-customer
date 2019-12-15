@@ -9,12 +9,18 @@
       <span class="line"></span>
     </div>
     <transition name="scale-in">
-      <div v-if="menuActive" class="menu">
-        <router-link to="/calendar" @click.native="closeMenu">Booking Calendar</router-link>
+      <div v-if="menuActive" class="menu" @click="closeMenu">
+        <router-link to="/calendar">Booking Calendar</router-link>
         <a href="https://thecage.com.sg/contact.html" target="_blank" @click="closeMenu"
           >Contact Us</a
         >
-        <router-link to="/signin" @click.native="closeMenu">Sign In</router-link>
+        <router-link v-if="!isLoggedIn" to="/signin">Sign In</router-link>
+        <span v-else>
+          <a>Cart</a>
+          <router-link to="/account">Account Settings</router-link>
+          <a>Upcoming Games</a>
+          <a @click="logout">Sign Out</a>
+        </span>
       </div>
     </transition>
   </div>
@@ -28,11 +34,21 @@ export default {
       menuActive: false,
     };
   },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters.isAuthenticated;
+    },
+  },
   methods: {
     closeMenu() {
       if (this.menuActive) {
         this.menuActive = false;
       }
+    },
+    logout() {
+      this.$store.dispatch('logout').then(() => {
+        this.$router.push('/');
+      });
     },
   },
 };
@@ -107,19 +123,18 @@ export default {
 // navbar
 .nav {
   background-color: whitesmoke;
-  overflow: hidden;
   height: $navbarHeight;
-  display: inline-block;
-  vertical-align: middle;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 
   .logo {
-    display: inline-block;
+    margin-left: 24px;
     height: 100%;
   }
 
   img {
     height: $navbarHeight;
-    padding-left: 24px;
   }
 }
 </style>
