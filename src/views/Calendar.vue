@@ -12,8 +12,18 @@
       <label>Your slot</label>
       <input type="checkbox" class="calendar-checkbox" disabled />
       <label>Booked</label>
+      <div class="calendar-type-toggle">
+        <label>
+          <input v-model="calendarType" type="radio" name="calendar-type" value="week" />
+          <span>Week</span>
+        </label>
+        <label>
+          <input v-model="calendarType" type="radio" name="calendar-type" value="day" />
+          <span>Day</span>
+        </label>
     </div>
-    <calendar-daily :date="selectedDate"></calendar-daily>
+  </div>
+    <calendar-daily v-show="calendarType === 'day'" :date="selectedDate"></calendar-daily>
   </div>
 </template>
 
@@ -27,6 +37,7 @@ export default {
   data() {
     return {
       selectedDate: '',
+      calendarType: 'day',
     };
   },
   components: {
@@ -44,8 +55,35 @@ export default {
 
 <style lang="scss" scoped>
 .legend {
-  text-align: center;
+  width: 80%;
   margin: 20px auto;
+  text-align: center;
+
+  .calendar-type-toggle {
+    float: right;
+
+    label {
+      margin: 0;
+    }
+
+    span {
+      @include montserrat($h4, 500);
+      padding: 6px 12px;
+      border: 1px solid $secondary;
+      background-color: white;
+      color: black;
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      display: none;
+
+      &:checked + span {
+        background-color: $primary;
+        color: white;
+      }
+    }
+  }
 
   label {
     margin: 0 20px 0 12px;
