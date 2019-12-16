@@ -1,14 +1,5 @@
 <template>
   <div>
-    <div class="legend">
-      <input id="checkbox-1-1" type="checkbox" class="calendar-checkbox" @click.prevent />
-      <label>Available</label>
-      <input type="checkbox" class="calendar-checkbox" checked @click.prevent />
-      <label>Your slot</label>
-      <input type="checkbox" class="calendar-checkbox" disabled />
-      <label>Booked</label>
-    </div>
-
     <table class="calendar">
       <thead>
         <td></td>
@@ -145,16 +136,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.legend {
-  text-align: center;
-  margin: 20px auto;
-
-  label {
-    margin: 0 20px 0 12px;
-    @include montserrat($h4, 400)
-  }
-}
-
 .calendar {
   width: 80%;
   margin: auto;
@@ -205,10 +186,6 @@ export default {
 
   &:disabled {
     background-color: #808080;
-  }
-
-  .legend & {
-    padding: 12px;
   }
 
   .calendar & {
