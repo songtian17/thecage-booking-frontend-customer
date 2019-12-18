@@ -1,6 +1,6 @@
 <template>
   <div class="nav">
-    <router-link to="/" class="logo" @click.native="closeMenu">
+    <router-link to="/" class="logo">
       <img src="@/assets/logo.jpeg" alt="TheCage Logo" />
     </router-link>
     <span class="nav-links">
