@@ -56,21 +56,21 @@ export default {
       const [year, month, day] = date.split('-');
       return `${day}/${month}/${year}`;
     },
-    formatDateObject(Date) {
-      const year = Date.getFullYear();
-      const month = String(Date.getMonth()).padStart(2, '0');
-      const day = String(Date.getDate()).padStart(2, '0');
+    formatDateObject(dateObject) {
+      const year = dateObject.getFullYear();
+      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObject.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
     },
     selectNextDay() {
       const [currentDay, currentMonth, currentYear] = this.selectedDate.split('/');
-      const currentDate = new Date(currentYear, currentMonth, currentDay);
+      const currentDate = new Date(currentYear, currentMonth - 1, currentDay);
       currentDate.setDate(currentDate.getDate() + 1);
       this.date = this.formatDateObject(currentDate);
     },
     selectPrevDay() {
       const [currentDay, currentMonth, currentYear] = this.selectedDate.split('/');
-      const currentDate = new Date(currentYear, currentMonth, currentDay);
+      const currentDate = new Date(currentYear, currentMonth - 1, currentDay);
       currentDate.setDate(currentDate.getDate() - 1);
       this.date = this.formatDateObject(currentDate);
     },

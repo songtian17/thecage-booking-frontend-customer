@@ -8,11 +8,11 @@
       </table>
     </div>
     <calendar-weekly-day
-      v-for="date in datesDisplayed"
-      :key="date"
+      v-for="i in 7"
+      :key="i"
       :timings="timings"
       :pitches="pitches"
-      :date="date"
+      :date="datesDisplayed[i - 1]"
     ></calendar-weekly-day>
   </div>
 </template>
@@ -109,6 +109,11 @@ export default {
   computed: {
     datesDisplayed() {
       const dates = [];
+
+      if (this.date === '') {
+        return [];
+      }
+
       for (let i = -3; i <= 3; i += 1) {
         const dateObject = this.toDateObject(this.date);
         const shiftedDateObject = this.shiftDateByDays(dateObject, i);
@@ -121,12 +126,12 @@ export default {
   methods: {
     toDateObject(displayDate) {
       const [day, month, year] = displayDate.split('/');
-      return new Date(year, month, day);
+      return new Date(year, month - 1, day);
     },
     toDateDisplayString(dateObject) {
       const day = weekdays[dateObject.getDay()];
-      const date = dateObject.getDate();
-      const month = dateObject.getMonth();
+      const date = String(dateObject.getDate()).padStart(2, '0');
+      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
       return `${day}, ${date}/${month}`;
     },
     shiftDateByDays(dateObject, numDays) {
