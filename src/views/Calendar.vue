@@ -13,7 +13,7 @@
         <label>Your slot</label>
         <input type="checkbox" class="calendar-checkbox" disabled />
         <label>Booked</label>
-        <div class="calendar-type-toggle">
+        <div v-if="isDesktop" class="calendar-type-toggle">
           <label>
             <input v-model="calendarType" type="radio" name="calendar-type" value="week" />
             <span>Week</span>
@@ -25,7 +25,11 @@
         </div>
       </div>
       <calendar-daily v-show="calendarType === 'day'" :date="selectedDate"></calendar-daily>
-      <calendar-weekly v-show="calendarType === 'week'" :date="selectedDate"></calendar-weekly>
+      <calendar-weekly
+        v-if="isDesktop"
+        v-show="calendarType === 'week'"
+        :date="selectedDate"
+      ></calendar-weekly>
     </div>
   </div>
 </template>
@@ -50,9 +54,21 @@ export default {
     CalendarDaily,
     CalendarWeekly,
   },
+  computed: {
+    isDesktop() {
+      return this.$vuetify.breakpoint.width >= 1280;
+    },
+  },
   methods: {
     changeSelectedDate(newDate) {
       this.selectedDate = newDate;
+    },
+  },
+  watch: {
+    isDesktop(bool) {
+      if (!bool) {
+        this.calendarType = 'day';
+      }
     },
   },
 };
