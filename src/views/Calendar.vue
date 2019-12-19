@@ -5,25 +5,28 @@
       <br />
       <calendar-date-picker @change="changeSelectedDate"></calendar-date-picker>
     </view-header>
-    <div class="legend">
-      <input id="checkbox-1-1" type="checkbox" class="calendar-checkbox" @click.prevent />
-      <label>Available</label>
-      <input type="checkbox" class="calendar-checkbox" checked @click.prevent />
-      <label>Your slot</label>
-      <input type="checkbox" class="calendar-checkbox" disabled />
-      <label>Booked</label>
-      <div class="calendar-type-toggle">
-        <label>
-          <input v-model="calendarType" type="radio" name="calendar-type" value="week" />
-          <span>Week</span>
-        </label>
-        <label>
-          <input v-model="calendarType" type="radio" name="calendar-type" value="day" />
-          <span>Day</span>
-        </label>
+    <div class="content-wrapper">
+      <div class="legend">
+        <input id="checkbox-1-1" type="checkbox" class="calendar-checkbox" @click.prevent />
+        <label>Available</label>
+        <input type="checkbox" class="calendar-checkbox" checked @click.prevent />
+        <label>Your slot</label>
+        <input type="checkbox" class="calendar-checkbox" disabled />
+        <label>Booked</label>
+        <div class="calendar-type-toggle">
+          <label>
+            <input v-model="calendarType" type="radio" name="calendar-type" value="week" />
+            <span>Week</span>
+          </label>
+          <label>
+            <input v-model="calendarType" type="radio" name="calendar-type" value="day" />
+            <span>Day</span>
+          </label>
+        </div>
+      </div>
+      <calendar-daily v-show="calendarType === 'day'" :date="selectedDate"></calendar-daily>
+      <calendar-weekly v-show="calendarType === 'week'" :date="selectedDate"></calendar-weekly>
     </div>
-  </div>
-    <calendar-daily v-show="calendarType === 'day'" :date="selectedDate"></calendar-daily>
   </div>
 </template>
 
@@ -31,6 +34,7 @@
 import ViewHeader from '@/components/ViewHeader.vue';
 import CalendarDatePicker from '@/components/CalendarDatePicker.vue';
 import CalendarDaily from '@/components/CalendarDaily.vue';
+import CalendarWeekly from '@/components/CalendarWeekly.vue';
 
 export default {
   name: 'Calendar',
@@ -44,6 +48,7 @@ export default {
     ViewHeader,
     CalendarDatePicker,
     CalendarDaily,
+    CalendarWeekly,
   },
   methods: {
     changeSelectedDate(newDate) {
@@ -54,9 +59,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.content-wrapper {
+  margin: 40px auto;
+}
+
 .legend {
   width: 80%;
-  margin: 20px auto;
+  margin: 0 auto;
+  margin-bottom: 60px;
   text-align: center;
 
   .calendar-type-toggle {
