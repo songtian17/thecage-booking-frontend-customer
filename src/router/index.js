@@ -5,6 +5,7 @@ import SignIn from '@/views/SignIn.vue';
 import SignUp from '@/views/SignUp.vue';
 import ForgetPassword from '@/views/ForgetPassword.vue';
 import AccountSettings from '@/views/AccountSettings.vue';
+import ShoppingCart from '@/views/ShoppingCart.vue';
 
 Vue.use(VueRouter);
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/account',
     name: 'accountsettings',
     component: AccountSettings,
+  },
+  {
+    path: '/cart',
+    name: 'shoppingcart',
+    component: ShoppingCart,
   },
   {
     path: '/calendar',
