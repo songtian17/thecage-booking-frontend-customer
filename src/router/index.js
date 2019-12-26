@@ -7,6 +7,7 @@ import ForgetPassword from '@/views/ForgetPassword.vue';
 import AccountSettings from '@/views/AccountSettings.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
 import BillingInformation from '@/views/BillingInformation.vue';
+import ConfirmOrder from '@/views/ConfirmOrder.vue';
 
 Vue.use(VueRouter);
 
@@ -45,6 +46,11 @@ const routes = [
     path: '/billing',
     name: 'billinginfo',
     component: BillingInformation,
+  },
+  {
+    path: '/confirmorder',
+    name: 'confirmorder',
+    component: ConfirmOrder,
   },
   {
     path: '/calendar',
