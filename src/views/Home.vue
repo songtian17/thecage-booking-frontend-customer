@@ -11,14 +11,20 @@
         <hr />
         <div class="venue-list">
           <div v-for="venue in venues" :key="venue.name" class="venue">
-            <div class="collapsable" @click="venue.active = !venue.active">
+            <div
+              v-if="venue.fields.length"
+              class="collapsable"
+              @click="venue.active = !venue.active"
+            >
               {{ venue.name }} Calendar
               <v-icon>{{ venue.active ? "mdi-minus" : "mdi-plus" }}</v-icon>
             </div>
             <transition-expand>
               <div v-if="venue.active" class="field-list">
                 <div v-for="field in venue.fields" :key="field.id" class="field">
-                  <router-link :to="field.id">{{ field.name }}</router-link>
+                  <router-link :to="`calendar/${field.id.toString()}`">{{
+                    field.field_type
+                  }}</router-link>
                 </div>
               </div>
             </transition-expand>
@@ -43,41 +49,18 @@ export default {
       announcement1: '<h1>Hot Deals!</h1><p>Special 30% discount for students now!</p>',
       announcement2:
         '<h1>News</h1><p>Kalling 5-A-Side field will be shortly closed due to maintenance</p>',
-      venues: [
-        {
-          name: 'Kallang',
-          fields: [
-            {
-              name: '5-A-Side',
-              id: 'kallang5',
-            },
-            {
-              name: '7-A-Side',
-              id: 'kallang7',
-            },
-          ],
-          active: false,
-        },
-        {
-          name: 'Bukit Timah',
-          fields: [
-            {
-              name: '5-A-Side',
-              id: 'bt5',
-            },
-            {
-              name: '7-A-Side',
-              id: 'bt7',
-            },
-          ],
-          active: false,
-        },
-      ],
+      venues: [],
     };
   },
   components: {
     ViewHeader,
     TransitionExpand,
+  },
+  mounted() {
+    this.$axios.get(`${process.env.VUE_APP_API}/venues`).then((res) => {
+      const { data } = res;
+      this.venues = data.map(venue => Object.assign(venue, { active: false }));
+    });
   },
 };
 </script>
