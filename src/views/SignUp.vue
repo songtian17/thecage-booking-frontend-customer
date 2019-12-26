@@ -9,19 +9,23 @@
       <form @submit.prevent="submitForm">
         <label for="email">Email</label>
         <br />
-        <input id="email" type="text" name="email" />
+        <input id="email" v-model="email" type="email" name="email" />
         <br />
         <label for="name">Name</label>
         <br />
-        <input id="name" type="text" name="name" />
+        <input id="name" v-model="name" type="text" name="name" />
         <br />
         <label for="phone">Phone Number</label>
         <br />
-        <input id="phone" type="text" name="phone" />
+        <input id="phone" v-model="phone" type="tel" name="phone" />
         <br />
         <label for="password">Password</label>
         <br />
-        <input id="password" type="password" name="password" />
+        <input id="password" v-model="password" type="password" name="password" />
+        <br />
+        <label for="confirm-pass">Confirm Password</label>
+        <br />
+        <input id="confirm-pass" v-model="confirmPassword" type="password" name="confirm-pass" />
         <br />
         <div class="actions">
           <input id="submit" type="submit" value="Sign Up" />
@@ -50,16 +54,19 @@ export default {
   },
   methods: {
     submitForm() {
-      this.$axios.post(`${process.env.VUE_APP_API}/register`, {
-        email: this.email,
-        name: this.name,
-        phone: this.phone,
-        password: this.password,
-      }).then(() => {
-        this.$router.push('/');
-      }).catch((err) => {
-        console.log(err);
-      });
+      this.$axios
+        .post(`${process.env.VUE_APP_API}/signup`, {
+          email: this.email,
+          username: this.name,
+          phone: this.phone,
+          password: this.password,
+        })
+        .then(() => {
+          this.$router.push('/');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
