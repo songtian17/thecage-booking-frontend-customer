@@ -17,11 +17,11 @@ const actions = {
   login: ({ commit }, credentials) => new Promise((resolve, reject) => {
     commit('authRequest');
     axios
-      .post(`${process.env.VUE_APP_API}/login`, credentials)
+      .post(`${process.env.VUE_APP_API}/signin`, credentials)
       .then((resp) => {
         const { token, user } = resp.data;
         localStorage.setItem('user-token', token);
-        localStorage.setItem('user-name', user);
+        localStorage.setItem('user-name', user || 'User');
         axios.defaults.headers.common.Authorization = token;
         commit('authSuccess', { token, user });
         resolve(resp);

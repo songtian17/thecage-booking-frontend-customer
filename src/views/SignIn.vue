@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     submitForm() {
-      this.$store.dispatch('login', { user: this.email, password: this.password }).then(() => {
+      this.$store.dispatch('login', { username: this.email, password: this.password }).then(() => {
         this.$router.back(1);
       }).catch((err) => {
         console.log(err);
