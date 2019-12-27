@@ -6,16 +6,21 @@
     </view-header>
     <div class="container">
       <div class="header">Forget Password</div>
-      <form @submit.prevent="submit">
-      <p>Please enter your email address associated with your account.</p>
+      <form v-if="!isEmailSent" @submit.prevent="submit">
+        <p>Please enter your email address associated with your account.</p>
         <label for="email">Email</label>
         <br />
-        <input id="email" type="text" name="email" />
-        <br>
+        <input id="email" v-model="email" type="email" name="email" />
+        <br />
         <div class="actions">
           <input id="submit" type="submit" value="Reset Password" />
         </div>
       </form>
+      <div v-else class="info-text">
+        An email to reset your password has been sent to your email address. Click on the link in
+        the email to reset your password. If you do not see the email, remember to check your spam
+        folder.
+      </div>
     </div>
   </div>
 </template>
@@ -24,15 +29,23 @@
 import ViewHeader from '@/components/ViewHeader.vue';
 
 export default {
-  name: 'SignUp',
+  name: 'ForgetPassword',
+  data() {
+    return {
+      email: '',
+      isEmailSent: false,
+    };
+  },
   components: {
     ViewHeader,
   },
   methods: {
     submit() {
-      // TODO: submit form data to back end,
-      // add jwt token to localstorage,
-      // push router back by 1
+      this.$axios.post(`${process.env.VUE_APP_API}/forget`, { email: this.email }).then(() => {
+        this.isEmailSent = true;
+      }).catch((err) => {
+        console.log(err);
+      });
     },
   },
 };
@@ -98,6 +111,11 @@ export default {
         cursor: pointer;
       }
     }
+  }
+
+  .info-text {
+    @include montserrat($h5, 400);
+    padding: 16px;
   }
 }
 </style>
