@@ -18,7 +18,7 @@
         <button id="clear-cart-btn">
           <v-icon size="16px">mdi-trash-can</v-icon><span>Clear Cart</span>
         </button>
-        <button id="continue-btn">Continue</button>
+        <router-link id="continue-btn" to="/billing">Continue</router-link>
       </div>
       <div class="promo">
         <p class="header">Promotion Code</p>
@@ -112,6 +112,7 @@ export default {
       background-color: $primary;
       color: white;
       margin-left: 40px;
+      padding: 4px 8px;
     }
   }
 

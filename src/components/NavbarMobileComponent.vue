@@ -16,9 +16,9 @@
         >
         <router-link v-if="!isLoggedIn" to="/signin">Sign In</router-link>
         <span v-else>
-          <a>Cart</a>
+          <router-link to="/cart">Cart</router-link>
           <router-link to="/account">Account Settings</router-link>
-          <a>Upcoming Games</a>
+          <router-link to="/upcominggames">Upcoming Games</router-link>
           <a @click="logout">Sign Out</a>
         </span>
       </div>

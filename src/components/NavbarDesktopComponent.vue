@@ -12,9 +12,9 @@
           >{{ user }} <v-icon>mdi-chevron-down</v-icon>
         </span>
         <div v-if="dropdownExpanded" class="dropdown-menu">
-          <a class="dropdown-item">Cart</a>
+          <router-link to="/cart" class="dropdown-item">Cart</router-link>
           <router-link to="/account" class="dropdown-item">Account Settings</router-link>
-          <a class="dropdown-item">Upcoming Games</a>
+          <router-link to="/upcominggames" class="dropdown-item">Upcoming Games</router-link>
           <a class="dropdown-item" @click="logout">Sign Out</a>
         </div>
       </div>
