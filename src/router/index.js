@@ -4,6 +4,7 @@ import Home from '@/views/Home.vue';
 import SignIn from '@/views/SignIn.vue';
 import SignUp from '@/views/SignUp.vue';
 import ForgetPassword from '@/views/ForgetPassword.vue';
+import ResetPassword from '@/views/ResetPassword.vue';
 import AccountSettings from '@/views/AccountSettings.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
 import BillingInformation from '@/views/BillingInformation.vue';
@@ -28,9 +29,14 @@ const routes = [
     component: SignUp,
   },
   {
-    path: '/resetpassword',
+    path: '/forgetpassword',
     name: 'forgetpassword',
     component: ForgetPassword,
+  },
+  {
+    path: '/resetpassword',
+    name: 'resetpassword',
+    component: ResetPassword,
   },
   {
     path: '/account',
@@ -53,7 +59,7 @@ const routes = [
     component: ConfirmOrder,
   },
   {
-    path: '/calendar',
+    path: '/calendar/:id',
     name: 'calendar',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
