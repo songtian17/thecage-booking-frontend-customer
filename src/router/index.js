@@ -9,6 +9,7 @@ import AccountSettings from '@/views/AccountSettings.vue';
 import ShoppingCart from '@/views/ShoppingCart.vue';
 import BillingInformation from '@/views/BillingInformation.vue';
 import ConfirmOrder from '@/views/ConfirmOrder.vue';
+import UpcomingGames from '@/views/UpcomingGames.vue';
 
 Vue.use(VueRouter);
 
@@ -57,6 +58,11 @@ const routes = [
     path: '/confirmorder',
     name: 'confirmorder',
     component: ConfirmOrder,
+  },
+  {
+    path: '/upcominggames',
+    name: 'upcominggames',
+    component: UpcomingGames,
   },
   {
     path: '/calendar/:id',
