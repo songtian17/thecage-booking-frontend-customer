@@ -20,10 +20,8 @@
 
 @mixin form-group {
   .form-group {
-    .form__label {
-      margin-top: 4px;
-      margin-bottom: 4px;
-    }
+    margin-bottom: 12px;
+
     .form__label {
       @include montserrat($h5, 400);
     }
