@@ -17,3 +17,32 @@
     }
   }
 }
+
+@mixin form-group {
+  .form-group {
+    .form__label {
+      margin-top: 4px;
+      margin-bottom: 4px;
+    }
+    .form__label {
+      @include montserrat($h5, 400);
+    }
+    .form__input {
+      border: 1px solid $secondary;
+      padding: 4px 6px;
+    }
+  }
+
+  .form-group--error {
+    .form__label {
+      color: red;
+    }
+    .form__input {
+      border-color: red;
+    }
+    .form__error {
+      @include montserrat($h6, 400);
+      color: red;
+    }
+  }
+}
