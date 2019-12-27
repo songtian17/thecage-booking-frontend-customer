@@ -43,7 +43,7 @@
         </div>
 
         <div class="actions">
-          <router-link to="/resetpassword">Forget Password?</router-link>
+          <router-link to="/forgetpassword">Forget Password?</router-link>
           <router-link to="/signup">Sign Up</router-link>
           <input id="submit" type="submit" value="Sign In" />
         </div>
