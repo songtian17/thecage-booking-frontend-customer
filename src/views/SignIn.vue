@@ -7,14 +7,41 @@
     <div class="container">
       <div class="header">Sign In</div>
       <form @submit.prevent="submitForm">
-        <label for="email">Email</label>
-        <br />
-        <input id="email" v-model="email" type="text" name="email" />
-        <br />
-        <label for="password">Password</label>
-        <br />
-        <input id="password" v-model="password" type="password" name="password" />
-        <br />
+        <div class="form-group" :class="{ 'form-group--error': $v.formData.email.$error }">
+          <label class="form__label" for="email">Email</label>
+          <input
+            id="email"
+            v-model.lazy.trim="formData.email"
+            class="form__input"
+            type="text"
+            @change="$v.formData.email.$touch"
+          />
+          <div v-if="$v.formData.email.$error">
+            <div v-if="!$v.formData.email.required" class="form__error">
+              Field is required.
+            </div>
+            <div v-if="!$v.formData.email.email" class="form__error">
+              Enter a valid email address.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" :class="{ 'form-group--error': $v.formData.password.$error }">
+          <label class="form__label" for="password">Password</label>
+          <input
+            id="password"
+            v-model.lazy="formData.password"
+            class="form__input"
+            type="password"
+            @change="$v.formData.password.$touch"
+          />
+          <div v-if="$v.formData.password.$error">
+            <div v-if="!$v.formData.password.required" class="form__error">
+              Field is required.
+            </div>
+          </div>
+        </div>
+
         <div class="actions">
           <router-link to="/resetpassword">Forget Password?</router-link>
           <router-link to="/signup">Sign Up</router-link>
@@ -26,6 +53,7 @@
 </template>
 
 <script>
+import { required, email } from 'vuelidate/lib/validators';
 import ViewHeader from '@/components/ViewHeader.vue';
 
 export default {
@@ -35,23 +63,44 @@ export default {
   },
   data() {
     return {
-      email: '',
-      password: '',
+      formData: {
+        email: '',
+        password: '',
+      },
     };
+  },
+  validations: {
+    formData: {
+      email: {
+        required,
+        email,
+      },
+      password: {
+        required,
+      },
+    },
   },
   methods: {
     submitForm() {
-      this.$store.dispatch('login', { email: this.email, password: this.password }).then(() => {
-        this.$router.back(1);
-      }).catch((err) => {
-        console.log(err);
-      });
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.$store
+          .dispatch('login', this.formData)
+          .then(() => {
+            this.$router.back(1);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     },
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@include form-group;
+
 .container {
   @media screen and (max-width: 400px) {
     width: 100%;
@@ -82,48 +131,44 @@ export default {
     padding: 16px;
     @include montserrat($h3, 600);
   }
+}
 
-  form {
-    padding: 16px;
+form {
+  padding: 16px;
 
-    label {
-      @include montserrat($h5, 400);
-    }
+  .form-group {
+    margin-bottom: 8px;
+  }
 
-    input:not(#submit) {
-      border: 1px solid $secondary;
-      margin-top: 4px;
-      margin-bottom: 12px;
-      width: 100%;
-      padding: 4px 6px;
-    }
+  .form__input {
+    width: 100%;
+  }
 
-    .actions {
-      overflow: auto;
+  .actions {
+    overflow: auto;
 
-      a {
-        @media screen and (max-width: 400px) {
-          margin-right: 10px;
-          @include montserrat($h6, 500);
-        }
-
-        margin-right: 24px;
-        padding-top: 6px;
-        display: inline-block;
-        text-decoration: none;
-        color: #428bca;
-        @include montserrat($h5, 500);
+    a {
+      @media screen and (max-width: 400px) {
+        margin-right: 10px;
+        @include montserrat($h6, 500);
       }
 
-      #submit {
-        background-color: $primary;
-        color: white;
-        padding: 6px 12px;
-        border-radius: 4px;
-        float: right;
-        @include montserrat($h4, 500);
-        cursor: pointer;
-      }
+      margin-right: 24px;
+      padding-top: 6px;
+      display: inline-block;
+      text-decoration: none;
+      color: #428bca;
+      @include montserrat($h5, 500);
+    }
+
+    #submit {
+      background-color: $primary;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 4px;
+      float: right;
+      @include montserrat($h4, 500);
+      cursor: pointer;
     }
   }
 }
