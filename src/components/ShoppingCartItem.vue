@@ -1,12 +1,21 @@
 <template>
   <div class="item">
+    <v-icon v-if="!displayOnly" class="remove" @click="$emit('removeItem')">mdi-close</v-icon>
     <span id="name">{{ itemData.venue }}, {{ itemData.field }} Field</span>
     <span id="pitch">{{ itemData.pitch }}</span>
     <span id="timing">{{ itemData.timeStart }} - {{ itemData.timeEnd }}</span>
     <label id="label-product">TYPE</label>
     <span id="product">{{ itemData.product }}</span>
     <label id="label-amount">AMOUNT</label>
-    <span id="amount">${{ itemData.amount }}</span>
+    <span
+      v-if="!itemData.discountedAmount || itemData.amount === itemData.discountedAmount"
+      id="amount"
+      >${{ itemData.amount }}</span
+    >
+    <span v-else id="amount">
+      <span class="strikethrough"> ${{ itemData.amount }} </span>
+      <span>${{ itemData.discountedAmount }}</span>
+    </span>
   </div>
 </template>
 
@@ -24,7 +33,12 @@ export default {
         timeEnd: '',
         product: '',
         amount: '',
+        discountedAmount: '',
       }),
+    },
+    displayOnly: {
+      type: Boolean,
+      default: false,
     },
   },
 };
@@ -37,6 +51,19 @@ export default {
   background-color: #202020;
   padding: 10px;
   margin-bottom: 18px;
+  position: relative;
+
+  .remove {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+    color: white;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
 
   span {
     color: white;
@@ -44,6 +71,12 @@ export default {
 
   label {
     color: #a0a0a0;
+  }
+
+  .strikethrough {
+    color: $primary;
+    text-decoration: line-through;
+    margin-right: 1em;
   }
 }
 

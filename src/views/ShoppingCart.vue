@@ -9,6 +9,7 @@
           v-for="(item, index) in cartItems"
           :key="index"
           :itemData="item"
+          @removeItem="removeCartItem(index)"
         ></shopping-cart-item>
       </div>
       <div class="totals">
@@ -45,6 +46,7 @@ const mockCartItems = [
     timeEnd: '22/10/2019 17:00',
     product: 'Online Premium',
     amount: '92.00',
+    discountedAmount: '90.00',
   },
 ];
 
@@ -61,6 +63,9 @@ export default {
     fetchPromoDetails() {
       // POST promoCodeInput and fetch promo details
       // then apply promo to items in cart
+    },
+    removeCartItem(index) {
+      this.cartItems.splice(index, 1);
     },
   },
   components: {

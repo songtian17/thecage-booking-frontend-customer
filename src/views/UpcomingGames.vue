@@ -7,10 +7,14 @@
       <div v-for="game in upcomingGames" :key="`${game.pitch}: ${game.timeStart}`" class="game">
         <div class="collapsable" @click="game.active = !game.active">
           <div>{{ game.timeStart }}</div>
-          <v-icon>{{ game.active ? "mdi-chevron-up" : "mdi-chevron-down"}}</v-icon>
+          <v-icon>{{ game.active ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
         </div>
         <transition-expand>
-          <shopping-cart-item v-if="game.active" :itemData="game"></shopping-cart-item>
+          <shopping-cart-item
+            v-if="game.active"
+            :itemData="game"
+            :displayOnly="true"
+          ></shopping-cart-item>
         </transition-expand>
       </div>
     </div>
@@ -31,6 +35,7 @@ const mockUpcomingGames = [
     timeEnd: '22/10/2019 17:00',
     product: 'Online Premium',
     amount: '92.00',
+    discountedAmount: '90.00',
     active: false,
   },
 ];

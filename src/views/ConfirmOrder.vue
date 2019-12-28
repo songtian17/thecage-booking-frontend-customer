@@ -8,6 +8,7 @@
         v-for="(item, index) in cartItems"
         :key="index"
         :itemData="item"
+        :displayOnly="true"
       ></shopping-cart-item>
       <div class="bottom-wrapper">
         <div class="left">
@@ -47,6 +48,7 @@ const mockCartItems = [
     timeEnd: '22/10/2019 17:00',
     product: 'Online Premium',
     amount: '92.00',
+    discountedAmount: '90.00',
   },
 ];
 export default {
