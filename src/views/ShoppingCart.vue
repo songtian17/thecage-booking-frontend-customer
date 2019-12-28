@@ -16,10 +16,10 @@
         <p>Total: ${{ totalPrice }}</p>
       </div>
       <div class="actions">
-        <button id="clear-cart-btn">
+        <button id="clear-cart-btn" @click="clearCart">
           <v-icon size="16px">mdi-trash-can</v-icon><span>Clear Cart</span>
         </button>
-        <router-link id="continue-btn" to="/billing">Continue</router-link>
+        <button id="continue-btn" @click="navigateToBilling">Continue</button>
       </div>
       <div class="promo">
         <p class="header">Promotion Code</p>
@@ -54,7 +54,6 @@ export default {
   name: 'ShoppingCart',
   data() {
     return {
-      totalPrice: '276.00',
       promoCodeInput: '',
       cartItems: [],
     };
@@ -66,6 +65,25 @@ export default {
     },
     removeCartItem(index) {
       this.cartItems.splice(index, 1);
+      // send request to odoo to remove time slot
+    },
+    clearCart() {
+      this.cartItems = [];
+      // send request to odoo to clear items in purchase order
+    },
+    navigateToBilling() {
+      if (!this.cartItems.length) {
+        // cart is empty
+        return;
+      }
+      this.$router.push('/billing');
+    },
+  },
+  computed: {
+    totalPrice() {
+      return this.cartItems
+        .reduce((acc, cur) => acc + parseFloat(cur.discountedAmount), 0)
+        .toFixed(2);
     },
   },
   components: {
