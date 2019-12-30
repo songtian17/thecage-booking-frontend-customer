@@ -41,7 +41,7 @@ export default {
   },
   methods: {
     submit() {
-      this.$axios.post(`${process.env.VUE_APP_API}/forget`, { email: this.email }).then(() => {
+      this.$axios.post(`${process.env.VUE_APP_API}/forgetpassword`, { email: this.email }).then(() => {
         this.isEmailSent = true;
       }).catch((err) => {
         console.log(err);
