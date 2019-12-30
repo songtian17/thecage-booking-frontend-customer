@@ -5,12 +5,14 @@ const state = {
   token: localStorage.getItem('user-token') || '',
   status: '',
   user: localStorage.getItem('user-name') || '',
+  userId: localStorage.getItem('user-id') || '',
 };
 
 const getters = {
   isAuthenticated: state => !!state.token,
   authStatus: state => state.status,
   currentUser: state => state.user,
+  userId: state => state.userId,
 };
 
 const actions = {
@@ -19,11 +21,12 @@ const actions = {
     axios
       .post(`${process.env.VUE_APP_API}/signin`, credentials)
       .then((resp) => {
-        const { token, user } = resp.data;
+        const { token, user, userId } = resp.data;
         localStorage.setItem('user-token', token);
         localStorage.setItem('user-name', user || 'User');
+        localStorage.setItem('user-id', userId);
         axios.defaults.headers.common.Authorization = token;
-        commit('authSuccess', { token, user });
+        commit('authSuccess', { token, user, userId });
         resolve(resp);
       })
       .catch((err) => {
@@ -46,10 +49,11 @@ const mutations = {
   authRequest: (state) => {
     state.status = 'loading';
   },
-  authSuccess: (state, { token, user }) => {
+  authSuccess: (state, { token, user, userId }) => {
     state.status = 'success';
     state.token = token;
     state.user = user;
+    state.userId = userId;
   },
   authError: (state) => {
     state.status = 'error';
