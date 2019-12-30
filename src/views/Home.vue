@@ -5,7 +5,7 @@
       BOOKING SYSTEM
     </view-header>
     <div class="home">
-      <div class="announcement" v-html="announcement1"></div>
+      <div v-if="announcement1.visible" class="announcement" v-html="announcement1.html"></div>
       <div class="main">
         <h1>Book Now!</h1>
         <hr />
@@ -32,7 +32,7 @@
         </div>
         <hr />
       </div>
-      <div class="announcement" v-html="announcement2"></div>
+      <div v-if="announcement2.visible" class="announcement" v-html="announcement2.html"></div>
     </div>
   </div>
 </template>
@@ -45,22 +45,46 @@ export default {
   name: 'home',
   data() {
     return {
-      // TODO: replace mock data with data from backend
-      announcement1: '<h1>Hot Deals!</h1><p>Special 30% discount for students now!</p>',
-      announcement2:
-        '<h1>News</h1><p>Kalling 5-A-Side field will be shortly closed due to maintenance</p>',
+      announcement1: {
+        html: '',
+        visible: false,
+      },
+      announcement2: {
+        html: '',
+        visible: false,
+      },
       venues: [],
     };
+  },
+  methods: {
+    fetchVenues() {
+      this.$axios.get(`${process.env.VUE_APP_API}/venues`).then((res) => {
+        const { data } = res;
+        this.venues = data.map(venue => Object.assign(venue, { active: false }));
+      });
+    },
+    fetchAnnouncements() {
+      this.$axios.get(`${process.env.VUE_APP_API}/announcement`).then((res) => {
+        const { data } = res;
+        data.forEach((announcement) => {
+          if (announcement.placement === 'Top') {
+            this.announcement1.html = announcement.html_string;
+            this.announcement1.visible = announcement.visibility;
+          } else if (announcement.placement === 'Bottom') {
+            this.announcement2.html = announcement.html_string;
+            this.announcement2.visible = announcement.visibility;
+          }
+        });
+      });
+    },
   },
   components: {
     ViewHeader,
     TransitionExpand,
   },
   mounted() {
-    this.$axios.get(`${process.env.VUE_APP_API}/venues`).then((res) => {
-      const { data } = res;
-      this.venues = data.map(venue => Object.assign(venue, { active: false }));
-    });
+    this.fetchVenues();
+    this.fetchAnnouncements();
   },
 };
 </script>
