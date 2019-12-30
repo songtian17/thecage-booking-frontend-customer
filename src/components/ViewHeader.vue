@@ -1,6 +1,13 @@
 <template>
   <div class="header" :class="{ main }">
-    <slot></slot>
+    <div class="header-title">
+      <slot></slot>
+    </div>
+    <div v-if="countdown" class="timer">
+      <div>
+        {{ countdown }}
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,6 +19,15 @@ export default {
       default: () => true,
       type: Boolean,
     },
+    timer: {
+      type: Boolean,
+      default: () => false,
+    },
+  },
+  computed: {
+    countdown() {
+      return this.$store.getters.countdown;
+    },
   },
 };
 </script>
@@ -20,13 +36,32 @@ export default {
 .header {
   width: 100%;
   background-color: $primary;
-  padding: 20px 24px;
+  position: relative;
+}
+
+.header-title {
   @include montserrat($h2, 600);
   color: white;
+  padding: 20px 24px;
 
   &.main {
-    padding: 40px 24px;
     @include montserrat($h1, 700);
+    padding: 40px 24px;
   }
+}
+
+.timer {
+  @include montserrat($h3, 500);
+  background-color: black;
+  color: white;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding-left: 24px;
+  padding-right: 24px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 </style>

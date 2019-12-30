@@ -66,10 +66,16 @@ export default {
     removeCartItem(index) {
       this.cartItems.splice(index, 1);
       // send request to odoo to remove time slot
+
+      if (!this.cartItems.length) {
+        this.$store.dispatch('clearTimer');
+      }
     },
     clearCart() {
       this.cartItems = [];
       // send request to odoo to clear items in purchase order
+
+      this.$store.dispatch('clearTimer');
     },
     navigateToBilling() {
       if (!this.cartItems.length) {
@@ -92,6 +98,7 @@ export default {
   },
   mounted() {
     this.cartItems = mockCartItems;
+    this.$store.dispatch('startTimer');
   },
 };
 </script>
