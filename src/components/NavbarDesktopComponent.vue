@@ -27,7 +27,7 @@ export default {
   name: 'NavbarDesktopComponent',
   data() {
     return {
-      dropdownExpanded: 'false',
+      dropdownExpanded: false,
     };
   },
   computed: {
@@ -43,6 +43,11 @@ export default {
       this.$store.dispatch('logout').then(() => {
         this.$router.push('/');
       });
+    },
+  },
+  watch: {
+    $route() {
+      this.dropdownExpanded = false;
     },
   },
 };
