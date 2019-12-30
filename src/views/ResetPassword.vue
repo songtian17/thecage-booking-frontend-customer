@@ -71,22 +71,27 @@ export default {
       if (!this.userToken) {
         this.isValidToken = false;
         this.tokenInvalidMessage = 'You do not have a token to reset your password. Redirecting you to home page in 5 seconds...';
-        setTimeout(this.$router.push('/'), 5000);
+        setTimeout(() => this.$router.push('/'), 5000);
       }
-      this.$axios.post(`${process.env.VUE_APP_API}/resetpassword`, this.userToken).then((res) => {
-        if (res.status === '200') {
-          this.isValidToken = true;
-        } else if (res.status === '400') {
-          this.isValidToken = false;
-          if (res.data.message === 'Expired link') {
-            this.tokenInvalidMessage = 'Your reset password link has expired. Redirecting you to home page page in 5 seconds...';
-            setTimeout(this.$router.push('/forgetpassword'), 5000);
-          } else if (res.data.message === 'Invalid link') {
-            this.tokenInvalidMessage = 'You do not have a valid token. Redirecting you to home page in 5 seconds...';
-            setTimeout(this.$router.push('/'), 5000);
+      this.$axios
+        .get(`${process.env.VUE_APP_API}/validatetoken?token=${this.userToken}`)
+        .then((res) => {
+          console.log(res);
+          if (res.data.message === 'success') {
+            this.isValidToken = true;
           }
-        }
-      });
+        })
+        .catch((err) => {
+          this.isValidToken = false;
+          const responseMessage = err.response.data.message;
+          if (responseMessage === 'Expired link') {
+            this.tokenInvalidMessage = 'Your reset password link has expired. Redirecting you to home page page in 5 seconds...';
+            setTimeout(() => this.$router.push('/'), 5000);
+          } else if (responseMessage === 'Invalid link') {
+            this.tokenInvalidMessage = 'You do not have a valid token. Redirecting you to home page in 5 seconds...';
+            setTimeout(() => this.$router.push('/'), 5000);
+          }
+        });
     },
   },
   mounted() {
