@@ -6,11 +6,12 @@
         <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
       </thead>
       <tr v-for="(timing, index) in timings" :key="index">
-        <td class="timing">{{ timing }}</td>
+        <td class="timing">{{ timing.time }}</td>
         <td v-for="pitch in pitches" :key="pitch.id">
           <input
             v-model="selectedTimings"
-            :value="{ time: timing, pitch: pitch.id }"
+            :value="{ date, time: timing.time, pitch: pitch.id, hours: timing.hours }"
+            :class="`span-${timing.hours}`"
             type="checkbox"
             class="calendar-checkbox"
             :disabled="isBooked(timing, pitch.id)"
@@ -23,30 +24,62 @@
 
 <script>
 const timings = () => [
-  '00:00',
-  '01:00',
-  '02:00',
-  '03:00',
-  '04:00',
-  '05:00',
-  '06:00',
-  '07:00',
-  '08:00',
-  '09:00',
-  '10:00',
-  '11:00',
-  '12:00',
-  '13:00',
-  '14:00',
-  '15:00',
-  '16:00',
-  '17:00',
-  '18:00',
-  '19:00',
-  '20:00',
-  '21:00',
-  '22:00',
-  '23:00',
+  {
+    time: '07:00',
+    hours: 1,
+  },
+  {
+    time: '08:00',
+    hours: 1,
+  },
+  {
+    time: '09:00',
+    hours: 1,
+  },
+  {
+    time: '10:00',
+    hours: 1,
+  },
+  {
+    time: '11:00',
+    hours: 1,
+  },
+  {
+    time: '12:00',
+    hours: 1,
+  },
+  {
+    time: '13:00',
+    hours: 1,
+  },
+  {
+    time: '14:00',
+    hours: 1,
+  },
+  {
+    time: '15:00',
+    hours: 1,
+  },
+  {
+    time: '16:00',
+    hours: 1,
+  },
+  {
+    time: '17:00',
+    hours: 1,
+  },
+  {
+    time: '18:00',
+    hours: 2,
+  },
+  {
+    time: '20:00',
+    hours: 2,
+  },
+  {
+    time: '22:00',
+    hours: 2,
+  },
 ];
 const pitches = () => [
   {
@@ -109,7 +142,7 @@ export default {
     isBooked(time, pitchId) {
       return this.bookedSlots.find((slot) => {
         const bookedPitch = slot.pitch_id === pitchId;
-        const bookedTime = time >= slot.booking_start && time <= slot.booking_end;
+        const bookedTime = time.time >= slot.booking_start && time.time <= slot.booking_end;
         return bookedPitch && bookedTime;
       });
     },
@@ -168,6 +201,16 @@ export default {
   position: relative;
   vertical-align: middle;
   margin: 0;
+
+  &.span-2 {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  &.span-3 {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
 
   &:active {
     background-color: #e9bfbf;
