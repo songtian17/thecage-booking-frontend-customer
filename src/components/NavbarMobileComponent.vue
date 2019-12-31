@@ -10,7 +10,6 @@
     </div>
     <transition name="scale-in">
       <div v-if="menuActive" class="menu" @click="closeMenu">
-        <router-link to="/calendar">Booking Calendar</router-link>
         <a href="https://thecage.com.sg/contact.html" target="_blank" @click="closeMenu"
           >Contact Us</a
         >

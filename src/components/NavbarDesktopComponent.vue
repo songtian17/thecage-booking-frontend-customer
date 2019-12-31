@@ -4,7 +4,6 @@
       <img src="@/assets/logo.jpeg" alt="TheCage Logo" />
     </router-link>
     <span class="nav-links">
-      <router-link to="/calendar">Booking Calendar</router-link>
       <a href="https://thecage.com.sg/contact.html" target="_blank">Contact Us</a>
       <router-link v-if="!isLoggedIn" to="/signin">Sign In</router-link>
       <div v-else class="dropdown">
