@@ -5,12 +5,57 @@
     </view-header>
     <div class="content-wrapper">
       <form @submit.prevent="submit">
-        <label for="name">Name</label>
-        <input id="name" v-model="name" type="text" name="name" />
-        <label for="email">Email</label>
-        <input v-model="email" type="text" name="email" />
-        <label for="phone">Phone</label>
-        <input v-model="phone" type="text" name="phone" />
+        <div class="form-group" :class="{ 'form-group--error': $v.formData.email.$error }">
+          <label class="form__label" for="email">Email</label>
+          <input
+            id="email"
+            v-model.lazy="formData.email"
+            class="form__input"
+            type="email"
+            @change="$v.formData.email.$touch"
+          />
+          <div v-if="$v.formData.email.$error">
+            <div v-if="!$v.formData.email.required" class="form__error">
+              Field is required.
+            </div>
+            <div v-if="!$v.formData.email.email" class="form__error">
+              Enter a valid email address.
+            </div>
+          </div>
+        </div>
+        <div class="form-group" :class="{ 'form-group--error': $v.formData.name.$error }">
+          <label class="form__label" for="name">Name</label>
+          <input
+            id="name"
+            v-model.lazy="formData.name"
+            class="form__input"
+            type="text"
+            @change="$v.formData.name.$touch"
+          />
+          <div v-if="$v.formData.name.$error">
+            <div v-if="!$v.formData.name.required" class="form__error">
+              Field is required.
+            </div>
+          </div>
+        </div>
+        <div class="form-group" :class="{ 'form-group--error': $v.formData.phone.$error }">
+          <label class="form__label" for="phone">Phone Number</label>
+          <input
+            id="phone"
+            v-model.lazy="formData.phone"
+            class="form__input"
+            type="tel"
+            @change="$v.formData.phone.$touch"
+          />
+          <div v-if="$v.formData.phone.$error">
+            <div v-if="!$v.formData.phone.required" class="form__error">
+              Field is required.
+            </div>
+            <div v-if="!$v.formData.phone.phoneNumber" class="form__error">
+              Enter a valid phone number.
+            </div>
+          </div>
+        </div>
         <div class="actions">
           <button id="return">
             <v-icon size="16px">mdi-chevron-left</v-icon>
@@ -33,16 +78,36 @@
 </template>
 
 <script>
+import { required, email } from 'vuelidate/lib/validators';
 import ViewHeader from '@/components/ViewHeader.vue';
+
+const phoneNumber = value => /^$|^[8-9][0-9]{7}$/.test(value);
 
 export default {
   name: 'BillingInformation',
   data() {
     return {
-      name: '',
-      email: '',
-      phone: '',
+      formData: {
+        name: '',
+        email: '',
+        phone: '',
+      },
     };
+  },
+  validations: {
+    formData: {
+      email: {
+        required,
+        email,
+      },
+      name: {
+        required,
+      },
+      phone: {
+        required,
+        phoneNumber,
+      },
+    },
   },
   props: {
     subtotal: {
@@ -63,31 +128,48 @@ export default {
   },
   methods: {
     submit() {
-      this.$router.push('/confirmorder');
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.$router.push('/confirmorder');
+      }
     },
+    fetchCustomerDetails() {
+      this.$axios
+        .get(`${process.env.VUE_APP_API}/customer/${this.$store.getters.userId}`)
+        .then((res) => {
+          // eslint-disable-next-line no-shadow
+          const { email, name } = res.data;
+          const phone = res.data.phone_no;
+          this.formData.email = email;
+          this.formData.name = name;
+          this.formData.phone = phone;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+  mounted() {
+    this.fetchCustomerDetails();
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@include form-group;
+
 .content-wrapper {
-  width: 60%;
+  width: 80%;
   margin: 40px auto;
   display: flex;
   flex-flow: wrap;
   justify-content: space-between;
 
   form {
-    min-width: 60%;
     margin-bottom: 40px;
+    flex: 1 1 auto;
 
-    label {
-      @include montserrat($h5, 400);
-      display: block;
-    }
-
-    input[type="text"] {
-      border: 1px solid $secondary;
+    .form__input {
       width: 100%;
     }
 
@@ -123,6 +205,8 @@ export default {
   }
 
   .order-info {
+    margin-left: auto;
+    padding-left: 20%;
     display: grid;
     grid-template-columns: 2fr 1fr;
     grid-template-rows: 40px 20px 20px 30px;
