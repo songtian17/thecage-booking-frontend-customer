@@ -24,62 +24,30 @@
 
 <script>
 const timings = () => [
-  {
-    time: '07:00',
-    hours: 1,
-  },
-  {
-    time: '08:00',
-    hours: 1,
-  },
-  {
-    time: '09:00',
-    hours: 1,
-  },
-  {
-    time: '10:00',
-    hours: 1,
-  },
-  {
-    time: '11:00',
-    hours: 1,
-  },
-  {
-    time: '12:00',
-    hours: 1,
-  },
-  {
-    time: '13:00',
-    hours: 1,
-  },
-  {
-    time: '14:00',
-    hours: 1,
-  },
-  {
-    time: '15:00',
-    hours: 1,
-  },
-  {
-    time: '16:00',
-    hours: 1,
-  },
-  {
-    time: '17:00',
-    hours: 1,
-  },
-  {
-    time: '18:00',
-    hours: 2,
-  },
-  {
-    time: '20:00',
-    hours: 2,
-  },
-  {
-    time: '22:00',
-    hours: 2,
-  },
+  { time: '00:00', hours: 1 },
+  { time: '01:00', hours: 1 },
+  { time: '02:00', hours: 1 },
+  { time: '03:00', hours: 1 },
+  { time: '04:00', hours: 1 },
+  { time: '05:00', hours: 1 },
+  { time: '06:00', hours: 1 },
+  { time: '07:00', hours: 1 },
+  { time: '08:00', hours: 1 },
+  { time: '09:00', hours: 1 },
+  { time: '10:00', hours: 1 },
+  { time: '11:00', hours: 1 },
+  { time: '12:00', hours: 1 },
+  { time: '13:00', hours: 1 },
+  { time: '14:00', hours: 1 },
+  { time: '15:00', hours: 1 },
+  { time: '16:00', hours: 1 },
+  { time: '17:00', hours: 1 },
+  { time: '18:00', hours: 1 },
+  { time: '19:00', hours: 1 },
+  { time: '20:00', hours: 1 },
+  { time: '21:00', hours: 1 },
+  { time: '22:00', hours: 1 },
+  { time: '23:00', hours: 1 },
 ];
 const pitches = () => [
   {
@@ -108,50 +76,49 @@ const pitches = () => [
   },
 ];
 
-const bookedSlots = () => [
-  {
-    // booking_start: '2019-10-10 13:00:00',
-    // booking_end: '2019-10-10 15:00:00',
-    booking_start: '13:00',
-    booking_end: '15:00',
-    // venue_id: [1, 'Kallang 05'],
-    // pitch_id: [3, 'P3'],
-    pitch_id: 3,
-    // id: 71915,
-  },
-  {
-    // booking_start: '2019-10-10 11:00:00',
-    // booking_end: '2019-10-10 13:00:00',
-    booking_start: '11:00',
-    booking_end: '13:00',
-    // venue_id: [1, 'Kallang 05'],
-    // pitch_id: [4, 'P4'],
-    pitch_id: 4,
-    // id: 72019,
-  },
-];
-
 export default {
   name: 'CalendarDaily',
   data() {
     return {
+      bookedSlots: [],
       selectedTimings: [],
+      fieldId: '',
     };
   },
   methods: {
     isBooked(time, pitchId) {
       return this.bookedSlots.find((slot) => {
         const bookedPitch = slot.pitch_id === pitchId;
-        const bookedTime = time.time >= slot.booking_start && time.time <= slot.booking_end;
+        const bookedTime = time.time >= slot.booking_start && time.time < slot.booking_end;
         return bookedPitch && bookedTime;
       });
     },
+    fetchbookedTimings(date) {
+      // bookingDate: 'YYYY-MM-DD',
+      // fieldId: '9', // field id in database
+      const [d, m, y] = date.split('/');
+      const bookingDate = `${y}-${m}-${d}`;
+      const payload = {
+        bookingDate,
+        fieldId: this.fieldId,
+      };
+      this.$axios.post(`${process.env.VUE_APP_API}/calendar/day`, payload).then((res) => {
+        console.dir(res.data);
+        const bookedSlots = res.data.map(e => ({
+          booking_start: e.booking_start.split(' ')[1].slice(0, 5),
+          booking_end: e.booking_end.split(' ')[1].slice(0, 5),
+          pitch_id: e.pitch_id,
+        }));
+        this.bookedSlots = bookedSlots;
+      });
+    },
+  },
+  watch: {
+    date() {
+      this.fetchbookedTimings(this.date);
+    },
   },
   props: {
-    bookedSlots: {
-      type: Array,
-      default: bookedSlots,
-    },
     timings: {
       type: Array,
       default: timings,
@@ -164,6 +131,9 @@ export default {
       type: String,
       default: '',
     },
+  },
+  mounted() {
+    this.fieldId = this.$route.params.id;
   },
 };
 </script>
