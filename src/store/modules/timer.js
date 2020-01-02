@@ -45,6 +45,9 @@ const mutations = {
     state.total = '';
   },
   setTimerValues: (state) => {
+    if (!state.deadline) {
+      return;
+    }
     const now = new Date();
     const msDiff = state.deadline.getTime() - now.getTime();
     const m = Math.floor(msDiff / 1000 / 60);
