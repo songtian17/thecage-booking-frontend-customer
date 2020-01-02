@@ -154,16 +154,16 @@ export default {
       if (!this.$v.$invalid) {
         this.$axios
           .post(`${process.env.VUE_APP_API}/signup`, {
-            email: this.email,
-            username: this.name,
-            phone: this.phone,
-            password: this.password,
+            email: this.formData.email,
+            username: this.formData.name,
+            phone: this.formData.phone,
+            password: this.formData.password,
           })
           .then(() => {
             this.$router.push('/');
           })
           .catch((err) => {
-            console.log(err);
+            console.log(err.response);
           });
       }
     },
