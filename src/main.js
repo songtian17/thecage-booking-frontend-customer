@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuelidate from 'vuelidate';
 import Notifications from 'vue-notification';
 import axios from 'axios';
+import LoadScript from 'vue-plugin-load-script';
 import App from './App.vue';
 import './registerServiceWorker';
 import router from './router';
@@ -12,6 +13,7 @@ Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;
 Vue.use(Vuelidate);
 Vue.use(Notifications);
+Vue.use(LoadScript);
 
 new Vue({
   router,
