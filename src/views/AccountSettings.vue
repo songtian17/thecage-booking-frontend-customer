@@ -31,7 +31,7 @@
               id="name"
               v-model.lazy="formData.name"
               class="form__input"
-              type="name"
+              type="text"
               @change="$v.formData.name.$touch"
             />
             <div v-if="$v.formData.name.$error">
@@ -46,7 +46,7 @@
               id="phone"
               v-model.lazy="formData.phone"
               class="form__input"
-              type="phone"
+              type="tel"
               @change="$v.formData.phone.$touch"
             />
             <div v-if="$v.formData.phone.$error">
@@ -69,7 +69,7 @@
               id="oldPassword"
               v-model.lazy="formData.oldPassword"
               class="form__input"
-              type="oldPassword"
+              type="password"
               @change="$v.formData.oldPassword.$touch"
             />
             <div v-if="$v.formData.oldPassword.$error">
@@ -84,7 +84,7 @@
               id="newPassword"
               v-model.lazy="formData.newPassword"
               class="form__input"
-              type="newPassword"
+              type="password"
               @change="$v.formData.newPassword.$touch"
             />
             <div v-if="$v.formData.newPassword.$error">
@@ -102,7 +102,7 @@
               id="confirmPassword"
               v-model.lazy="formData.confirmPassword"
               class="form__input"
-              type="confirmPassword"
+              type="password"
               @change="$v.formData.confirmPassword.$touch"
             />
             <div v-if="$v.formData.confirmPassword.$error">
@@ -205,17 +205,29 @@ export default {
             });
           })
           .catch((err) => {
-            console.log(err);
             if (err.response.status === 400) {
-              if (err.response.data.message === 'Passwords do not match') {
+              const errorMessage = err.response.data.message;
+              if (errorMessage === 'email already exists') {
+                this.$notify({
+                  type: 'error',
+                  title: 'Update failed',
+                  text: 'Email already exists.',
+                });
+              } else if (errorMessage === 'phone_no already exists') {
+                this.$notify({
+                  type: 'error',
+                  title: 'Update failed',
+                  text: 'Phone Number already exists.',
+                });
+              } else if (errorMessage === 'Passwords do not match') {
                 this.$notify({
                   type: 'error',
                   title: 'Update failed',
                   text: 'Your old password is incorrect.',
                 });
-              } else {
-                console.log(err.response.data);
               }
+            } else {
+              console.error(err);
             }
           });
       }
