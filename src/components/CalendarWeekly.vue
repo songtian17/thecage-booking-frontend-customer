@@ -3,7 +3,7 @@
     <div class="timings-wrapper">
       <table class="timings">
         <tr v-for="(timing, index) in timings" :key="index">
-          <td>{{ timing }}</td>
+          <td :class="`span-${timing.hours}`">{{ timing.time }}</td>
         </tr>
       </table>
     </div>
@@ -21,30 +21,30 @@
 import CalendarWeeklyDay from '@/components/CalendarWeeklyDay.vue';
 
 const timings = () => [
-  '00:00',
-  '01:00',
-  '02:00',
-  '03:00',
-  '04:00',
-  '05:00',
-  '06:00',
-  '07:00',
-  '08:00',
-  '09:00',
-  '10:00',
-  '11:00',
-  '12:00',
-  '13:00',
-  '14:00',
-  '15:00',
-  '16:00',
-  '17:00',
-  '18:00',
-  '19:00',
-  '20:00',
-  '21:00',
-  '22:00',
-  '23:00',
+  { time: '00:00', hours: 1 },
+  { time: '01:00', hours: 1 },
+  { time: '02:00', hours: 1 },
+  { time: '03:00', hours: 1 },
+  { time: '04:00', hours: 1 },
+  { time: '05:00', hours: 1 },
+  { time: '06:00', hours: 1 },
+  { time: '07:00', hours: 1 },
+  { time: '08:00', hours: 1 },
+  { time: '09:00', hours: 1 },
+  { time: '10:00', hours: 1 },
+  { time: '11:00', hours: 1 },
+  { time: '12:00', hours: 1 },
+  { time: '13:00', hours: 1 },
+  { time: '14:00', hours: 1 },
+  { time: '15:00', hours: 1 },
+  { time: '16:00', hours: 1 },
+  { time: '17:00', hours: 1 },
+  { time: '18:00', hours: 1 },
+  { time: '19:00', hours: 1 },
+  { time: '20:00', hours: 1 },
+  { time: '21:00', hours: 1 },
+  { time: '22:00', hours: 1 },
+  { time: '23:00', hours: 1 },
 ];
 
 const pitches = () => [
@@ -160,6 +160,14 @@ export default {
 
   tr {
     height: 26px;
+  }
+
+  .span-2 {
+    padding-bottom: 17px;
+  }
+
+  .span-3 {
+    padding-bottom: 29px;
   }
 }
 </style>

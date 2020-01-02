@@ -9,9 +9,10 @@
         <td v-for="pitch in pitches" :key="pitch.id">
           <input
             v-model="selectedTimings"
-            :value="{ time: timing, pitch: pitch.id }"
+            :value="{ date, time: timing.time, pitch: pitch.id, hours: timing.hours }"
             type="checkbox"
             class="calendar-checkbox"
+            :class="`span-${timing.hours}`"
             :disabled="isBooked(timing, pitch.id)"
           />
         </td>
@@ -110,6 +111,16 @@ export default {
   position: relative;
   vertical-align: middle;
   margin: 0;
+
+  &.span-2 {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  &.span-3 {
+    padding-top: 24px;
+    padding-bottom: 24px;
+  }
 
   &:active {
     background-color: #e9bfbf;
