@@ -186,19 +186,37 @@ export default {
     submitForm() {
       this.$v.$touch();
       if (!this.$v.$invalid) {
+        const payload = {
+          email: this.formData.email,
+          name: this.formData.name,
+          phoneNo: this.formData.phone,
+        };
+        if (this.formData.oldPassword && this.formData.newPassword) {
+          payload.oldPassword = this.formData.oldPassword;
+          payload.newPassword = this.formData.newPassword;
+        }
         this.$axios
-          .put(`${process.env.VUE_APP_API}/customer/${this.$store.getters.userId}`, {
-            email: this.formData.email,
-            name: this.formData.name,
-            phoneNo: this.formData.phone,
-            oldPassword: this.formData.oldPassword,
-            newPassword: this.formData.newPassword,
-          })
+          .put(`${process.env.VUE_APP_API}/customer/${this.$store.getters.userId}`, payload)
           .then((res) => {
             console.log(res);
+            this.$notify({
+              type: 'success',
+              text: 'Your account details have been updated successfully',
+            });
           })
           .catch((err) => {
             console.log(err);
+            if (err.response.status === 400) {
+              if (err.response.data.message === 'Passwords do not match') {
+                this.$notify({
+                  type: 'error',
+                  title: 'Update failed',
+                  text: 'Your old password is incorrect.',
+                });
+              } else {
+                console.log(err.response.data);
+              }
+            }
           });
       }
     },
