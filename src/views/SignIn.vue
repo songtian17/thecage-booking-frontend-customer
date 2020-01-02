@@ -90,7 +90,7 @@ export default {
             this.$router.back(1);
           })
           .catch((err) => {
-            if (err.response.status === 401) {
+            if (err.response.status === 400) {
               if (err.response.data === 'Login Failed') {
                 this.$notify({
                   type: 'error',
