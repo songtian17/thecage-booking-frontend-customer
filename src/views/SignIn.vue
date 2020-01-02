@@ -90,7 +90,15 @@ export default {
             this.$router.back(1);
           })
           .catch((err) => {
-            console.log(err);
+            if (err.response.status === 401) {
+              if (err.response.data === 'Login Failed') {
+                this.$notify({
+                  type: 'error',
+                  title: 'Login Failed',
+                  text: 'Invalid credentials, try again.',
+                });
+              }
+            }
           });
       }
     },
