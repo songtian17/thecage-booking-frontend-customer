@@ -30,7 +30,11 @@
         v-show="calendarType === 'week'"
         :date="selectedDate"
       ></calendar-weekly>
+      <div class="btn-wrapper">
+        <button id="add-btn" @click="showAddToCartModal = true">Add to cart</button>
+      </div>
     </div>
+  <add-to-cart-modal :showModal.sync="showAddToCartModal"></add-to-cart-modal>
   </div>
 </template>
 
@@ -39,6 +43,7 @@ import ViewHeader from '@/components/ViewHeader.vue';
 import CalendarDatePicker from '@/components/CalendarDatePicker.vue';
 import CalendarDaily from '@/components/CalendarDaily.vue';
 import CalendarWeekly from '@/components/CalendarWeekly.vue';
+import AddToCartModal from '@/components/AddToCartModal.vue';
 
 export default {
   name: 'Calendar',
@@ -46,6 +51,7 @@ export default {
     return {
       selectedDate: '',
       calendarType: 'day',
+      showAddToCartModal: false,
     };
   },
   components: {
@@ -53,6 +59,7 @@ export default {
     CalendarDatePicker,
     CalendarDaily,
     CalendarWeekly,
+    AddToCartModal,
   },
   computed: {
     isDesktop() {
@@ -70,6 +77,9 @@ export default {
         this.calendarType = 'day';
       }
     },
+  },
+  mounted() {
+    console.log(this.$route.params.id);
   },
 };
 </script>
@@ -135,6 +145,21 @@ export default {
     &:disabled {
       background-color: #808080;
     }
+  }
+}
+
+.btn-wrapper {
+  width: 90%;
+  margin: 60px auto;
+  display: flex;
+  justify-content: flex-end;
+
+  #add-btn {
+    @include montserrat($h5, 500);
+    padding: 6px 12px;
+    background-color: $primary;
+    color: white;
+    border-radius: 6px;
   }
 }
 </style>
