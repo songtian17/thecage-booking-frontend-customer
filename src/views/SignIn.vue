@@ -85,7 +85,7 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.$store
-          .dispatch('login', this.formData)
+          .dispatch('auth/login', this.formData)
           .then(() => {
             this.$router.back(1);
           })

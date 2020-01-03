@@ -68,14 +68,14 @@ export default {
       // send request to odoo to remove time slot
 
       if (!this.cartItems.length) {
-        this.$store.dispatch('clearTimer');
+        this.$store.dispatch('timer/clearTimer');
       }
     },
     clearCart() {
       this.cartItems = [];
       // send request to odoo to clear items in purchase order
 
-      this.$store.dispatch('clearTimer');
+      this.$store.dispatch('timer/clearTimer');
     },
     navigateToBilling() {
       if (!this.cartItems.length) {
@@ -98,7 +98,7 @@ export default {
   },
   mounted() {
     this.cartItems = mockCartItems;
-    this.$store.dispatch('startTimer');
+    this.$store.dispatch('timer/startTimer');
   },
 };
 </script>
