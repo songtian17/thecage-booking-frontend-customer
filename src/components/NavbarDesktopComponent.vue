@@ -31,10 +31,10 @@ export default {
   },
   computed: {
     isLoggedIn() {
-      return this.$store.getters.isAuthenticated;
+      return this.$store.getters['auth/isAuthenticated'];
     },
     user() {
-      return this.$store.getters.currentUser;
+      return this.$store.getters['auth/currentUser'];
     },
   },
   methods: {

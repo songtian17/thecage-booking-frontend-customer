@@ -26,7 +26,7 @@ export default {
   },
   computed: {
     countdown() {
-      return this.$store.getters.countdown;
+      return this.$store.getters['timer/countdown'];
     },
   },
 };

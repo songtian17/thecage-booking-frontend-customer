@@ -170,7 +170,7 @@ export default {
   methods: {
     fetchCustomerData() {
       this.$axios
-        .get(`${process.env.VUE_APP_API}/customer/${this.$store.getters.userId}`)
+        .get(`${process.env.VUE_APP_API}/customer/${this.$store.getters['auth/userId']}`)
         .then((res) => {
           // eslint-disable-next-line no-shadow
           const { email, name } = res.data;
@@ -196,7 +196,7 @@ export default {
           payload.newPassword = this.formData.newPassword;
         }
         this.$axios
-          .put(`${process.env.VUE_APP_API}/customer/${this.$store.getters.userId}`, payload)
+          .put(`${process.env.VUE_APP_API}/customer/${this.$store.getters['auth/userId']}`, payload)
           .then((res) => {
             console.log(res);
             this.$notify({
