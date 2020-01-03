@@ -10,7 +10,7 @@ function createInstance(baseURL) {
   });
 }
 
-const devInstance = createInstance('http://localhost:5001');
-const productionInstance = createInstance('http://localhost:5001');
+const devInstance = createInstance('http://121.6.194.123:5001');
+const productionInstance = createInstance('http://121.6.194.123:5001');
 
 export default process.env.NODE_ENV === 'production' ? productionInstance : devInstance;

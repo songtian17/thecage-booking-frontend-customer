@@ -58,7 +58,7 @@ export default {
   methods: {
     submit() {
       this.$axios
-        .post(`${process.env.VUE_APP_API}/resetpassword`, {
+        .post('/resetpassword', {
           password: this.password,
           token: this.userToken,
         })
@@ -74,7 +74,7 @@ export default {
         setTimeout(() => this.$router.push('/'), 5000);
       }
       this.$axios
-        .get(`${process.env.VUE_APP_API}/validatetoken?token=${this.userToken}`)
+        .get(`/validatetoken?token=${this.userToken}`)
         .then((res) => {
           console.log(res);
           if (res.data.message === 'success') {

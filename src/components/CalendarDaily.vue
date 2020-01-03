@@ -102,7 +102,7 @@ export default {
         bookingDate,
         fieldId: this.fieldId,
       };
-      this.$axios.post(`${process.env.VUE_APP_API}/calendar/day`, payload).then((res) => {
+      this.$axios.post('/calendar/day', payload).then((res) => {
         const bookedSlots = res.data.map(e => ({
           booking_start: e.booking_start.split(' ')[1].slice(0, 5),
           booking_end: e.booking_end.split(' ')[1].slice(0, 5),

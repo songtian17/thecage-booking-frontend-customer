@@ -58,13 +58,13 @@ export default {
   },
   methods: {
     fetchVenues() {
-      this.$axios.get(`${process.env.VUE_APP_API}/venues`).then((res) => {
+      this.$axios.get('/venues').then((res) => {
         const { data } = res;
         this.venues = data.map(venue => Object.assign(venue, { active: false }));
       });
     },
     fetchAnnouncements() {
-      this.$axios.get(`${process.env.VUE_APP_API}/announcement`).then((res) => {
+      this.$axios.get('/announcement').then((res) => {
         const { data } = res;
         data.forEach((announcement) => {
           if (announcement.placement === 'Top') {

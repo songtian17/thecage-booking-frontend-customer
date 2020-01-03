@@ -135,7 +135,7 @@ export default {
     },
     fetchCustomerDetails() {
       this.$axios
-        .get(`${process.env.VUE_APP_API}/customer/${this.$store.getters['auth/userId']}`)
+        .get(`/customer/${this.$store.getters['auth/userId']}`)
         .then((res) => {
           // eslint-disable-next-line no-shadow
           const { email, name } = res.data;

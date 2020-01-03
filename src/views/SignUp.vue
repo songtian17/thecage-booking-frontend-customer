@@ -153,7 +153,7 @@ export default {
       this.$v.$touch();
       if (!this.$v.$invalid) {
         this.$axios
-          .post(`${process.env.VUE_APP_API}/signup`, {
+          .post('/signup', {
             email: this.formData.email,
             username: this.formData.name,
             phone: this.formData.phone,
