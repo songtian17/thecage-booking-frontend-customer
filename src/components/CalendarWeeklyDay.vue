@@ -1,6 +1,6 @@
 <template>
   <div class="calendar-wrapper">
-    <p>{{ date }}</p>
+    <p>{{ displayDate }}</p>
     <table class="calendar">
       <thead>
         <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
@@ -8,8 +8,8 @@
       <tr v-for="(timing, index) in timings" :key="index">
         <td v-for="pitch in pitches" :key="pitch.id">
           <input
-            v-model="selectedTimings"
-            :value="{ date, time: timing.time, pitch: pitch.id, hours: timing.hours }"
+            v-model="selectedTimeslots"
+            :value="formatTimeslotObject(date, timing.time, timing.hours, pitch.id, pitch.name)"
             type="checkbox"
             class="calendar-checkbox"
             :class="`span-${timing.hours}`"
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
 const bookedSlots = () => [
   {
     booking_start: '13:00',
@@ -34,7 +36,6 @@ const bookedSlots = () => [
     pitch_id: 4,
   },
 ];
-
 export default {
   name: 'CalendarWeeklyDay',
   data() {
@@ -49,6 +50,38 @@ export default {
         const bookedTime = time >= slot.booking_start && time <= slot.booking_end;
         return bookedPitch && bookedTime;
       });
+    },
+    toDateDisplayString(selectedDate) {
+      const [d, m, y] = selectedDate.split('/');
+      const dateObject = new Date(y, m - 1, d);
+      const day = weekdays[dateObject.getDay()];
+      const date = String(dateObject.getDate()).padStart(2, '0');
+      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+      return `${day}, ${date}/${month}`;
+    },
+    formatTimeslotObject(date, startTime, hours, pitchId, pitchName) {
+      const [d, m, y] = date.split('/');
+      const formattedDate = `${y}-${m}-${d}`;
+      const endTimeHour = String(parseInt(startTime.split(':')[0], 10) + hours);
+      return {
+        booking_start: `${formattedDate} ${startTime}:00`,
+        booking_end: `${formattedDate} ${endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour}:00:00`,
+        pitchId,
+        pitchName,
+      };
+    },
+  },
+  computed: {
+    selectedTimeslots: {
+      get() {
+        return this.$store.state.cart.selectedTimeslots;
+      },
+      set(selectedTimeslots) {
+        this.$store.commit('cart/setSelectedTimeslots', selectedTimeslots);
+      },
+    },
+    displayDate() {
+      return this.toDateDisplayString(this.date);
     },
   },
   props: {

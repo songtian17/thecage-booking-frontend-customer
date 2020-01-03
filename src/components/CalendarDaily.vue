@@ -9,8 +9,8 @@
         <td class="timing">{{ timing.time }}</td>
         <td v-for="pitch in pitches" :key="pitch.id">
           <input
-            v-model="selectedTimings"
-            :value="{ date, time: timing.time, pitch: pitch.id, hours: timing.hours }"
+            v-model="selectedTimeslots"
+            :value="formatTimeslotObject(date, timing.time, timing.hours, pitch.id, pitch.name)"
             :class="`span-${timing.hours}`"
             type="checkbox"
             class="calendar-checkbox"
@@ -103,7 +103,6 @@ export default {
         fieldId: this.fieldId,
       };
       this.$axios.post(`${process.env.VUE_APP_API}/calendar/day`, payload).then((res) => {
-        console.dir(res.data);
         const bookedSlots = res.data.map(e => ({
           booking_start: e.booking_start.split(' ')[1].slice(0, 5),
           booking_end: e.booking_end.split(' ')[1].slice(0, 5),
@@ -111,6 +110,27 @@ export default {
         }));
         this.bookedSlots = bookedSlots;
       });
+    },
+    formatTimeslotObject(date, startTime, hours, pitchId, pitchName) {
+      const [d, m, y] = date.split('/');
+      const formattedDate = `${y}-${m}-${d}`;
+      const endTimeHour = String(parseInt(startTime.split(':')[0], 10) + hours);
+      return {
+        booking_start: `${formattedDate} ${startTime}:00`,
+        booking_end: `${formattedDate} ${endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour}:00:00`,
+        pitchId,
+        pitchName,
+      };
+    },
+  },
+  computed: {
+    selectedTimeslots: {
+      get() {
+        return this.$store.state.cart.selectedTimeslots;
+      },
+      set(selectedTimeslots) {
+        this.$store.commit('cart/setSelectedTimeslots', selectedTimeslots);
+      },
     },
   },
   watch: {
@@ -134,6 +154,9 @@ export default {
   },
   mounted() {
     this.fieldId = this.$route.params.id;
+  },
+  destroyed() {
+    this.$store.commit('cart/clearSelectedTimeslots');
   },
 };
 </script>

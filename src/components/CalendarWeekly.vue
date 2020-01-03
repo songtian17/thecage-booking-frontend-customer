@@ -12,7 +12,7 @@
       :key="i"
       :timings="timings"
       :pitches="pitches"
-      :date="datesDisplayed[i - 1]"
+      :date="weekDates[i - 1]"
     ></calendar-weekly-day>
   </div>
 </template>
@@ -82,8 +82,6 @@ const pitches = () => [
   },
 ];
 
-const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-
 export default {
   name: 'CalendarWeekly',
   components: {
@@ -107,7 +105,7 @@ export default {
     },
   },
   computed: {
-    datesDisplayed() {
+    weekDates() {
       const dates = [];
 
       if (this.date === '') {
@@ -117,7 +115,7 @@ export default {
       for (let i = -3; i <= 3; i += 1) {
         const dateObject = this.toDateObject(this.date);
         const shiftedDateObject = this.shiftDateByDays(dateObject, i);
-        const formattedDate = this.toDateDisplayString(shiftedDateObject);
+        const formattedDate = this.formatDateObject(shiftedDateObject);
         dates.push(formattedDate);
       }
       return dates;
@@ -128,11 +126,11 @@ export default {
       const [day, month, year] = displayDate.split('/');
       return new Date(year, month - 1, day);
     },
-    toDateDisplayString(dateObject) {
-      const day = weekdays[dateObject.getDay()];
-      const date = String(dateObject.getDate()).padStart(2, '0');
+    formatDateObject(dateObject) {
+      const year = dateObject.getFullYear();
       const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-      return `${day}, ${date}/${month}`;
+      const day = String(dateObject.getDate()).padStart(2, '0');
+      return `${day}/${month}/${year}`;
     },
     shiftDateByDays(dateObject, numDays) {
       dateObject.setDate(dateObject.getDate() + numDays);
