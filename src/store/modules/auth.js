@@ -1,5 +1,5 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
-import axios from 'axios';
+import axios from '@/plugins/axios';
 
 const state = {
   token: localStorage.getItem('user-token') || '',
