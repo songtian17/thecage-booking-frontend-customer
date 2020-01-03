@@ -1,10 +1,4 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-use-before-define */
 import axios from 'axios';
-import Vue from 'vue';
-
-const devInstance = createInstance('http://localhost:5001');
-const productionInstance = createInstance('http://localhost:5001');
 
 function createInstance(baseURL) {
   return axios.create({
@@ -16,12 +10,7 @@ function createInstance(baseURL) {
   });
 }
 
-export default {
-  install() {
-    if (process.env.NODE_ENV === 'production') {
-      Vue.prototype.$axios = productionInstance;
-    } else {
-      Vue.prototype.$axios = devInstance;
-    }
-  },
-};
+const devInstance = createInstance('http://localhost:5001');
+const productionInstance = createInstance('http://localhost:5001');
+
+export default process.env.NODE_ENV === 'production' ? productionInstance : devInstance;

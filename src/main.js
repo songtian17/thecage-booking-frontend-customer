@@ -10,7 +10,7 @@ import vuetify from './plugins/vuetify';
 import store from './store';
 
 Vue.config.productionTip = false;
-Vue.use(axios);
+Vue.prototype.$axios = axios;
 Vue.use(Vuelidate);
 Vue.use(Notifications);
 Vue.use(LoadScript);
