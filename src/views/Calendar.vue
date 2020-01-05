@@ -36,10 +36,13 @@
         :pitches="pitches"
       ></calendar-weekly>
       <div class="btn-wrapper">
-        <button id="add-btn" @click="showAddToCartModal = true">Add to cart</button>
+        <button id="add-btn" @click="openAddToCartModal">Add to cart</button>
       </div>
     </div>
-  <add-to-cart-modal :showModal.sync="showAddToCartModal"></add-to-cart-modal>
+    <add-to-cart-modal
+      :showModal.sync="showAddToCartModal"
+      :selectedSlots="selectedSlots"
+    ></add-to-cart-modal>
   </div>
 </template>
 
@@ -57,6 +60,7 @@ export default {
       selectedDate: '',
       calendarType: 'day',
       showAddToCartModal: false,
+      selectedSlots: [],
       pitches: [],
     };
   },
@@ -76,7 +80,10 @@ export default {
     changeSelectedDate(newDate) {
       this.selectedDate = newDate;
     },
-  },
+    openAddToCartModal() {
+      this.showAddToCartModal = true;
+      this.selectedSlots = this.$store.getters['cart/selected'];
+    },
     fetchPitches(fieldId) {
       this.$axios
         .get(`/field/${fieldId}`)

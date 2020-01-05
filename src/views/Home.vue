@@ -85,6 +85,9 @@ export default {
   mounted() {
     this.fetchVenues();
     this.fetchAnnouncements();
+    if (!this.$store.getters['cart/products'].length) {
+      this.$store.dispatch('cart/fetchProducts');
+    }
   },
 };
 </script>

@@ -23,15 +23,12 @@
           </div>
           <div class="item-section">
             <div id="select-products">
-              <select>
-                <option
-                  v-for="product in slot.availableProducts"
-                  :key="product.id"
-                  :value="product.id"
-                >
-                  {{ product.name }}
-                </option>
-              </select>
+              <available-product-options
+                :timeslot="slot"
+                @selectedChanged="slot.amount = $event.price;
+                $forceUpdate()"
+              >
+              </available-product-options>
             </div>
             <div id="amount">${{ slot.amount }}</div>
             <v-icon id="trashcan" @click="removeCartItem(index)">mdi-trash-can</v-icon>
@@ -43,6 +40,8 @@
 </template>
 
 <script>
+import AvailableProductOptions from '@/components/AvailableProductOptions.vue';
+
 const mockSelectedSlots = () => [
   {
     pitchName: 'P4',
@@ -99,8 +98,11 @@ export default {
       this.$emit('update:showModal', false);
     },
     removeCartItem(index) {
-      this.selectedSlots.splice(index, 1);
+      this.$store.commit('cart/removeSelectedTimeslot', index);
     },
+  },
+  components: {
+    AvailableProductOptions,
   },
 };
 </script>
