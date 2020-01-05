@@ -49,32 +49,6 @@ const timings = () => [
   { time: '22:00', hours: 1 },
   { time: '23:00', hours: 1 },
 ];
-const pitches = () => [
-  {
-    id: 1,
-    name: 'P1',
-  },
-  {
-    id: 2,
-    name: 'P2',
-  },
-  {
-    id: 3,
-    name: 'P3',
-  },
-  {
-    id: 4,
-    name: 'P4',
-  },
-  {
-    id: 5,
-    name: 'P5',
-  },
-  {
-    id: 6,
-    name: 'P6',
-  },
-];
 
 export default {
   name: 'CalendarDaily',
@@ -145,7 +119,7 @@ export default {
     },
     pitches: {
       type: Array,
-      default: pitches,
+      default: () => [],
     },
     date: {
       type: String,

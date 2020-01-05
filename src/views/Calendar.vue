@@ -24,11 +24,16 @@
           </label>
         </div>
       </div>
-      <calendar-daily v-show="calendarType === 'day'" :date="selectedDate"></calendar-daily>
+      <calendar-daily
+        v-show="calendarType === 'day'"
+        :date="selectedDate"
+        :pitches="pitches"
+      ></calendar-daily>
       <calendar-weekly
         v-if="isDesktop"
         v-show="calendarType === 'week'"
         :date="selectedDate"
+        :pitches="pitches"
       ></calendar-weekly>
       <div class="btn-wrapper">
         <button id="add-btn" @click="showAddToCartModal = true">Add to cart</button>
@@ -52,6 +57,7 @@ export default {
       selectedDate: '',
       calendarType: 'day',
       showAddToCartModal: false,
+      pitches: [],
     };
   },
   components: {
@@ -71,6 +77,21 @@ export default {
       this.selectedDate = newDate;
     },
   },
+    fetchPitches(fieldId) {
+      this.$axios
+        .get(`/field/${fieldId}`)
+        .then((res) => {
+          this.pitches = res.data.pitches;
+        })
+        .catch((err) => {
+          this.$notify({
+            type: 'error',
+            title: 'Failed to fetch field information',
+            message: `Error message: ${err}`,
+          });
+        });
+    },
+  },
   watch: {
     isDesktop(bool) {
       if (!bool) {
@@ -79,7 +100,7 @@ export default {
     },
   },
   mounted() {
-    console.log(this.$route.params.id);
+    this.fetchPitches(this.$route.params.id);
   },
 };
 </script>
