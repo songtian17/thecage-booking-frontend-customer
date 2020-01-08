@@ -4,20 +4,16 @@ import axios from '@/plugins/axios';
 const state = {
   selectedTimeslots: [],
   productsList: [],
+  selectedWithProduct: [],
 };
 
 const getters = {
   selected: state => state.selectedTimeslots,
   products: state => state.productsList,
+  selectedWithProduct: state => state.selectedWithProduct,
 };
 
 const actions = {
-  updateSelected: ({ commit }, arr) => {
-    commit('updateSelected', arr);
-  },
-  clearSelected: ({ commit }) => {
-    commit('updateSelected', []);
-  },
   fetchProducts: ({ commit }) => {
     axios.get('/products').then((res) => {
       commit('setProductsList', res.data);
@@ -39,6 +35,12 @@ const mutations = {
   },
   setProductsList: (state, products) => {
     state.productsList = products;
+  },
+  copySelectedTimeslots: (state) => {
+    state.selectedWithProduct = JSON.parse(JSON.stringify(state.selectedTimeslots));
+  },
+  removeSelectedWithProduct: (state, index) => {
+    state.selectedWithProduct.splice(index, 1);
   },
 };
 

@@ -9,76 +9,36 @@
       <v-toolbar color="primary" dark flat>
         <v-toolbar-title>Choose packages and add to cart</v-toolbar-title>
       </v-toolbar>
-      <div class="items-wrapper">
-        <div
-          v-for="(slot, index) in selectedSlots"
-          :key="`${slot.pitchName}, ${slot.booking_start}`"
-          class="item"
-        >
-          <div class="item-section">
-            <div id="pitch-name">{{ slot.pitchName }}</div>
-            <div class="booking-time">{{ slot.booking_start }}</div>
-            <div id="time-separator">-</div>
-            <div class="booking-time">{{ slot.booking_end }}</div>
-          </div>
-          <div class="item-section">
-            <div id="select-products">
-              <available-product-options
-                :timeslot="slot"
-                @selectedChanged="slot.amount = $event.price;
-                $forceUpdate()"
-              >
-              </available-product-options>
-            </div>
-            <div id="amount">${{ slot.amount }}</div>
-            <v-icon id="trashcan" @click="removeCartItem(index)">mdi-trash-can</v-icon>
-          </div>
+      <v-card-text>
+        <div class="items-wrapper">
+          <add-to-cart-modal-item
+            v-for="(slot, index) in selectedSlots"
+            :key="`${slot.booking_start}, ${slot.pitchId}`"
+            :timeslot="slot"
+            @productUpdate="slot.productId = $event"
+            @remove="removeCartItem(index)"
+          >
+          </add-to-cart-modal-item>
         </div>
-      </div>
+      </v-card-text>
+
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary darken-1" text @click="$emit('closeModal')">Continue Booking</v-btn>
+        <v-btn color="primary darken-1" text @click="addItemsToCart">Add to Cart</v-btn>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
-import AvailableProductOptions from '@/components/AvailableProductOptions.vue';
-
-const mockSelectedSlots = () => [
-  {
-    pitchName: 'P4',
-    booking_start: '11/01/2020 12:00',
-    booking_end: '11/01/2020 13:00',
-    availableProducts: [
-      {
-        id: 1,
-        name: 'Online Premium',
-      },
-      {
-        id: 2,
-        name: 'Students Special',
-      },
-    ],
-    amount: '92.00',
-  },
-  {
-    pitchName: 'P5',
-    booking_start: '11/01/2020 12:00',
-    booking_end: '11/01/2020 13:00',
-    availableProducts: [
-      {
-        id: 1,
-        name: 'Online Premium',
-      },
-      {
-        id: 2,
-        name: 'Students Special',
-      },
-    ],
-    amount: '92.00',
-  },
-];
+import AddToCartModalItem from '@/components/AddToCartModalItem.vue';
 
 export default {
   name: 'AddToCartModal',
+  data() {
+    return {};
+  },
   props: {
     showModal: {
       type: Boolean,
@@ -86,7 +46,7 @@ export default {
     },
     selectedSlots: {
       type: Array,
-      default: mockSelectedSlots,
+      default: () => [],
     },
   },
   methods: {
@@ -99,10 +59,23 @@ export default {
     },
     removeCartItem(index) {
       this.$store.commit('cart/removeSelectedTimeslot', index);
+      this.$store.commit('cart/removeSelectedWithProduct', index);
+    },
+    addItemsToCart() {
+      console.log('Add To Cart CLICKED');
+      this.$axios
+        .post('/cartitem', { items: this.selectedSlots })
+        .then((res) => {
+          console.log(res);
+          this.$emit('closeModal');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
   components: {
-    AvailableProductOptions,
+    AddToCartModalItem,
   },
 };
 </script>
@@ -150,10 +123,6 @@ export default {
     background-color: white;
     border: 1px solid $secondary;
     margin: 0 8px;
-  }
-
-  #amount {
-    margin: 0 16px;
   }
 
   #trashcan {

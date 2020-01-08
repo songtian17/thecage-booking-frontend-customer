@@ -1,15 +1,9 @@
 <template>
-  <div>
-    <select v-model="selected" @change="$emit('selectedChanged', selected)">
-      <option
-        v-for="product in products"
-        :key="product.id"
-        :value="product"
-      >
-        {{ product.name }}
-      </option>
-    </select>
-  </div>
+  <select v-model="selected" @change="$emit('selectedChanged', selected)">
+    <option v-for="product in products" :key="product.id" :value="product">
+      {{ product.name }}
+    </option>
+  </select>
 </template>
 
 <script>
@@ -43,7 +37,12 @@ export default {
       return isStartTimeValid && isEndTimeValid;
     },
   },
+  mounted() {
+    // eslint-disable-next-line prefer-destructuring
+    this.selected = this.products[0];
+    this.$emit('selectedChanged', this.selected);
+  },
 };
 </script>
 
-<style></style>
+<style lang="scss" scoped></style>

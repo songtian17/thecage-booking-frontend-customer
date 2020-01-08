@@ -40,8 +40,10 @@
       </div>
     </div>
     <add-to-cart-modal
+      v-if="showAddToCartModal"
       :showModal.sync="showAddToCartModal"
       :selectedSlots="selectedSlots"
+      @closeModal="showAddToCartModal = false"
     ></add-to-cart-modal>
   </div>
 </template>
@@ -82,7 +84,8 @@ export default {
     },
     openAddToCartModal() {
       this.showAddToCartModal = true;
-      this.selectedSlots = this.$store.getters['cart/selected'];
+      this.$store.commit('cart/copySelectedTimeslots');
+      this.selectedSlots = this.$store.getters['cart/selectedWithProduct'];
     },
     fetchPitches(fieldId) {
       this.$axios
@@ -108,6 +111,9 @@ export default {
   },
   mounted() {
     this.fetchPitches(this.$route.params.id);
+    if (!this.$store.getters['cart/products'].length) {
+      this.$store.dispatch('cart/fetchProducts');
+    }
   },
 };
 </script>
