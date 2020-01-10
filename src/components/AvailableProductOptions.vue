@@ -1,9 +1,12 @@
 <template>
-  <select v-model="selected" @change="$emit('selectedChanged', selected)">
-    <option v-for="product in products" :key="product.id" :value="product">
-      {{ product.name }}
-    </option>
-  </select>
+  <v-select
+    v-model="selected"
+    :items="products"
+    item-text="name"
+    :return-object="true"
+    @change="$emit('selectedChanged', selected)"
+  >
+  </v-select>
 </template>
 
 <script>
