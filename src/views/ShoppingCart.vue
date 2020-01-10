@@ -9,7 +9,7 @@
           v-for="(item, index) in cartItems"
           :key="index"
           :itemData="item"
-          @removeItem="removeCartItem(index)"
+          @removeItem="removeCartItem(index, item.id)"
         ></shopping-cart-item>
       </div>
       <div class="totals">
@@ -37,19 +37,6 @@
 import ViewHeader from '@/components/ViewHeader.vue';
 import ShoppingCartItem from '@/components/ShoppingCartItem.vue';
 
-const mockCartItems = [
-  {
-    venue: 'Kallang',
-    field: '5-A-Side',
-    pitch: 'Pitch 4',
-    timeStart: '22/10/2019 15:00',
-    timeEnd: '22/10/2019 17:00',
-    product: 'Online Premium',
-    amount: '92.00',
-    discountedAmount: '90.00',
-  },
-];
-
 export default {
   name: 'ShoppingCart',
   data() {
@@ -59,12 +46,39 @@ export default {
     };
   },
   methods: {
+    fetchCartItems() {
+      this.$axios
+        .get('/cartitem')
+        .then((res) => {
+          console.log(res);
+          this.cartItems = res.data.items;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     fetchPromoDetails() {
       // POST promoCodeInput and fetch promo details
       // then apply promo to items in cart
     },
-    removeCartItem(index) {
-      this.cartItems.splice(index, 1);
+    removeCartItem(index, itemId) {
+      this.$axios
+        .delete(`/cartitem/${itemId}`)
+        .then(() => {
+          this.cartItems.splice(index, 1);
+          this.$notify({
+            type: 'success',
+            text: 'Successfully removed item from cart.',
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          this.$notify({
+            type: 'error',
+            title: 'An error has occured',
+            text: 'Failed to remove item from cart. Please try again later.',
+          });
+        });
       // send request to odoo to remove time slot
 
       if (!this.cartItems.length) {
@@ -88,7 +102,7 @@ export default {
   computed: {
     totalPrice() {
       return this.cartItems
-        .reduce((acc, cur) => acc + parseFloat(cur.discountedAmount), 0)
+        .reduce((acc, cur) => acc + parseFloat(cur.discountAmount), 0)
         .toFixed(2);
     },
   },
@@ -97,7 +111,7 @@ export default {
     ShoppingCartItem,
   },
   mounted() {
-    this.cartItems = mockCartItems;
+    this.fetchCartItems();
     this.$store.dispatch('timer/startTimer');
   },
 };
