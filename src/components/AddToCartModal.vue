@@ -1,12 +1,12 @@
 <template>
   <v-dialog
-    max-width="600px"
+    max-width="900px"
     :value="showModal"
     @click:outside="onCloseModal()"
     @keydown="onCloseModal($event)"
   >
     <v-card>
-      <v-toolbar color="primary" dark flat>
+      <v-toolbar color="#C85050" dark flat>
         <v-toolbar-title>Choose packages and add to cart</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
@@ -15,6 +15,7 @@
             v-for="(slot, index) in selectedSlots"
             :key="`${slot.booking_start}, ${slot.pitchId}`"
             :timeslot="slot"
+            class="modal-item"
             @productUpdate="slot.productId = $event"
             @remove="removeCartItem(index)"
           >
@@ -81,8 +82,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.items-wrapper {
-  padding: 12px 18px;
+.modal-item {
+  padding: 20px 0;
+  border-bottom: 1px solid #c7c7c7;
+}
+
+.modal-item:last-child {
+  border-bottom: none;
 }
 
 .item {
