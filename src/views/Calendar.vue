@@ -7,7 +7,7 @@
     </view-header>
     <div class="content-wrapper">
       <div class="legend">
-        <input id="checkbox-1-1" type="checkbox" class="calendar-checkbox" @click.prevent />
+        <input type="checkbox" class="calendar-checkbox" @click.prevent />
         <label>Available</label>
         <input type="checkbox" class="calendar-checkbox" checked @click.prevent />
         <label>Your slot</label>
@@ -124,39 +124,14 @@ export default {
 }
 
 .legend {
-  width: 80%;
+  width: 95%;
   margin: 0 auto;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
   text-align: center;
-
-  .calendar-type-toggle {
-    float: right;
-
-    label {
-      margin: 0;
-    }
-
-    span {
-      @include montserrat($h4, 500);
-      padding: 6px 12px;
-      border: 1px solid $secondary;
-      background-color: white;
-      color: black;
-      cursor: pointer;
-    }
-
-    input[type="radio"] {
-      display: none;
-
-      &:checked + span {
-        background-color: $primary;
-        color: white;
-      }
-    }
-  }
+  position: relative;
 
   label {
-    margin: 0 20px 0 12px;
+    margin: 0 16px 0 8px;
     @include montserrat($h4, 400);
   }
 
@@ -178,6 +153,35 @@ export default {
 
     &:disabled {
       background-color: #808080;
+    }
+  }
+}
+
+.calendar-type-toggle {
+  float: right;
+  position: absolute;
+  right: 180px;
+  top: 0;
+
+  label {
+    margin: 0;
+  }
+
+  span {
+    @include montserrat($h4, 500);
+    padding: 6px 12px;
+    border: 1px solid $secondary;
+    background-color: white;
+    color: black;
+    cursor: pointer;
+  }
+
+  input[type="radio"] {
+    display: none;
+
+    &:checked + span {
+      background-color: $primary;
+      color: white;
     }
   }
 }

@@ -1,20 +1,22 @@
 <template>
   <div class="item">
     <v-icon v-if="!displayOnly" class="remove" @click="$emit('removeItem')">mdi-close</v-icon>
-    <span id="name">{{ itemData.venue }}, {{ itemData.field }} Field</span>
-    <span id="pitch">{{ itemData.pitch }}</span>
-    <span id="timing">{{ itemData.timeStart }} - {{ itemData.timeEnd }}</span>
+    <span id="name">{{ itemData.venueName }}, {{ itemData.fieldType }} Field</span>
+    <span id="pitch">{{ itemData.pitchName }}</span>
+    <span id="timing"
+      >{{ itemData.startTime.replace("T", " ") }} - {{ itemData.endTime.replace("T", " ") }}</span
+    >
     <label id="label-product">TYPE</label>
-    <span id="product">{{ itemData.product }}</span>
+    <span id="product">{{ itemData.productName }}</span>
     <label id="label-amount">AMOUNT</label>
     <span
-      v-if="!itemData.discountedAmount || itemData.amount === itemData.discountedAmount"
+      v-if="!itemData.discountAmount || itemData.amount === itemData.discountAmount"
       id="amount"
       >${{ itemData.amount }}</span
     >
     <span v-else id="amount">
       <span class="strikethrough"> ${{ itemData.amount }} </span>
-      <span>${{ itemData.discountedAmount }}</span>
+      <span>${{ itemData.discountAmount }}</span>
     </span>
   </div>
 </template>
@@ -26,14 +28,14 @@ export default {
     itemData: {
       type: Object,
       default: () => ({
-        venue: '',
-        field: '',
-        pitch: '',
-        timeStart: '',
-        timeEnd: '',
-        product: '',
+        venueName: '',
+        fieldType: '',
+        pitchName: '',
+        startTime: '',
+        endTime: '',
+        productName: '',
         amount: '',
-        discountedAmount: '',
+        discountAmount: '',
       }),
     },
     displayOnly: {

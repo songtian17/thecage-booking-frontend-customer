@@ -33,10 +33,14 @@ export default {
       const hour = dateStr.slice(11, 13);
       return parseInt(hour, 10);
     },
+    getHourFromTime(timeStr) {
+      const hour = timeStr.slice(0, 2);
+      return parseInt(hour, 10);
+    },
     isProductTimingValid(product) {
       const timeslotStartTime = this.getHourFromDate(this.timeslot.booking_start);
-      const isStartTimeValid = timeslotStartTime >= this.getHourFromDate(product.start_time);
-      const isEndTimeValid = timeslotStartTime <= this.getHourFromDate(product.end_time);
+      const isStartTimeValid = timeslotStartTime >= this.getHourFromTime(product.start_time);
+      const isEndTimeValid = timeslotStartTime <= this.getHourFromTime(product.end_time);
       return isStartTimeValid && isEndTimeValid;
     },
   },
