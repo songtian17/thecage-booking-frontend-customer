@@ -28,5 +28,25 @@ export default {
 </script>
 
 <style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,500i,600,700&display=swap');
+@import url("https://fonts.googleapis.com/css?family=Montserrat:400,500,500i,600,700&display=swap");
+
+#home {
+  h1 {
+    @include montserrat(28px, 600);
+    margin-bottom: 15px;
+  }
+  p {
+    font-size: 16px !important;
+    font-weight: 400;
+  }
+  @media (max-width: 720px) {
+    h1 {
+      font-size: 22px;
+      margin-bottom: 15px;
+    }
+    p {
+      font-size: 14px !important;
+    }
+  }
+}
 </style>

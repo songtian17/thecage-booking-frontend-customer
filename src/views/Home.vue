@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div id="home">
     <view-header :main="true">
       THE CAGE <br />
-      BOOKING SYSTEM
+      BOOKING SYSTEM.
     </view-header>
     <div class="home">
       <div v-if="announcement1.visible" class="announcement" v-html="announcement1.html"></div>
@@ -32,6 +32,10 @@
         </div>
         <hr />
       </div>
+      <p class="home-info">
+        For bookings less than 12 hours and beyond 60 days, please call our hotline at 6344 9345
+        between 10am and 11pm daily.
+      </p>
       <div v-if="announcement2.visible" class="announcement" v-html="announcement2.html"></div>
     </div>
   </div>
@@ -96,28 +100,25 @@ export default {
 hr {
   border: 1px solid #c2c2c2;
 }
-
+#home .v-application p {
+  font-size: 14px;
+}
 .home {
-  margin-left: 24px;
-  margin-right: 64px;
-
-  @media screen and (max-width: 400px) {
-    margin-left: 24px;
-    margin-right: 24px;
-  }
+  margin: 0 60px;
 }
-
 .announcement {
-  margin-top: 30px;
-  margin-bottom: 14px;
-}
-
-.venue {
-  margin: 14px 40px;
-
-  @media screen and (max-width: 400px) {
-    margin: 14px 0;
+  @include montserrat(18px, 600);
+  margin: 40px 0;
+  p {
+    font-size: 14px;
   }
+}
+.home-info{
+    @include montserrat(16px, 600);
+    margin-top: 25px;
+}
+.venue {
+  margin: 20px 40px;
 
   .collapsable {
     @include montserrat($h3, 600);
@@ -140,6 +141,24 @@ hr {
       @include montserrat($h4, 500);
       color: black;
       text-decoration: none;
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .home{
+    margin: 0 20px;
+  }
+  .announcement{
+    margin:30px 0;
+  }
+  .venue{
+    margin: 20px 30px;
+    .collapsable{
+      font-size: 16px;
+    }
+    .field a{
+      font-size: 14px;
     }
   }
 }

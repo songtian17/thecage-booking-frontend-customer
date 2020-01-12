@@ -7,7 +7,7 @@
     <div class="container">
       <div class="header">Forget Password</div>
       <form v-if="!isEmailSent" @submit.prevent="submit">
-        <p>Please enter your email address associated with your account.</p>
+        <p class="info-msg">Please enter your email address associated with your account.</p>
         <label for="email">Email</label>
         <br />
         <input id="email" v-model="email" type="email" name="email" />
@@ -41,11 +41,14 @@ export default {
   },
   methods: {
     submit() {
-      this.$axios.post('/forgetpassword', { email: this.email }).then(() => {
-        this.isEmailSent = true;
-      }).catch((err) => {
-        console.log(err);
-      });
+      this.$axios
+        .post('/forgetpassword', { email: this.email })
+        .then(() => {
+          this.isEmailSent = true;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   },
 };
@@ -53,12 +56,6 @@ export default {
 
 <style lang="scss" scoped>
 .container {
-  @media screen and (max-width: 400px) {
-    width: 100%;
-    border-radius: 0px;
-    box-shadow: none;
-  }
-
   margin: 40px auto;
   width: 400px;
   padding: 0;
@@ -66,34 +63,28 @@ export default {
   box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14),
     0px 5px 22px 4px rgba(0, 0, 0, 0.12);
 
+  .info-msg{
+    @include montserrat($h5, 400);
+  }
   .header {
-    @media screen and (max-width: 400px) {
-      background-color: white;
-      color: black;
-      padding: 0;
-      margin: 16px;
-      margin-bottom: 0;
-      padding-bottom: 6px;
-      border-bottom: 1px solid $secondary;
-    }
-
     background-color: $primary;
     color: white;
-    padding: 16px;
+    padding: 15px 20px;
     @include montserrat($h3, 600);
   }
 
   form {
-    padding: 16px;
+    padding: 20px;
 
     label {
       @include montserrat($h5, 400);
     }
 
     input:not(#submit) {
+      @include montserrat($h5, 400);
       border: 1px solid $secondary;
-      margin-top: 4px;
-      margin-bottom: 12px;
+      margin-top: 5px;
+      margin-bottom: 20px;
       width: 100%;
       padding: 4px 6px;
     }
@@ -104,11 +95,14 @@ export default {
       #submit {
         background-color: $primary;
         color: white;
-        padding: 6px 12px;
-        border-radius: 4px;
-        float: right;
-        @include montserrat($h4, 500);
+      padding: 10px 25px;
+      float: right;
+      @include montserrat($h5, 500);
         cursor: pointer;
+        transition: 0.2s linear;
+      }
+      #submit:hover {
+        background-color: #c85050;
       }
     }
   }
@@ -116,6 +110,27 @@ export default {
   .info-text {
     @include montserrat($h5, 400);
     padding: 16px;
+  }
+}
+
+@media (max-width: 720px) {
+  .container {
+    width: 100%;
+    border-radius: 0px;
+    box-shadow: none;
+    .header {
+      background-color: white;
+      color: black;
+      padding: 0;
+      margin: 16px;
+      margin-bottom: 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid $secondary;
+    }
+  }
+  form .actions a {
+    margin-right: 10px;
+    @include montserrat($h6, 500);
   }
 }
 </style>

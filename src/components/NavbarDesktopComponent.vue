@@ -62,12 +62,13 @@ export default {
   justify-content: space-between;
 
   .logo {
-    margin-left: 24px;
+    margin-left: 60px;
     height: 100%;
   }
 
   img {
-    height: $navbarHeight;
+    height: 60px;
+    margin: 4px 0;
   }
 
   // links excluding TheCage logo
@@ -75,7 +76,7 @@ export default {
     $fontSize: $h4;
     @include montserrat($fontSize, 600);
     line-height: $fontSize;
-    margin-right: 30px;
+    margin-right: 60px;
 
     a {
       color: black;

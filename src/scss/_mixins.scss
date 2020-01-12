@@ -20,13 +20,15 @@
 
 @mixin form-group {
   .form-group {
-    margin-bottom: 12px;
+    margin-bottom: 15px;
 
     .form__label {
       @include montserrat($h5, 400);
     }
     .form__input {
+      @include montserrat($h5, 400);
       border: 1px solid $secondary;
+      margin: 5px 0;
       padding: 4px 6px;
     }
   }

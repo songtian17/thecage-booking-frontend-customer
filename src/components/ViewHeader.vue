@@ -40,9 +40,10 @@ export default {
 }
 
 .header-title {
-  @include montserrat($h2, 600);
+  @include montserrat(32px, 700);
   color: white;
-  padding: 20px 24px;
+  padding: 40px 60px;
+  line-height: 40px;
 
   &.main {
     @include montserrat($h1, 700);
@@ -63,5 +64,13 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+
+@media (max-width: 720px){
+  .header-title {
+    font-size: 28px;
+    line-height: 36px;
+    padding: 35px 20px;
+  }
 }
 </style>

@@ -60,12 +60,12 @@ export default {
   margin: 15px 30px;
 
   .line {
-    width: 30px;
-    height: 5px;
+    width: 25px;
+    height: 2px;
     display: block;
     background-color: black;
     border-radius: 3px;
-    margin: 5px auto;
+    margin: 4px auto;
     transition: all 0.2s ease-in-out;
   }
 
@@ -74,7 +74,7 @@ export default {
   }
 
   &.active .line:nth-child(1) {
-    transform: translateY(10px) rotate(45deg);
+    transform: translateY(6px) rotate(45deg);
   }
 
   &.active .line:nth-child(2) {
@@ -82,7 +82,7 @@ export default {
   }
 
   &.active .line:nth-child(3) {
-    transform: translateY(-10px) rotate(-45deg);
+    transform: translateY(-6px) rotate(-45deg);
   }
 }
 
@@ -101,17 +101,17 @@ export default {
 // mobile menu
 .menu {
   position: absolute;
-  top: $navbarHeight;
+  top: 60px;
   left: 0;
   right: 0;
   z-index: 10;
   background-color: white;
 
   a {
-    @include montserrat($h3, 500, italic);
+    @include montserrat($h5, 500, italic);
     text-decoration-line: none;
     display: block;
-    padding: 12px 24px;
+    padding: 12px 20px;
     margin: 1px 0;
     width: 100%;
     background-color: $primary;
@@ -122,18 +122,19 @@ export default {
 // navbar
 .nav {
   background-color: whitesmoke;
-  height: $navbarHeight;
+  height: 60px;
   display: flex;
   align-items: center;
   justify-content: space-between;
 
   .logo {
-    margin-left: 24px;
+    margin-left: 20px;
     height: 100%;
   }
 
   img {
-    height: $navbarHeight;
+    height: 50px;
+    margin: 5px 0;
   }
 }
 </style>

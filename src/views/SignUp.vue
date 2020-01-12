@@ -175,39 +175,23 @@ export default {
 @include form-group;
 
 .container {
-  @media screen and (max-width: 400px) {
-    width: 100%;
-    border-radius: 0px;
-    box-shadow: none;
-  }
-
   margin: 40px auto;
-  width: 400px;
+  width: 450px;
   padding: 0;
   border-radius: 4px;
   box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14),
     0px 5px 22px 4px rgba(0, 0, 0, 0.12);
 
   .header {
-    @media screen and (max-width: 400px) {
-      background-color: white;
-      color: black;
-      padding: 0;
-      margin: 16px;
-      margin-bottom: 0;
-      padding-bottom: 6px;
-      border-bottom: 1px solid $secondary;
-    }
-
     background-color: $primary;
     color: white;
-    padding: 16px;
+    padding: 15px 20px;
     @include montserrat($h3, 600);
   }
 }
 
 form {
-  padding: 16px;
+  padding: 20px;
 
   .form__input {
     width: 100%;
@@ -219,12 +203,36 @@ form {
     #submit {
       background-color: $primary;
       color: white;
-      padding: 6px 12px;
-      border-radius: 4px;
+      padding: 10px 25px;
       float: right;
-      @include montserrat($h4, 500);
+      @include montserrat($h5, 500);
       cursor: pointer;
+      transition: 0.2s linear;
     }
+    #submit:hover{
+      background-color:#C85050 ;
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .container {
+    width: 100%;
+    border-radius: 0px;
+    box-shadow: none;
+    .header {
+      background-color: white;
+      color: black;
+      padding: 0;
+      margin: 16px;
+      margin-bottom: 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid $secondary;
+    }
+  }
+  form .actions a {
+    margin-right: 10px;
+    @include montserrat($h6, 500);
   }
 }
 </style>
