@@ -109,6 +109,7 @@ export default {
 .weekly-calendar {
   width: 95%;
   margin: 0 auto;
+  text-align: center;
 }
 
 .timings-wrapper {
