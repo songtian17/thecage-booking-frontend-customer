@@ -63,12 +63,12 @@ export default {
       this.$store.commit('cart/removeSelectedWithProduct', index);
     },
     addItemsToCart() {
-      console.log('Add To Cart CLICKED');
       this.$axios
         .post('/cartitem', { items: this.selectedSlots })
         .then((res) => {
           console.log(res);
           this.$emit('closeModal');
+          this.$router.push('/cart');
         })
         .catch((err) => {
           console.log(err);

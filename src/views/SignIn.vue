@@ -86,8 +86,12 @@ export default {
       if (!this.$v.$invalid) {
         this.$store
           .dispatch('auth/login', this.formData)
-          .then(() => {
-            this.$router.back(1);
+          .then((res) => {
+            this.$notify({
+              type: 'success',
+              text: `Logged in as ${res.data.user}`,
+            });
+            this.$router.push('/');
           })
           .catch((err) => {
             if (err.response.status === 400) {
@@ -154,11 +158,11 @@ form {
       cursor: pointer;
       transition: 0.2s linear;
     }
-    a:hover{
+    a:hover {
       color: #115aac;
     }
-    #submit:hover{
-      background-color:#C85050 ;
+    #submit:hover {
+      background-color: #c85050;
     }
   }
 }

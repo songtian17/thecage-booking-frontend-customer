@@ -46,6 +46,10 @@ export default {
     },
     logout() {
       this.$store.dispatch('auth/logout').then(() => {
+        this.$notify({
+          type: 'success',
+          text: 'Signed out successfully',
+        });
         this.$router.push('/');
       });
     },

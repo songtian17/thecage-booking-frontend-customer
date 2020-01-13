@@ -160,9 +160,19 @@ export default {
             password: this.formData.password,
           })
           .then(() => {
+            this.$notify({
+              type: 'success',
+              title: 'Signed up successfully',
+              text: 'Sign in to your newly registered account',
+            });
             this.$router.push('/');
           })
           .catch((err) => {
+            this.$notify({
+              type: 'error',
+              title: 'Sign Up Failed',
+              text: err.response.data.message,
+            });
             console.log(err.response);
           });
       }
