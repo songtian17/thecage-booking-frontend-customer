@@ -39,24 +39,25 @@
 import ViewHeader from '@/components/ViewHeader.vue';
 import ShoppingCartItem from '@/components/ShoppingCartItem.vue';
 
-const mockCartItems = [
-  {
-    venue: 'Kallang',
-    field: '5-A-Side',
-    pitch: 'Pitch 4',
-    timeStart: '22/10/2019 15:00',
-    timeEnd: '22/10/2019 17:00',
-    product: 'Online Premium',
-    amount: '92.00',
-    discountedAmount: '90.00',
-  },
-];
 export default {
   name: 'ConfirmOrder',
   data() {
     return {
       cartItems: [],
     };
+  },
+  methods: {
+    fetchCartItems() {
+      this.$axios
+        .get('/cartitem')
+        .then((res) => {
+          console.log(res);
+          this.cartItems = res.data.items;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
   },
   computed: {
     tax() {
@@ -74,7 +75,7 @@ export default {
     if (!this.total) {
       this.$router.push('/cart');
     }
-    this.cartItems = mockCartItems;
+    this.fetchCartItems();
   },
 };
 </script>
