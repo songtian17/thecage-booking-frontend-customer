@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="actions">
-          <button id="return">
+          <button id="return" @click="$router.go('/cart')">
             <v-icon size="16px">mdi-chevron-left</v-icon>
             <span>Return to Cart</span>
           </button>
