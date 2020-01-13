@@ -9,9 +9,7 @@
     <label id="label-product">TYPE</label>
     <span id="product">{{ itemData.productName }}</span>
     <label id="label-amount">AMOUNT</label>
-    <span
-      v-if="!itemData.discountAmount || itemData.amount === itemData.discountAmount"
-      id="amount"
+    <span v-if="!itemData.discountAmount || itemData.amount === itemData.discountAmount" id="amount"
       >${{ itemData.amount }}</span
     >
     <span v-else id="amount">
@@ -83,46 +81,90 @@ export default {
 }
 
 /* Grid Display */
-.item {
-  display: grid;
-  grid-template-columns: 4fr 3fr 2fr;
-  grid-template-rows: auto;
-  grid-column-gap: 16px;
-  grid-row-gap: 8px;
+@media (max-width: 720px) {
+  .item {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: auto;
+    grid-row-gap: 4px;
 
-  #name {
-    grid-column: 1 / span 3;
-    grid-row: 1;
+    #name {
+      grid-column: span 2;
+      grid-row: 1;
+    }
+
+    #pitch {
+      grid-column: span 2;
+      grid-row: 2;
+    }
+
+    #timing {
+      grid-column: span 2;
+      grid-row: 3;
+      padding-bottom: 10px;
+      border-bottom: 1px solid white;
+    }
+
+    #label-product {
+      grid-row: 4;
+    }
+
+    #product {
+      grid-row: 5;
+    }
+
+    #label-amount {
+      grid-row: 4;
+    }
+
+    #amount {
+      grid-row: 5;
+    }
   }
+}
 
-  #pitch {
-    grid-row: 2;
-    grid-column: 1;
-  }
+@media (min-width: 720px) {
+  .item {
+    display: grid;
+    grid-template-columns: 4fr 3fr 2fr;
+    grid-template-rows: auto;
+    grid-column-gap: 16px;
+    grid-row-gap: 8px;
 
-  #timing {
-    grid-row: 3;
-    grid-column: 1;
-  }
+    #name {
+      grid-column: 1 / span 3;
+      grid-row: 1;
+    }
 
-  #label-product {
-    grid-row: 2;
-    grid-column: 2;
-  }
+    #pitch {
+      grid-row: 2;
+      grid-column: 1;
+    }
 
-  #product {
-    grid-row: 3;
-    grid-column: 2;
-  }
+    #timing {
+      grid-row: 3;
+      grid-column: 1;
+    }
 
-  #label-amount {
-    grid-row: 2;
-    grid-column: 3;
-  }
+    #label-product {
+      grid-row: 2;
+      grid-column: 2;
+    }
 
-  #amount {
-    grid-row: 3;
-    grid-column: 3;
+    #product {
+      grid-row: 3;
+      grid-column: 2;
+    }
+
+    #label-amount {
+      grid-row: 2;
+      grid-column: 3;
+    }
+
+    #amount {
+      grid-row: 3;
+      grid-column: 3;
+    }
   }
 }
 /* Grid Display */
