@@ -244,6 +244,7 @@ export default {
 
 form {
   width: 80%;
+  max-width: 800px;
   margin: 30px auto 40px;
   display: flex;
   flex-direction: column;
