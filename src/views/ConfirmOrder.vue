@@ -26,8 +26,8 @@
           </div>
         </div>
         <div class="right">
-          <span>Total: $100.00</span>
-          <span>Taxes: $7.00</span>
+          <span>Total: ${{ total.toFixed(2) }}</span>
+          <span>Taxes: ${{ tax.toFixed(2) }}</span>
           <button id="payment-btn">Pay Now</button>
         </div>
       </div>
@@ -58,11 +58,22 @@ export default {
       cartItems: [],
     };
   },
+  computed: {
+    tax() {
+      return this.$store.state.cart.cartTax;
+    },
+    total() {
+      return this.$store.state.cart.cartTotal;
+    },
+  },
   components: {
     ViewHeader,
     ShoppingCartItem,
   },
   mounted() {
+    if (!this.total) {
+      this.$router.push('/cart');
+    }
     this.cartItems = mockCartItems;
   },
 };

@@ -13,7 +13,7 @@
         ></shopping-cart-item>
       </div>
       <div class="totals">
-        <p>Total: ${{ totalPrice }}</p>
+        <p>Total: ${{ totalPrice.toFixed(2) }}</p>
       </div>
       <div class="actions">
         <button id="clear-cart-btn" @click="clearCart">
@@ -57,10 +57,6 @@ export default {
           console.log(err);
         });
     },
-    fetchPromoDetails() {
-      // POST promoCodeInput and fetch promo details
-      // then apply promo to items in cart
-    },
     removeCartItem(index, itemId) {
       this.$axios
         .delete(`/cartitem/${itemId}`)
@@ -101,9 +97,12 @@ export default {
   },
   computed: {
     totalPrice() {
-      return this.cartItems
-        .reduce((acc, cur) => acc + parseFloat(cur.discountAmount), 0)
-        .toFixed(2);
+      return this.$store.state.cart.cartTotal;
+    },
+  },
+  watch: {
+    cartItems() {
+      this.$store.dispatch('cart/calculateCartPrices', this.cartItems);
     },
   },
   components: {
