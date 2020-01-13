@@ -57,7 +57,7 @@
           </div>
         </div>
         <div class="actions">
-          <button id="return" @click="$router.go('/cart')">
+          <button id="return" @click="$router.push('/cart')">
             <v-icon size="16px">mdi-chevron-left</v-icon>
             <span>Return to Cart</span>
           </button>
@@ -67,11 +67,11 @@
       <div class="order-info">
         <span class="title">Your Order</span>
         <span>Subtotal</span>
-        <span>${{ subtotal }}</span>
+        <span>${{ subtotal.toFixed(2) }}</span>
         <span>Taxes</span>
-        <span>${{ taxes }}</span>
+        <span>${{ tax.toFixed(2) }}</span>
         <span class="subtitle">Total to pay</span>
-        <span class="subtitle">${{ total }}</span>
+        <span class="subtitle">${{ total.toFixed(2) }}</span>
       </div>
     </div>
   </div>
@@ -109,18 +109,15 @@ export default {
       },
     },
   },
-  props: {
-    subtotal: {
-      type: String,
-      default: '93.00',
+  computed: {
+    subtotal() {
+      return this.$store.state.cart.cartSubtotal;
     },
-    taxes: {
-      type: String,
-      default: '7.00',
+    tax() {
+      return this.$store.state.cart.cartTax;
     },
-    total: {
-      type: String,
-      default: '100.00',
+    total() {
+      return this.$store.state.cart.cartTotal;
     },
   },
   components: {
@@ -150,6 +147,9 @@ export default {
     },
   },
   mounted() {
+    if (!this.total) {
+      this.$router.push('/cart');
+    }
     this.fetchCustomerDetails();
   },
 };
