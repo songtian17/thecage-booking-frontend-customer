@@ -153,7 +153,7 @@ export default {
     }
 
     &.timing {
-    @include montserrat($h5, 400);
+      @include montserrat($h5, 400);
       vertical-align: top;
       width: 40px;
       // text-align: right;
@@ -201,6 +201,15 @@ export default {
 
   .calendar & {
     width: 100%;
+  }
+}
+
+@media (max-width: 720px) {
+  .calendar {
+    width: 95%;
+  }
+  .calendar td.timing {
+    font-size: 12px;
   }
 }
 </style>

@@ -72,10 +72,12 @@ export default {
     font-size: 20px;
     line-height: 26px;
     padding: 25px 20px;
+    padding-right: 80px;
     .main & {
       font-size: 26px;
       line-height: 30px;
       padding: 35px 20px;
+      padding-right: 80px;
     }
   }
   .timer {
