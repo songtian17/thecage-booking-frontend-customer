@@ -119,7 +119,7 @@ export default {
 
 .timings {
   display: inline-block;
-  font-size: 14px;
+    @include montserrat($h5, 400);
   width: 40px;
 
   tr {

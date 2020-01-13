@@ -142,6 +142,7 @@ export default {
 
   thead td {
     text-align: center;
+    @include montserrat($h5, 400);
   }
 
   td {
@@ -152,7 +153,7 @@ export default {
     }
 
     &.timing {
-      font-size: 14px;
+    @include montserrat($h5, 400);
       vertical-align: top;
       width: 40px;
       // text-align: right;

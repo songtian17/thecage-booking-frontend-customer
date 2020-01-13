@@ -2,12 +2,13 @@
   <v-dialog
     max-width="900px"
     :value="showModal"
+    content-class="addtocart-dialog"
     @click:outside="onCloseModal()"
     @keydown="onCloseModal($event)"
   >
     <v-card>
       <v-toolbar color="#C85050" dark flat>
-        <v-toolbar-title>Choose packages and add to cart</v-toolbar-title>
+        <v-toolbar-title class="modal-title">Add to cart</v-toolbar-title>
       </v-toolbar>
       <v-card-text>
         <div class="items-wrapper">
@@ -23,10 +24,14 @@
         </div>
       </v-card-text>
 
-      <v-card-actions>
+      <v-card-actions id="modal-buttons">
         <v-spacer></v-spacer>
-        <v-btn color="primary darken-1" text @click="$emit('closeModal')">Continue Booking</v-btn>
-        <v-btn color="primary darken-1" text @click="addItemsToCart">Add to Cart</v-btn>
+        <v-btn class="modal-button" color="primary darken-1" text @click="$emit('closeModal')"
+          >Continue Booking</v-btn
+        >
+        <v-btn class="modal-button" color="primary darken-1" text @click="addItemsToCart"
+          >Add to Cart</v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -85,10 +90,14 @@ export default {
 .modal-item {
   padding: 20px 0;
   border-bottom: 1px solid #c7c7c7;
+  position: relative;
 }
-
+.modal-title {
+  @include montserrat($h4, 400);
+}
 .modal-item:last-child {
   border-bottom: none;
+  padding-bottom: 0;
 }
 
 .item {
@@ -133,6 +142,21 @@ export default {
 
   #trashcan {
     cursor: pointer;
+  }
+}
+
+@media (max-width: 950px) {
+  .items-wrapper {
+    padding: 0 24px 0 0;
+  }
+}
+@media (max-width: 650px) {
+  #modal-buttons {
+    display: block;
+    .modal-button {
+      display: block;
+      margin: 0 auto;
+    }
   }
 }
 </style>

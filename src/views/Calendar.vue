@@ -2,7 +2,6 @@
   <div>
     <view-header :main="false">
       KALLANG 05
-      <br />
       <calendar-date-picker @change="changeSelectedDate"></calendar-date-picker>
     </view-header>
     <div class="content-wrapper">
@@ -169,19 +168,25 @@ export default {
 
   span {
     @include montserrat($h4, 500);
-    padding: 6px 12px;
-    border: 1px solid $secondary;
+    padding: 10px 25px;
+    border: 1px solid #c7c7c7;
     background-color: white;
     color: black;
     cursor: pointer;
+    transition: 0.2s linear;
+
+    &:hover {
+      background-color: #d2d2d2;
+    }
   }
 
   input[type="radio"] {
     display: none;
 
     &:checked + span {
-      background-color: $primary;
+      background-color: #c85050;
       color: white;
+      cursor: auto;
     }
   }
 }
@@ -194,10 +199,22 @@ export default {
 
   #add-btn {
     @include montserrat($h5, 500);
-    padding: 6px 12px;
+    padding: 10px 25px;
     background-color: $primary;
     color: white;
-    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s linear;
+    &:hover {
+      background-color: #c85050;
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .legend {
+    label {
+      font-size: 12px;
+    }
   }
 }
 </style>

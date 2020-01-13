@@ -149,7 +149,7 @@ export default {
       background-color: white;
       padding: 10px 25px;
       color: black;
-      border: 1px solid $secondary;
+      border: 1px solid #C7C7C7;;
 
       &:hover {
         background-color: #d2d2d2;
@@ -199,7 +199,7 @@ export default {
       display: inline-block;
 
       input[type="text"] {
-        border: 1px solid $secondary;
+        border: 1px solid #C7C7C7;
         vertical-align: middle;
         padding: 10px 25px;
         @include montserrat($h5, 500);
@@ -209,7 +209,7 @@ export default {
       input[type="submit"] {
         @include montserrat($h5, 500);
         padding: 10px 25px;
-        border: 1px solid $secondary;
+        border: 1px solid #C7C7C7;
         background-color: whitesmoke;
         vertical-align: middle;
         cursor: pointer;

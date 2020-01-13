@@ -264,7 +264,7 @@ form {
         width: 100%;
       }
     }
-    .form-group:last-child{
+    .form-group:last-child {
       margin-bottom: 0;
     }
   }
@@ -284,9 +284,9 @@ form {
   @include montserrat($h5, 500);
   cursor: pointer;
   transition: 0.2s linear;
-}
-#submit:hover {
-  background-color: #c85050;
+  &:hover {
+    background-color: #c85050;
+  }
 }
 
 @media (max-width: 720px) {
@@ -294,7 +294,7 @@ form {
     width: 95%;
     border-radius: 0px;
     box-shadow: none;
-    .form-section .section-container{
+    .form-section .section-container {
       padding: 15px 20px;
     }
   }

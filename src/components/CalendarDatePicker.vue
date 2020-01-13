@@ -2,13 +2,13 @@
   <v-menu
     v-model="menu"
     :close-on-content-click="false"
-    :nudge-right="40"
+    :nudge-right="30"
     transition="scale-transition"
     offset-y
     min-width="290px"
   >
     <template v-slot:activator="{ on }">
-      <div>
+      <div class="calendar-textfield">
         <v-icon color="white" size="18px">mdi-calendar</v-icon>
         <span id="date-selector">
           <button @click="selectPrevDay">
@@ -28,7 +28,7 @@
         </span>
       </div>
     </template>
-    <v-date-picker v-model="date" @input="menu = false"></v-date-picker>
+    <v-date-picker v-model="date" class="datepicker" @input="menu = false"></v-date-picker>
   </v-menu>
 </template>
 
@@ -88,8 +88,14 @@ export default {
 }
 
 .date-input {
-  @include montserrat($h6, 400);
+  @include montserrat($h5, 400);
   text-align: center;
-  margin: 0 -10px;
+  margin: 0 5px;
+}
+
+@media (max-width: 720px) {
+  .calendar-textfield {
+    margin-top: 10px;
+  }
 }
 </style>

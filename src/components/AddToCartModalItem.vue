@@ -3,6 +3,7 @@
     <div class="first-part">
       <div class="sec-part">
         <div id="pitch-name">{{ timeslot.pitchName }}</div>
+        <div id="pitch-name-mb"><span class="bold">Pitch:</span> {{ timeslot.pitchName }}</div>
         <div class="booking-time">
           <div>{{ timeslot.booking_start }}</div>
           -
@@ -16,10 +17,12 @@
           </available-product-options>
         </div>
         <div id="product-price">${{ price }}</div>
+        <div id="product-price-mb"><span class="bold">Price:</span> ${{ price }}</div>
       </div>
     </div>
     <div class="first-part">
       <v-icon id="trashcan" @click="$emit('remove')">mdi-trash-can</v-icon>
+      <v-icon id="close-icon" @click="$emit('remove')">mdi-close</v-icon>
     </div>
   </div>
 </template>
@@ -58,10 +61,12 @@ export default {
 .item-wrapper {
   @include montserrat(14px, 400);
 }
-
 #pitch-name {
   display: inline-block;
   padding-right: 70px;
+}
+#pitch-name-mb {
+  display: none;
 }
 .booking-time {
   display: inline-block;
@@ -76,6 +81,9 @@ export default {
   display: inline-block;
   padding-right: 30px;
 }
+#product-price-mb {
+  display: none;
+}
 .booking-time div {
   display: inline-block;
   border: 1px solid #c7c7c7;
@@ -89,6 +97,12 @@ export default {
   vertical-align: middle;
   display: inline-block;
 }
+#close-icon {
+  display: none;
+}
+.bold{
+  font-weight: 600;
+}
 
 @media (max-width: 950px) {
   .sec-part {
@@ -98,8 +112,18 @@ export default {
   .first-part {
     vertical-align: top;
   }
-  .sec-part:first-child {
-    padding-bottom: 20px;
+  #product-price {
+    float: right;
+    line-height: 60px;
+  }
+  #close-icon {
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: -30px;
+  }
+  #trashcan {
+    display: none;
   }
 }
 
@@ -108,18 +132,29 @@ export default {
     @include montserrat(12px, 400);
   }
   #pitch-name {
+    display: none;
+  }
+  #pitch-name-mb {
+    display: block;
     padding-right: 20px;
+    padding-bottom: 10px;
   }
   .booking-time {
     padding-right: 5px;
     display: block;
+    div {
+      margin: 5px auto;
+    }
   }
   #product-type {
     padding-right: 5px;
-    width: 200px;
+    width: 100%;
   }
   #product-price {
-    padding-right: 5px;
+    display: none;
+  }
+  #product-price-mb {
+    display: block;
   }
 }
 </style>

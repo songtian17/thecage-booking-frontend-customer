@@ -49,4 +49,7 @@ export default {
     }
   }
 }
+.addtocart-dialog{
+  width: auto!important;
+}
 </style>

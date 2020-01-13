@@ -110,11 +110,13 @@ export default {
   text-align: center;
   display: inline-block;
   padding: 6px;
-  border-left: 1px solid grey;
-  border-right: 1px solid grey;
+  border-left: 1px solid #707070;
 
   p {
-    @include montserrat($h4, 500);
+    @include montserrat($h4, 400);
+  }
+  &:last-child{
+    border-right: 1px solid #707070;
   }
 }
 
