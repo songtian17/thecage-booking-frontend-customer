@@ -135,7 +135,7 @@ hr {
   }
 
   .field {
-    margin: 0.4em 2em;
+    margin: 15px 30px;
 
     a {
       @include montserrat($h4, 500);
@@ -153,9 +153,12 @@ hr {
     margin:30px 0;
   }
   .venue{
-    margin: 20px 30px;
+    margin: 20px 15px;
     .collapsable{
       font-size: 16px;
+    }
+    .field{
+      margin: 10px 25px;
     }
     .field a{
       font-size: 14px;

@@ -96,8 +96,9 @@ export default {
         margin: 0;
         z-index: 10;
         right: 0;
-        padding-right: 50px;
-        background-color: grey;
+        padding: 13px 0;
+        padding-right: 70px;
+        background-color: #D2D2D2;
 
         a {
           display: block;

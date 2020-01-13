@@ -244,7 +244,7 @@ export default {
 
 form {
   width: 80%;
-  margin: 20px auto 40px auto;
+  margin: 30px auto 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -264,6 +264,9 @@ form {
         width: 100%;
       }
     }
+    .form-group:last-child{
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -275,10 +278,25 @@ form {
 #submit {
   background-color: $primary;
   color: white;
-  padding: 6px 12px;
+  padding: 10px 25px;
   align-self: flex-end;
   float: right;
-  @include montserrat($h4, 500);
+  @include montserrat($h5, 500);
   cursor: pointer;
+  transition: 0.2s linear;
+}
+#submit:hover {
+  background-color: #c85050;
+}
+
+@media (max-width: 720px) {
+  form {
+    width: 95%;
+    border-radius: 0px;
+    box-shadow: none;
+    .form-section .section-container{
+      padding: 15px 20px;
+    }
+  }
 }
 </style>

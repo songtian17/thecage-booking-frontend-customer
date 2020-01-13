@@ -40,14 +40,15 @@ export default {
 }
 
 .header-title {
-  @include montserrat(32px, 700);
+  @include montserrat(22px, 500);
   color: white;
-  padding: 40px 60px;
+  padding: 25px 60px;
   line-height: 40px;
 
-  &.main {
-    @include montserrat($h1, 700);
-    padding: 40px 24px;
+  .main & {
+    @include montserrat(32px, 700);
+    padding: 40px 60px;
+    line-height: 40px;
   }
 }
 
@@ -58,19 +59,28 @@ export default {
   position: absolute;
   top: 0;
   right: 0;
-  padding-left: 24px;
-  padding-right: 24px;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  text-align: center;
+  width: 100px;
 }
 
-@media (max-width: 720px){
+@media (max-width: 720px) {
   .header-title {
-    font-size: 28px;
-    line-height: 36px;
-    padding: 35px 20px;
+    font-size: 20px;
+    line-height: 26px;
+    padding: 20px 20px;
+    .main & {
+      font-size: 26px;
+      line-height: 30px;
+      padding: 35px 20px;
+    }
+  }
+  .timer {
+    font-size: 14px;
+    width: 80px;
   }
 }
 </style>
