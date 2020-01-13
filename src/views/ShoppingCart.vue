@@ -17,7 +17,7 @@
       </div>
       <div class="actions">
         <button id="clear-cart-btn" @click="clearCart">
-          <v-icon size="16px">mdi-trash-can</v-icon><span>Clear Cart</span>
+          <v-icon size="18px">mdi-trash-can</v-icon><span>Clear Cart</span>
         </button>
         <button id="continue-btn" @click="navigateToBilling">Continue</button>
       </div>
@@ -128,6 +128,10 @@ export default {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+    @include montserrat($h3, 400);
+    p {
+      margin: 20px 0 35px;
+    }
   }
 
   .actions {
@@ -136,62 +140,126 @@ export default {
     justify-content: flex-end;
 
     button {
-      @include montserrat($h5, 400);
-      padding: 4px 12px;
+      @include montserrat($h5, 500);
+      padding: 10px 25px;
+      cursor: pointer;
+      transition: 0.2s linear;
     }
 
     #clear-cart-btn {
       background-color: white;
+      padding: 10px 25px;
       color: black;
-      padding: 4px 8px;
       border: 1px solid $secondary;
 
+      &:hover {
+        background-color: #d2d2d2;
+      }
       span {
         vertical-align: middle;
         padding-left: 4px;
       }
     }
-
     #continue-btn {
       background-color: $primary;
       color: white;
       margin-left: 40px;
-      padding: 4px 8px;
+      padding: 10px 25px;
+      &:hover {
+        background-color: #c85050;
+      }
     }
   }
 
   .promo {
+    margin-top: 60px;
     p {
       padding: 0;
       margin: 0;
     }
 
     .header {
-      @include montserrat($h3, 500);
+      @include montserrat(24px, 500);
     }
     .subheader {
-      @include montserrat($h6, 400);
+      @include montserrat(14px, 400);
+      position: relative;
+      margin: 5px 0 15px;
+    }
+    .subheader:after {
+      content: "";
+      border: 0.5px solid #d1d1d1;
+      width: 390px;
+      position: absolute;
+      bottom: -6px;
+      left: 0;
     }
 
     form {
       padding-top: 20px;
-      border-top: 1px solid $secondary;
       display: inline-block;
 
       input[type="text"] {
         border: 1px solid $secondary;
         vertical-align: middle;
-        padding: 2px 4px;
+        padding: 10px 25px;
+        @include montserrat($h5, 500);
+        width: 290px;
       }
 
       input[type="submit"] {
         @include montserrat($h5, 500);
-        padding: 3.5px 4px;
+        padding: 10px 25px;
         border: 1px solid $secondary;
         background-color: whitesmoke;
         vertical-align: middle;
         cursor: pointer;
+        transition: 0.2s linear;
+
+        &:hover {
+          background-color: #d2d2d2;
+        }
       }
+    }
+  }
+}
+@media (max-width: 1200px) {
+  .cart-wrapper {
+    width: 95%;
+  }
+}
+@media (max-width: 720px) {
+  .cart-wrapper .promo {
+    .header {
+      font-size: 20px;
+    }
+    .subheader {
+      font-size: 12px;
+    }
+    .subheader:after {
+      content: "";
+      width: 330px;
+    }
+    form input[type="text"] {
+      width: 200px;
+    }
+  }
+}
+@media (max-width: 450px) {
+  .cart-wrapper {
+    .actions {
+      display: block;
+
+      #clear-cart-btn {
+        display: block;
+        margin: 0 0 15px auto;
+      }
+      #continue-btn {
+        float: right;
+      }
+    }
+    .promo form input[type="text"][data-v-0a4f6c3c] {
+      width: 160px;
     }
   }
 }
