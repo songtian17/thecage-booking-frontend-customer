@@ -71,7 +71,7 @@ export default {
   .header-title {
     font-size: 20px;
     line-height: 26px;
-    padding: 20px 20px;
+    padding: 25px 20px;
     .main & {
       font-size: 26px;
       line-height: 30px;

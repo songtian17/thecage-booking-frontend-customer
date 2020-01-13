@@ -13,8 +13,8 @@
       >${{ itemData.amount }}</span
     >
     <span v-else id="amount">
-      <span class="strikethrough"> ${{ itemData.amount }} </span>
-      <span>${{ itemData.discountAmount }}</span>
+      <span class="strikethrough"> $ {{ itemData.amount }} </span>
+      <span>$ {{ itemData.discountAmount }}</span>
     </span>
   </div>
 </template>
@@ -49,14 +49,14 @@ export default {
   @include montserrat($h5, 400);
   width: 100%;
   background-color: #202020;
-  padding: 10px;
+  padding: 25px 30px;
   margin-bottom: 18px;
   position: relative;
 
   .remove {
     position: absolute;
-    top: 8px;
-    right: 8px;
+    top: 25px;
+    right: 25px;
     z-index: 1;
     color: white;
 
@@ -87,6 +87,7 @@ export default {
     grid-template-columns: 2fr 1fr;
     grid-template-rows: auto;
     grid-row-gap: 4px;
+    font-size: 12px;
 
     #name {
       grid-column: span 2;
@@ -101,8 +102,9 @@ export default {
     #timing {
       grid-column: span 2;
       grid-row: 3;
-      padding-bottom: 10px;
+      padding-bottom: 15px;
       border-bottom: 1px solid white;
+      margin-bottom: 13px;
     }
 
     #label-product {
@@ -119,6 +121,13 @@ export default {
 
     #amount {
       grid-row: 5;
+    }
+
+    label{
+      font-size: 11px;
+    }
+    .remove{
+      font-size: 20px;
     }
   }
 }
