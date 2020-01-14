@@ -174,7 +174,7 @@ export default {
     color: black;
     cursor: pointer;
     transition: 0.2s linear;
-
+    user-select: none;
     &:hover {
       background-color: #d2d2d2;
     }
