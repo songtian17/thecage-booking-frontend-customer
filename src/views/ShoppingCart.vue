@@ -127,7 +127,7 @@ export default {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    @include montserrat($h3, 400);
+    @include montserrat($h4, 400);
     p {
       margin: 20px 0 35px;
     }

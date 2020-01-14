@@ -194,7 +194,6 @@ export default {
         span {
           padding-left: 4px;
           vertical-align: middle;
-          line-height: 1;
         }
       }
 

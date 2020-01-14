@@ -14,21 +14,26 @@
         <div class="left">
           <div class="payment">
             <span class="title">Payment method:</span>
-            <input id="paypal" type="radio" name="payment" value="Paypal" />
-            <span>Paypal</span>
+            <div>
+              <input id="paypal" type="radio" name="payment" value="Paypal" checked />
+              <img src="../assets/paypal_logo.png" />
+            </div>
           </div>
           <div class="billing">
             <span class="title">Bill to:</span>
             <span>John Tan</span>
-            <span>98765432</span>
-            <span>johntan@email.com</span>
+            <span><v-icon class="contact-icon">mdi-phone</v-icon>98765432</span>
+            <span><v-icon class="contact-icon">mdi-email</v-icon>johntan@email.com</span>
             <a href="">Change address ></a>
           </div>
         </div>
         <div class="right">
           <span>Total: ${{ total.toFixed(2) }}</span>
-          <span>Taxes: ${{ tax.toFixed(2) }}</span>
-          <button id="payment-btn">Pay Now</button>
+          <span style="font-size:14px;font-weight:400">Taxes(included): ${{ tax.toFixed(2) }}</span>
+          <button id="payment-btn">
+            <span>Pay Now</span>
+            <v-icon size="18px" color="white">mdi-chevron-right</v-icon>
+          </button>
         </div>
       </div>
     </div>
@@ -94,37 +99,86 @@ export default {
 
     .payment {
       margin-bottom: 40px;
+      font-family: "Montserrat" !important;
       .title {
         @include montserrat($h3, 400);
+        font-family: "Montserrat" !important;
+        font-size: 18px !important;
+        font-weight: 500;
         display: block;
+      }
+      div {
+        margin-top: 10px;
+      }
+      img {
+        max-width: 130px;
+        vertical-align: middle;
+        margin-left: 20px;
       }
     }
 
     .billing {
       .title {
-        @include montserrat($h3, 400);
+        @include montserrat($h3, 500);
+        font-family: "Montserrat" !important;
+        margin-bottom: 10px;
       }
-
+      .contact-icon {
+        font-size: 18px;
+        margin-right: 15px;
+      }
       span {
-        @include montserrat($h4, 400);
+        @include montserrat($h5, 400);
+        margin-bottom: 5px;
         display: block;
+      }
+      a {
+        text-decoration: none;
+        transition: 0.2s linear;
+        display: block;
+        margin-top: 10px;
+        @include montserrat($h4, 400);
+        &:hover {
+          color: #c85050;
+        }
       }
     }
 
     .right {
       text-align: right;
-
+      @include montserrat($h3, 500);
       span {
         display: block;
       }
     }
 
     #payment-btn {
-      @include montserrat($h5, 400);
-      padding: 4px 8px;
+      @include montserrat($h5, 500);
+      padding: 10px 25px;
       background-color: $primary;
       color: white;
-      margin-top: 20px;
+      margin-top: 35px;
+      transition: 0.2s linear;
+      span{
+        vertical-align: middle;
+        padding-right: 4px;
+        display: inline-flex;
+      }
+      &:hover {
+        background-color: #c85050;
+      }
+    }
+  }
+}
+
+@media (max-width: 720px) {
+  .content-wrapper {
+    width: 95%;
+    .bottom-wrapper{
+      display: block;
+      .right{
+        margin-top: 40px;
+      }
     }
   }
 }
