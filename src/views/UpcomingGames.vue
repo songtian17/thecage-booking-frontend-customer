@@ -4,9 +4,9 @@
       Upcoming Games
     </view-header>
     <div class="content-wrapper">
-      <div v-for="game in upcomingGames" :key="`${game.pitch}: ${game.timeStart}`" class="game">
+      <div v-for="game in upcomingGames" :key="`${game.pitch}: ${game.startTime}`" class="game">
         <div class="collapsable" @click="game.active = !game.active">
-          <div>{{ game.timeStart }}</div>
+          <div>{{ game.startTime.replace('T', ' ') }}</div>
           <v-icon>{{ game.active ? "mdi-chevron-up" : "mdi-chevron-down" }}</v-icon>
         </div>
         <transition-expand>
@@ -28,14 +28,14 @@ import ShoppingCartItem from '@/components/ShoppingCartItem.vue';
 
 const mockUpcomingGames = [
   {
-    venue: 'Kallang',
-    field: '5-A-Side',
-    pitch: 'Pitch 4',
-    timeStart: '22/10/2019 15:00',
-    timeEnd: '22/10/2019 17:00',
-    product: 'Online Premium',
+    venueName: 'Kallang',
+    fieldType: '5-A-Side',
+    pitchName: 'Pitch 4',
+    startTime: '22/10/2019T15:00',
+    endTime: '22/10/2019T17:00',
+    productName: 'Online Premium',
     amount: '92.00',
-    discountedAmount: '90.00',
+    discountAmount: '90.00',
     active: false,
   },
 ];
@@ -73,6 +73,7 @@ export default {
     padding: 8px 16px;
     background-color: #e9e9e9;
     border: 1px solid #707070;
+    @include montserrat(14px, 500);
 
     &:hover {
       cursor: pointer;
