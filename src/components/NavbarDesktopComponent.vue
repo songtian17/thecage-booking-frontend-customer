@@ -10,12 +10,14 @@
         <span @click="dropdownExpanded = !dropdownExpanded"
           >{{ user }} <v-icon>mdi-chevron-down</v-icon>
         </span>
-        <div v-if="dropdownExpanded" class="dropdown-menu">
-          <router-link to="/cart" class="dropdown-item">Cart</router-link>
-          <router-link to="/account" class="dropdown-item">Account Settings</router-link>
-          <router-link to="/upcominggames" class="dropdown-item">Upcoming Games</router-link>
-          <a class="dropdown-item" @click="logout">Sign Out</a>
-        </div>
+        <transition name="scale-in">
+          <div v-if="dropdownExpanded" class="dropdown-menu">
+            <router-link to="/cart" class="dropdown-item">Cart</router-link>
+            <router-link to="/account" class="dropdown-item">Account Settings</router-link>
+            <router-link to="/upcominggames" class="dropdown-item">Upcoming Games</router-link>
+            <a class="dropdown-item" @click="logout">Sign Out</a>
+          </div></transition
+        >
       </div>
     </span>
   </div>
@@ -102,7 +104,7 @@ export default {
         right: 0;
         padding: 13px 0;
         padding-right: 70px;
-        background-color: #D2D2D2;
+        background-color: #d2d2d2;
 
         a {
           display: block;
@@ -119,4 +121,16 @@ export default {
     }
   }
 }
+
+// --- scale-in transition ---
+.scale-in-enter-active {
+  animation: scale-in-ver-top 0.3s;
+}
+
+.scale-in-leave-active {
+  animation: scale-in-ver-top 0.3s reverse;
+}
+
+@include animation-scale-in;
+// --- end of scale-in transition ---
 </style>
