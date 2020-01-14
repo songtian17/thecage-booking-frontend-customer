@@ -111,7 +111,7 @@ export default {
         margin-top: 10px;
       }
       img {
-        max-width: 130px;
+        max-width: 100px;
         vertical-align: middle;
         margin-left: 20px;
       }
