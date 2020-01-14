@@ -7,7 +7,7 @@
       <a href="https://thecage.com.sg/contact.html" target="_blank">Contact Us</a>
       <router-link v-if="!isLoggedIn" to="/signin">Sign In</router-link>
       <div v-else class="dropdown">
-        <span @click="dropdownExpanded = !dropdownExpanded"
+        <span style="user-select:none;" @click="dropdownExpanded = !dropdownExpanded"
           >{{ user }} <v-icon>mdi-chevron-down</v-icon>
         </span>
         <transition name="scale-in">
