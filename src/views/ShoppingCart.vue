@@ -52,6 +52,9 @@ export default {
         .then((res) => {
           console.log(res);
           this.cartItems = res.data.items;
+          if (this.cartItems.length && !this.$store.getters['timer/isActive']) {
+            this.$store.dispatch('timer/startTimer');
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -66,6 +69,10 @@ export default {
             type: 'success',
             text: 'Successfully removed item from cart.',
           });
+          if (!this.cartItems.length) {
+            this.$store.dispatch('timer/clearTimer');
+            this.$router.push('/');
+          }
         })
         .catch((err) => {
           console.log(err);
@@ -75,17 +82,13 @@ export default {
             text: 'Failed to remove item from cart. Please try again later.',
           });
         });
-      // send request to odoo to remove time slot
-
-      if (!this.cartItems.length) {
-        this.$store.dispatch('timer/clearTimer');
-      }
     },
     clearCart() {
       this.cartItems = [];
       // send request to odoo to clear items in purchase order
 
       this.$store.dispatch('timer/clearTimer');
+      this.$router.push('/');
     },
     navigateToBilling() {
       if (!this.cartItems.length) {
@@ -111,7 +114,6 @@ export default {
   },
   mounted() {
     this.fetchCartItems();
-    this.$store.dispatch('timer/startTimer');
   },
 };
 </script>

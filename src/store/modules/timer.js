@@ -9,6 +9,7 @@ const state = {
 const getters = {
   countdown: state => state.countdown,
   isTimeUp: state => state.total <= 0,
+  isActive: state => state.deadline !== '',
 };
 
 const actions = {
