@@ -42,6 +42,7 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('auth/logout').then(() => {
+        this.$store.dispatch('timer/clearTimer');
         this.$notify({
           type: 'success',
           text: 'Signed out successfully',
