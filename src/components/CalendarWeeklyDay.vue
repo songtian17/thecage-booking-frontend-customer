@@ -1,7 +1,7 @@
 <template>
   <div class="calendar-wrapper">
     <p>{{ displayDate }}</p>
-    <table class="calendar">
+    <table class="calendar" :style="{ visibility: isWeekend ? 'hidden' : 'visible' }">
       <thead>
         <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
       </thead>
@@ -72,6 +72,10 @@ export default {
     },
   },
   computed: {
+    isWeekend() {
+      const day = this.displayDate.split(',')[0];
+      return day === 'Sat' || day === 'Sun';
+    },
     selectedTimeslots: {
       get() {
         return this.$store.state.cart.selectedTimeslots;
@@ -115,7 +119,7 @@ export default {
   p {
     @include montserrat($h4, 400);
   }
-  &:last-child{
+  &:last-child {
     border-right: 1px solid #707070;
   }
 }
