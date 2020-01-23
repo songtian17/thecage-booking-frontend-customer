@@ -74,7 +74,7 @@ export default {
   },
   computed: {
     isDesktop() {
-      return this.$vuetify.breakpoint.width >= 1280;
+      return this.$vuetify.breakpoint.width >= 1440;
     },
   },
   methods: {
