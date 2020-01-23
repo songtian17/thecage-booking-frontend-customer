@@ -82,6 +82,15 @@ export default {
       this.selectedDate = newDate;
     },
     openAddToCartModal() {
+      if (!this.$store.getters['auth/isAuthenticated']) {
+        this.$notify({
+          type: 'error',
+          title: 'Action failed',
+          text: 'You must be signed in to perform that action',
+        });
+        this.$router.push('/signin');
+        return;
+      }
       this.showAddToCartModal = true;
       this.$store.commit('cart/copySelectedTimeslots');
       this.selectedSlots = this.$store.getters['cart/selectedWithProduct'];
