@@ -16,8 +16,10 @@
           <available-product-options :timeslot="timeslot" @selectedChanged="onProductChange">
           </available-product-options>
         </div>
-        <div id="product-price">${{ price }}</div>
-        <div id="product-price-mb"><span class="bold">Price:</span> ${{ price }}</div>
+        <div id="product-price">${{ totalPrice }}</div>
+        <div id="product-price-mb">
+          <span class="bold">Price:</span> ${{ totalPrice }}
+        </div>
       </div>
     </div>
     <div class="first-part">
@@ -45,6 +47,15 @@ export default {
     timeslot: {
       type: Object,
       default: () => {},
+    },
+  },
+  computed: {
+    totalPrice() {
+      const endHour = parseInt(this.timeslot.booking_end.slice(11, 13), 10);
+      const startHour = parseInt(this.timeslot.booking_start.slice(11, 13), 10);
+      const hours = endHour - startHour;
+      console.log(hours * this.price);
+      return hours * this.price;
     },
   },
   methods: {
@@ -100,7 +111,7 @@ export default {
 #close-icon {
   display: none;
 }
-.bold{
+.bold {
   font-weight: 600;
 }
 
