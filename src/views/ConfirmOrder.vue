@@ -30,10 +30,7 @@
         <div class="right">
           <span>Total: ${{ total.toFixed(2) }}</span>
           <span style="font-size:14px;font-weight:400">Taxes(included): ${{ tax.toFixed(2) }}</span>
-          <button id="payment-btn">
-            <span>Pay Now</span>
-            <v-icon size="18px" color="white">mdi-chevron-right</v-icon>
-          </button>
+          <div id="paypal-button"></div>
         </div>
       </div>
     </div>
@@ -63,6 +60,49 @@ export default {
           console.log(err);
         });
     },
+    renderPaypalButton() {
+      const vm = this;
+      this.$loadScript('https://www.paypalobjects.com/api/checkout.js').then(() => {
+        const CREATE_PAYMENT_URL = `${process.env.VUE_APP_API}/payment`;
+        const EXECUTE_PAYMENT_URL = `${process.env.VUE_APP_API}/execute`;
+        window.paypal.Button.render(
+          {
+            env: 'sandbox',
+            commit: 'true',
+            payment() {
+              return window.paypal.request
+                .post(
+                  CREATE_PAYMENT_URL,
+                  {},
+                  { headers: { Authorization: `Bearer ${vm.$store.state.auth.token}` } },
+                )
+                .then(data => data.paymentID);
+            },
+            onAuthorize(data) {
+              return window.paypal.request
+                .post(EXECUTE_PAYMENT_URL, {
+                  paymentID: data.paymentID,
+                  payerID: data.payerID,
+                },
+                { headers: { Authorization: `Bearer ${vm.$store.state.auth.token}` } })
+                .then((res) => {
+                  console.log(res.success);
+                  // The payment is complete!
+                  // You can now show a confirmation message to the customer
+                  vm.$notify({
+                    type: 'success',
+                    title: 'Payment Success',
+                    text: 'Redirected to view your upcoming games...',
+                  });
+                  vm.$store.dispatch('timer/clearTimer');
+                  vm.$router.push('/upcominggames');
+                });
+            },
+          },
+          '#paypal-button',
+        );
+      });
+    },
   },
   computed: {
     tax() {
@@ -81,6 +121,7 @@ export default {
       this.$router.push('/cart');
     }
     this.fetchCartItems();
+    this.renderPaypalButton();
   },
 };
 </script>
@@ -149,23 +190,6 @@ export default {
       @include montserrat($h3, 500);
       span {
         display: block;
-      }
-    }
-
-    #payment-btn {
-      @include montserrat($h5, 500);
-      padding: 10px 25px;
-      background-color: $primary;
-      color: white;
-      margin-top: 35px;
-      transition: 0.2s linear;
-      span{
-        vertical-align: middle;
-        padding-right: 4px;
-        display: inline-flex;
-      }
-      &:hover {
-        background-color: #c85050;
       }
     }
   }
