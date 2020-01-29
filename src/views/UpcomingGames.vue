@@ -26,20 +26,6 @@ import ViewHeader from '@/components/ViewHeader.vue';
 import TransitionExpand from '@/components/TransitionExpand.vue';
 import ShoppingCartItem from '@/components/ShoppingCartItem.vue';
 
-const mockUpcomingGames = [
-  {
-    venueName: 'Kallang',
-    fieldType: '5-A-Side',
-    pitchName: 'Pitch 4',
-    startTime: '22/10/2019T15:00',
-    endTime: '22/10/2019T17:00',
-    productName: 'Online Premium',
-    amount: '92.00',
-    discountAmount: '90.00',
-    active: false,
-  },
-];
-
 export default {
   name: 'UpcomingGames',
   data() {
@@ -47,13 +33,21 @@ export default {
       upcomingGames: [],
     };
   },
+  methods: {
+    fetchUpcomingGames() {
+      this.$axios.get('/bookinghistory').then((res) => {
+        console.log(res.data);
+        this.upcomingGames = res.data;
+      });
+    },
+  },
   components: {
     ViewHeader,
     TransitionExpand,
     ShoppingCartItem,
   },
   mounted() {
-    this.upcomingGames = mockUpcomingGames;
+    this.fetchUpcomingGames();
   },
 };
 </script>
