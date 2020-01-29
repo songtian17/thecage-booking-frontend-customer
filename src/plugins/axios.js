@@ -1,4 +1,7 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 function createInstance(baseURL) {
   return axios.create({
@@ -9,7 +12,7 @@ function createInstance(baseURL) {
   });
 }
 
-const devInstance = createInstance('http://121.6.194.123:5001');
-const productionInstance = createInstance('http://121.6.194.123:5001');
+const devInstance = createInstance(process.env.VUE_APP_API);
+const productionInstance = createInstance(process.env.VUE_APP_API);
 
 export default process.env.NODE_ENV === 'production' ? productionInstance : devInstance;
