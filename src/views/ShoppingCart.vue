@@ -84,11 +84,21 @@ export default {
         });
     },
     clearCart() {
-      this.cartItems = [];
-      // send request to odoo to clear items in purchase order
-
-      this.$store.dispatch('timer/clearTimer');
-      this.$router.push('/');
+      this.$axios.delete('/cartitem').then(() => {
+        this.cartItems = [];
+        this.$store.dispatch('timer/clearTimer');
+        this.$router.push('/');
+        this.$notify({
+          type: 'success',
+          text: 'Cart cleared',
+        });
+      }).catch((err) => {
+        this.$notify({
+          type: 'error',
+          title: 'Failed to clear cart',
+          text: `Error: ${err}`,
+        });
+      });
     },
     navigateToBilling() {
       if (!this.cartItems.length) {
