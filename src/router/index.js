@@ -2,14 +2,6 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '@/views/Home.vue';
 import SignIn from '@/views/SignIn.vue';
-import SignUp from '@/views/SignUp.vue';
-import ForgetPassword from '@/views/ForgetPassword.vue';
-import ResetPassword from '@/views/ResetPassword.vue';
-import AccountSettings from '@/views/AccountSettings.vue';
-import ShoppingCart from '@/views/ShoppingCart.vue';
-import BillingInformation from '@/views/BillingInformation.vue';
-import ConfirmOrder from '@/views/ConfirmOrder.vue';
-import UpcomingGames from '@/views/UpcomingGames.vue';
 
 Vue.use(VueRouter);
 
@@ -27,42 +19,42 @@ const routes = [
   {
     path: '/signup',
     name: 'signup',
-    component: SignUp,
+    component: () => import(/* webpackChunkName: "SignUp" */ '../views/SignUp.vue'),
   },
   {
     path: '/forgetpassword',
     name: 'forgetpassword',
-    component: ForgetPassword,
+    component: () => import(/* webpackChunkName: "ForgetPassword" */ '../views/ForgetPassword.vue'),
   },
   {
     path: '/resetpassword',
     name: 'resetpassword',
-    component: ResetPassword,
+    component: () => import(/* webpackChunkName: "ResetPassword" */ '../views/ResetPassword.vue'),
   },
   {
     path: '/account',
     name: 'accountsettings',
-    component: AccountSettings,
+    component: () => import(/* webpackChunkName: "AccountSettings" */ '../views/AccountSettings.vue'),
   },
   {
     path: '/cart',
     name: 'shoppingcart',
-    component: ShoppingCart,
+    component: () => import(/* webpackChunkName: "ShoppingCart" */ '../views/ShoppingCart.vue'),
   },
   {
     path: '/billing',
     name: 'billinginfo',
-    component: BillingInformation,
+    component: () => import(/* webpackChunkName: "BillingInformation" */ '../views/BillingInformation.vue'),
   },
   {
     path: '/confirmorder',
     name: 'confirmorder',
-    component: ConfirmOrder,
+    component: () => import(/* webpackChunkName: "ConfirmOrder" */ '../views/ConfirmOrder.vue'),
   },
   {
     path: '/upcominggames',
     name: 'upcominggames',
-    component: UpcomingGames,
+    component: () => import(/* webpackChunkName: "UpcomingGames" */ '../views/UpcomingGames.vue'),
   },
   {
     path: '/calendar/:id',
