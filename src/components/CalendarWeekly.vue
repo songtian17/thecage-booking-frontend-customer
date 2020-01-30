@@ -123,7 +123,7 @@ export default {
   width: 40px;
 
   tr {
-    height: 26px;
+    height: 25.5px;
   }
 
   .span-2 {
