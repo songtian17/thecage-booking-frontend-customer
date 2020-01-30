@@ -33,6 +33,7 @@ const actions = {
         commit('authError');
         localStorage.removeItem('user-token');
         localStorage.removeItem('user-name');
+        localStorage.removeItem('user-id');
         reject(err);
       });
   }),
@@ -40,6 +41,7 @@ const actions = {
     commit('logout');
     localStorage.removeItem('user-token');
     localStorage.removeItem('user-name');
+    localStorage.removeItem('user-id');
     delete axios.defaults.headers.common.Authorization;
     resolve();
   }),
@@ -61,7 +63,8 @@ const mutations = {
   logout: (state) => {
     state.status = '';
     state.token = '';
-    state.user = {};
+    state.user = '';
+    state.userId = '';
   },
 };
 
