@@ -24,6 +24,12 @@ export default {
   data: () => ({
     //
   }),
+
+  mounted() {
+    if (this.$store.state.auth.token) {
+      this.$axios.defaults.headers.common.Authorization = `Bearer ${this.$store.state.auth.token}`;
+    }
+  },
 };
 </script>
 
