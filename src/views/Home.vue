@@ -5,7 +5,7 @@
       BOOKING SYSTEM.
     </view-header>
     <div class="home">
-      <div v-if="announcement1.visible" class="announcement" v-html="announcement1.html"></div>
+      <div v-if="topAnnouncement" class="announcement" v-html="topAnnouncement"></div>
       <div class="main">
         <h1>Book Now!</h1>
         <hr />
@@ -36,7 +36,7 @@
         For bookings less than 12 hours and beyond 60 days, please call our hotline at 6344 9345
         between 10am and 11pm daily.
       </p>
-      <div v-if="announcement2.visible" class="announcement" v-html="announcement2.html"></div>
+      <div v-if="bottomAnnouncement" class="announcement" v-html="bottomAnnouncement"></div>
     </div>
   </div>
 </template>
@@ -49,36 +49,22 @@ export default {
   name: 'home',
   data() {
     return {
-      announcement1: {
-        html: '',
-        visible: false,
-      },
-      announcement2: {
-        html: '',
-        visible: false,
-      },
       venues: [],
     };
+  },
+  computed: {
+    topAnnouncement() {
+      return this.$store.getters['home/topAnnouncement'];
+    },
+    bottomAnnouncement() {
+      return this.$store.getters['home/bottomAnnouncement'];
+    },
   },
   methods: {
     fetchVenues() {
       this.$axios.get('/venues').then((res) => {
         const { data } = res;
         this.venues = data.map(venue => Object.assign(venue, { active: false }));
-      });
-    },
-    fetchAnnouncements() {
-      this.$axios.get('/announcement').then((res) => {
-        const { data } = res;
-        data.forEach((announcement) => {
-          if (announcement.placement === 'Top') {
-            this.announcement1.html = announcement.html_string;
-            this.announcement1.visible = announcement.visibility;
-          } else if (announcement.placement === 'Bottom') {
-            this.announcement2.html = announcement.html_string;
-            this.announcement2.visible = announcement.visibility;
-          }
-        });
       });
     },
   },
@@ -88,7 +74,9 @@ export default {
   },
   mounted() {
     this.fetchVenues();
-    this.fetchAnnouncements();
+    if (this.$store.getters['home/isEmpty']) {
+      this.$store.dispatch('home/fetchAnnouncements');
+    }
     if (!this.$store.getters['cart/products'].length) {
       this.$store.dispatch('cart/fetchProducts');
     }
