@@ -1,7 +1,7 @@
 <template>
   <div class="calendar-wrapper">
     <p>{{ displayDate }}</p>
-    <table class="calendar" :style="{ visibility: isWeekend ? 'hidden' : 'visible' }">
+    <table class="calendar" :style="{ visibility: isPast ? 'hidden' : 'visible' }">
       <thead>
         <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
       </thead>
@@ -72,7 +72,9 @@ export default {
       }
       return {
         booking_start: `${formattedDate} ${startTime}:00`,
-        booking_end: `${formattedEndDate} ${endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour}:00:00`,
+        booking_end: `${formattedEndDate} ${
+          endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour
+        }:00:00`,
         pitchId,
         pitchName,
       };
@@ -85,9 +87,13 @@ export default {
     },
   },
   computed: {
-    isWeekend() {
-      const day = this.displayDate.split(',')[0];
-      return day === 'Sat' || day === 'Sun';
+    isPast() {
+      const [d, m, y] = this.date.split('/');
+      const calendarDate = new Date(y, m - 1, d);
+      const currDate = new Date();
+      return (
+        calendarDate < new Date(currDate.getFullYear(), currDate.getMonth(), currDate.getDate())
+      );
     },
     selectedTimeslots: {
       get() {
