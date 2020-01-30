@@ -62,13 +62,26 @@ export default {
     formatTimeslotObject(date, startTime, hours, pitchId, pitchName) {
       const [d, m, y] = date.split('/');
       const formattedDate = `${y}-${m}-${d}`;
-      const endTimeHour = String(parseInt(startTime.split(':')[0], 10) + hours);
+      let formattedEndDate = `${y}-${m}-${d}`;
+      let endTimeHour = String(parseInt(startTime.split(':')[0], 10) + hours);
+      if (endTimeHour === '24') {
+        endTimeHour = '0';
+        const nextDate = new Date(y, m - 1, d);
+        nextDate.setDate(nextDate.getDate() + 1);
+        formattedEndDate = this.formatDateObject(nextDate);
+      }
       return {
         booking_start: `${formattedDate} ${startTime}:00`,
-        booking_end: `${formattedDate} ${endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour}:00:00`,
+        booking_end: `${formattedEndDate} ${endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour}:00:00`,
         pitchId,
         pitchName,
       };
+    },
+    formatDateObject(dateObject) {
+      const year = dateObject.getFullYear();
+      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+      const day = String(dateObject.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     },
   },
   computed: {

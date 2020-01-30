@@ -51,7 +51,10 @@ export default {
   },
   computed: {
     totalPrice() {
-      const endHour = parseInt(this.timeslot.booking_end.slice(11, 13), 10);
+      let endHour = parseInt(this.timeslot.booking_end.slice(11, 13), 10);
+      if (endHour === 0) {
+        endHour = 24;
+      }
       const startHour = parseInt(this.timeslot.booking_start.slice(11, 13), 10);
       const hours = endHour - startHour;
       console.log(hours * this.price);
