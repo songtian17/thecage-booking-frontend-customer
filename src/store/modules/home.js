@@ -4,12 +4,15 @@ import axios from '@/plugins/axios';
 const state = {
   topAnnouncement: null,
   bottomAnnouncement: null,
+  venues: null,
 };
 
 const getters = {
-  isEmpty: state => state.topAnnouncement === null && state.bottomAnnouncement === null,
+  isAnnouncementsNull: state => state.topAnnouncement === null && state.bottomAnnouncement === null,
+  isVenuesNull: state => state.venues === null,
   topAnnouncement: state => state.topAnnouncement,
   bottomAnnouncement: state => state.bottomAnnouncement,
+  venues: state => state.venues,
 };
 
 const actions = {
@@ -32,6 +35,19 @@ const actions = {
         reject(err);
       });
   }),
+  fetchVenues: ({ commit }) => new Promise((resolve, reject) => {
+    axios
+      .get('/venues')
+      .then((res) => {
+        const { data } = res;
+        const venues = data.map(venue => Object.assign(venue, { active: false }));
+        commit('setVenues', venues);
+        resolve(res);
+      })
+      .catch((err) => {
+        reject(err);
+      });
+  }),
 };
 
 const mutations = {
@@ -40,6 +56,9 @@ const mutations = {
   },
   setBottomAnnouncement: (state, announcement) => {
     state.bottomAnnouncement = announcement;
+  },
+  setVenues: (state, venues) => {
+    state.venues = venues;
   },
 };
 

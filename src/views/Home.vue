@@ -47,11 +47,6 @@ import TransitionExpand from '@/components/TransitionExpand.vue';
 
 export default {
   name: 'home',
-  data() {
-    return {
-      venues: [],
-    };
-  },
   computed: {
     topAnnouncement() {
       return this.$store.getters['home/topAnnouncement'];
@@ -59,13 +54,13 @@ export default {
     bottomAnnouncement() {
       return this.$store.getters['home/bottomAnnouncement'];
     },
-  },
-  methods: {
-    fetchVenues() {
-      this.$axios.get('/venues').then((res) => {
-        const { data } = res;
-        this.venues = data.map(venue => Object.assign(venue, { active: false }));
-      });
+    venues: {
+      get() {
+        return this.$store.getters['home/venues'];
+      },
+      set(venues) {
+        this.$store.commit('home/setVenues', venues);
+      },
     },
   },
   components: {
@@ -73,9 +68,11 @@ export default {
     TransitionExpand,
   },
   mounted() {
-    this.fetchVenues();
-    if (this.$store.getters['home/isEmpty']) {
+    if (this.$store.getters['home/isAnnouncementsNull']) {
       this.$store.dispatch('home/fetchAnnouncements');
+    }
+    if (this.$store.getters['home/isVenuesNull']) {
+      this.$store.dispatch('home/fetchVenues');
     }
     if (!this.$store.getters['cart/products'].length) {
       this.$store.dispatch('cart/fetchProducts');
@@ -101,9 +98,9 @@ hr {
     font-size: 14px;
   }
 }
-.home-info{
-    @include montserrat(16px, 600);
-    margin-top: 25px;
+.home-info {
+  @include montserrat(16px, 600);
+  margin-top: 25px;
 }
 .venue {
   margin: 20px 40px;
@@ -134,21 +131,21 @@ hr {
 }
 
 @media (max-width: 720px) {
-  .home{
+  .home {
     margin: 0 20px;
   }
-  .announcement{
-    margin:30px 0;
+  .announcement {
+    margin: 30px 0;
   }
-  .venue{
+  .venue {
     margin: 20px 15px;
-    .collapsable{
+    .collapsable {
       font-size: 16px;
     }
-    .field{
+    .field {
       margin: 10px 25px;
     }
-    .field a{
+    .field a {
       font-size: 14px;
     }
   }
