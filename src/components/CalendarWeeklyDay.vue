@@ -13,7 +13,7 @@
             type="checkbox"
             class="calendar-checkbox"
             :class="`span-${timing.hours}`"
-            :disabled="isBooked(timing, pitch.id)"
+            :disabled="isBooked(timing, pitch.odoo_id)"
           />
         </td>
       </tr>

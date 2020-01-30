@@ -14,7 +14,7 @@
             :class="`span-${timing.hours}`"
             type="checkbox"
             class="calendar-checkbox"
-            :disabled="isBooked(timing, pitch.id)"
+            :disabled="isBooked(timing, pitch.odoo_id)"
           />
         </td>
       </tr>
@@ -36,8 +36,8 @@ const timings = () => [
   { time: '09:00', hours: 1 },
   { time: '10:00', hours: 1 },
   { time: '11:00', hours: 1 },
-  { time: '12:00', hours: 1 },
-  { time: '13:00', hours: 1 },
+  { time: '12:00', hours: 2 },
+  // { time: '13:00', hours: 1 },
   { time: '14:00', hours: 1 },
   { time: '15:00', hours: 1 },
   { time: '16:00', hours: 1 },
