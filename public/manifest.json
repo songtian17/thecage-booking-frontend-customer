@@ -1,0 +1,20 @@
+{
+  "name": "thecage-booking-webapp",
+  "short_name": "thecage-webapp",
+  "theme_color": "#9F0608",
+  "icons": [
+    {
+      "src": "./img/icons/thecage-logo-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./img/icons/thecage-logo-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff"
+}
