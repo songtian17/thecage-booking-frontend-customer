@@ -20,7 +20,7 @@
       :timings="timings"
       :pitches="pitches"
       :date="weekDates[i - 1]"
-      :bookedSlots="bookedSlots"
+      :bookedSlots="bookedSlots[i - 1]"
     ></calendar-weekly-day>
   </div>
 </template>
@@ -132,14 +132,14 @@ export default {
         currDateTime.getDate(),
       );
       let startDate;
-      const shiftDays = [-3, -2, -1, 0, 1, 2];
+      const shiftDays = [-3, -2, -1, 0, 1, 2, 3];
 
       const endDate = this.shiftDateByDays(selDate, 3);
       if (endDate < currDate) {
         return;
       }
 
-      for (let i = 0; i < shiftDays.length; i += 1) {
+      for (let i = 0; i < shiftDays.length - 1; i += 1) {
         const daysToShift = shiftDays[i];
         startDate = this.shiftDateByDays(selDate, daysToShift);
         if (startDate < currDate) {
@@ -157,12 +157,26 @@ export default {
         fieldId: this.fieldId,
       };
       this.$axios.post('/calendar/week', payload).then((res) => {
-        const bookedSlots = res.data.map(e => ({
-          booking_start: e.booking_start.split(' ')[1].slice(0, 5),
-          booking_end: e.booking_end.split(' ')[1].slice(0, 5),
-          pitch_id: e.pitch_id,
-        }));
-        this.bookedSlots = bookedSlots;
+        const bookedSlots = res.data;
+        const bookedSlotsArray = [];
+        const datesArray = shiftDays.map(days => this.formatDateObject(this.shiftDateByDays(selDate, days), 'YY-MM-DD'));
+        for (let i = 0; i < shiftDays.length; i += 1) {
+          bookedSlotsArray.push([]);
+        }
+        bookedSlots.forEach((slot) => {
+          const slotStartDate = slot.booking_start.split(' ')[0];
+          const i = datesArray.findIndex(d => d === slotStartDate);
+          if (i === -1) {
+            return;
+          }
+          const slotData = {
+            booking_start: slot.booking_start.split(' ')[1].slice(0, 5),
+            booking_end: slot.booking_end.split(' ')[1].slice(0, 5),
+            pitch_id: slot.pitch_id,
+          };
+          bookedSlotsArray[i].push(slotData);
+        });
+        this.bookedSlots = bookedSlotsArray;
       });
     },
   },
