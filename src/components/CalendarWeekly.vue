@@ -3,7 +3,14 @@
     <div class="timings-wrapper">
       <table class="timings">
         <tr v-for="(timing, index) in timings" :key="index">
-          <td :class="`span-${timing.hours}`">{{ timing.time }}</td>
+          <td :class="`span-${timing.hours}`" class="timing">{{ timing.time }}</td>
+          <td>
+            <input
+              type="checkbox"
+              class="calendar-checkbox invis"
+              :class="`span-${timing.hours}`"
+            />
+          </td>
         </tr>
       </table>
     </div>
@@ -107,31 +114,51 @@ export default {
 
 <style lang="scss" scoped>
 .weekly-calendar {
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
 }
 
 .timings-wrapper {
   display: inline-block;
-  padding: 10px;
+  padding: 6px;
 }
 
 .timings {
   display: inline-block;
+  margin: auto;
+
+  .timing {
     @include montserrat($h5, 400);
-  width: 40px;
-
-  tr {
-    height: 25.5px;
   }
 
-  .span-2 {
-    padding-bottom: 17px;
+  td {
+    padding: 1px 1px;
+    vertical-align: top;
+  }
+}
+
+.calendar-checkbox {
+  -webkit-appearance: none;
+  background-color: #9f0608;
+  padding: 9px 0;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+  margin: 0;
+
+  &.span-2 {
+    padding-top: 18px;
+    padding-bottom: 18px;
   }
 
-  .span-3 {
-    padding-bottom: 29px;
+  &.span-3 {
+    padding-top: 24px;
+    padding-bottom: 24px;
   }
+}
+
+.invis {
+  visibility: hidden;
 }
 </style>
