@@ -37,7 +37,7 @@ export default {
     fetchUpcomingGames() {
       this.$axios.get('/bookinghistory').then((res) => {
         console.log(res.data);
-        this.upcomingGames = res.data;
+        this.upcomingGames = res.data.map(game => Object.assign(game, { active: false }));
       });
     },
   },
