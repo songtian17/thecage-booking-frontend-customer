@@ -47,7 +47,7 @@ export default {
     isBooked(time, pitchId) {
       return this.bookedSlots.find((slot) => {
         const bookedPitch = slot.pitch_id === pitchId;
-        const bookedTime = time >= slot.booking_start && time <= slot.booking_end;
+        const bookedTime = time.time >= slot.booking_start && time.time < slot.booking_end;
         return bookedPitch && bookedTime;
       });
     },

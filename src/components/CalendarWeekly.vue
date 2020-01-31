@@ -20,6 +20,7 @@
       :timings="timings"
       :pitches="pitches"
       :date="weekDates[i - 1]"
+      :bookedSlots="bookedSlots"
     ></calendar-weekly-day>
   </div>
 </template>
@@ -60,7 +61,10 @@ export default {
     CalendarWeeklyDay,
   },
   data() {
-    return {};
+    return {
+      fieldId: '',
+      bookedSlots: [],
+    };
   },
   props: {
     timings: {
@@ -87,7 +91,7 @@ export default {
       for (let i = -3; i <= 3; i += 1) {
         const dateObject = this.toDateObject(this.date);
         const shiftedDateObject = this.shiftDateByDays(dateObject, i);
-        const formattedDate = this.formatDateObject(shiftedDateObject);
+        const formattedDate = this.formatDateObject(shiftedDateObject, 'DD/MM/YY');
         dates.push(formattedDate);
       }
       return dates;
@@ -98,16 +102,78 @@ export default {
       const [day, month, year] = displayDate.split('/');
       return new Date(year, month - 1, day);
     },
-    formatDateObject(dateObject) {
+    formatDateObject(dateObject, format) {
       const year = dateObject.getFullYear();
       const month = String(dateObject.getMonth() + 1).padStart(2, '0');
       const day = String(dateObject.getDate()).padStart(2, '0');
-      return `${day}/${month}/${year}`;
+      switch (format) {
+        case 'DD/MM/YY':
+          return `${day}/${month}/${year}`;
+        case 'YY-MM-DD':
+          return `${year}-${month}-${day}`;
+        default:
+          return 'Invalid date format';
+      }
     },
     shiftDateByDays(dateObject, numDays) {
-      dateObject.setDate(dateObject.getDate() + numDays);
-      return dateObject;
+      const newDateObject = new Date(dateObject.getTime());
+      newDateObject.setDate(newDateObject.getDate() + numDays);
+      return newDateObject;
     },
+    fetchBookedTimings(date) {
+      if (!date) {
+        return;
+      }
+      const selDate = this.toDateObject(date);
+      const currDateTime = new Date();
+      const currDate = new Date(
+        currDateTime.getFullYear(),
+        currDateTime.getMonth(),
+        currDateTime.getDate(),
+      );
+      let startDate;
+      const shiftDays = [-3, -2, -1, 0, 1, 2];
+
+      const endDate = this.shiftDateByDays(selDate, 3);
+      if (endDate < currDate) {
+        return;
+      }
+
+      for (let i = 0; i < shiftDays.length; i += 1) {
+        const daysToShift = shiftDays[i];
+        startDate = this.shiftDateByDays(selDate, daysToShift);
+        if (startDate < currDate) {
+          startDate = null;
+        } else {
+          break;
+        }
+      }
+      if (startDate === null) {
+        return;
+      }
+      const payload = {
+        bookingDateStart: this.formatDateObject(startDate, 'YY-MM-DD'),
+        bookingDateEnd: this.formatDateObject(endDate, 'YY-MM-DD'),
+        fieldId: this.fieldId,
+      };
+      this.$axios.post('/calendar/week', payload).then((res) => {
+        const bookedSlots = res.data.map(e => ({
+          booking_start: e.booking_start.split(' ')[1].slice(0, 5),
+          booking_end: e.booking_end.split(' ')[1].slice(0, 5),
+          pitch_id: e.pitch_id,
+        }));
+        this.bookedSlots = bookedSlots;
+      });
+    },
+  },
+  watch: {
+    date() {
+      this.fetchBookedTimings(this.date);
+    },
+  },
+  mounted() {
+    this.fieldId = this.$route.params.id;
+    this.fetchBookedTimings();
   },
 };
 </script>
