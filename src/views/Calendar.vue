@@ -1,7 +1,7 @@
 <template>
   <div>
     <view-header :main="false">
-      KALLANG 05
+      {{ fieldName }}
       <calendar-date-picker @change="changeSelectedDate"></calendar-date-picker>
     </view-header>
     <div class="content-wrapper">
@@ -75,6 +75,20 @@ export default {
   computed: {
     isDesktop() {
       return this.$vuetify.breakpoint.width >= 1440;
+    },
+    fieldName() {
+      const { venues } = this.$store.state.home;
+      if (!venues) {
+        return '';
+      }
+      for (let i = 0; i < venues.length; i += 1) {
+        const venue = venues[i];
+        const field = venue.fields.find(f => String(f.id) === this.$route.params.id);
+        if (field) {
+          return field.name;
+        }
+      }
+      return '';
     },
   },
   methods: {
