@@ -108,6 +108,7 @@ hr {
   .collapsable {
     @include montserrat($h3, 600);
     color: $primary;
+    user-select: none;
 
     &:hover {
       cursor: pointer;

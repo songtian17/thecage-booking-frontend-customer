@@ -4,7 +4,7 @@
       {{ fieldName }}
       <calendar-date-picker @change="changeSelectedDate"></calendar-date-picker>
     </view-header>
-    <div class="content-wrapper">
+    <div v-show="pitches.length" class="content-wrapper">
       <div class="legend">
         <input type="checkbox" class="calendar-checkbox" @click.prevent />
         <label>Available</label>

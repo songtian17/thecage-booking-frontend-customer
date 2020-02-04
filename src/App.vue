@@ -56,4 +56,7 @@ export default {
 .addtocart-dialog{
   width: auto!important;
 }
+.v-content {
+  background-color: white;
+}
 </style>
