@@ -30,7 +30,21 @@
         <div class="right">
           <span>Total: ${{ total.toFixed(2) }}</span>
           <span style="font-size:14px;font-weight:400">Taxes(included): ${{ tax.toFixed(2) }}</span>
-          <div id="paypal-button"></div>
+          <div
+            id="paypal-button"
+            :style="{ visibility: paymentSuccess ? 'hidden' : 'visible' }"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal" :class="{ 'show-modal': paymentSuccess && !modalClosed }">
+      <div class="modal-content">
+        <div class="modal-top">
+          <v-icon class="success-icon" color="white">mdi-check-circle-outline</v-icon>
+        </div>
+        <div class="modal-bottom">
+          <p>Your payment is completed successfully. Thank you.</p>
+          <button class="close-button" @click="closeModal">Ok</button>
         </div>
       </div>
     </div>
@@ -46,6 +60,8 @@ export default {
   data() {
     return {
       cartItems: [],
+      paymentSuccess: false,
+      modalClosed: false,
     };
   },
   methods: {
@@ -80,28 +96,30 @@ export default {
             },
             onAuthorize(data) {
               return window.paypal.request
-                .post(EXECUTE_PAYMENT_URL, {
-                  paymentID: data.paymentID,
-                  payerID: data.payerID,
-                },
-                { headers: { Authorization: `Bearer ${vm.$store.state.auth.token}` } })
+                .post(
+                  EXECUTE_PAYMENT_URL,
+                  {
+                    paymentID: data.paymentID,
+                    payerID: data.payerID,
+                  },
+                  { headers: { Authorization: `Bearer ${vm.$store.state.auth.token}` } },
+                )
                 .then((res) => {
                   console.log(res.success);
                   // The payment is complete!
                   // You can now show a confirmation message to the customer
-                  vm.$notify({
-                    type: 'success',
-                    title: 'Payment Success',
-                    text: 'Redirected to view your upcoming games...',
-                  });
                   vm.$store.dispatch('timer/clearTimer');
-                  vm.$router.push('/upcominggames');
+                  this.paymentSuccess = true;
                 });
             },
           },
           '#paypal-button',
         );
       });
+    },
+    closeModal() {
+      this.modalClosed = true;
+      this.$router.push('/');
     },
   },
   computed: {
@@ -198,12 +216,68 @@ export default {
 @media (max-width: 720px) {
   .content-wrapper {
     width: 95%;
-    .bottom-wrapper{
+    .bottom-wrapper {
       display: block;
-      .right{
+      .right {
         margin-top: 40px;
       }
     }
   }
+}
+
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(1.1);
+  transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.modal-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.modal-top {
+  background-color: #47c9a2;
+  padding: 24px;
+
+  .success-icon {
+    font-size: 96px;
+  }
+}
+
+.modal-bottom {
+  background-color: white;
+  @include montserrat($h5, 400);
+  padding: 32px;
+  display: block;
+
+  .close-button {
+    padding: 8px 32px;
+    background-color: #47c9a2;
+    color: white;
+    transition: 0.2s linear;
+
+    &:hover {
+      background-color: #2db189;
+    }
+  }
+}
+.show-modal {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+  transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
 </style>
