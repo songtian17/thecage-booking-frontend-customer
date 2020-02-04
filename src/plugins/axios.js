@@ -1,3 +1,4 @@
+import https from 'https';
 import axios from 'axios';
 import dotenv from 'dotenv';
 
@@ -9,6 +10,9 @@ function createInstance(baseURL) {
     headers: {
       'Content-Type': 'application/json',
     },
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false,
+    }),
   });
 }
 
