@@ -24,7 +24,7 @@
       <div class="promo">
         <p class="header">Promotion Code</p>
         <p class="subheader">Have a promotion code? Fill in this field and click apply.</p>
-        <form @submit.prevent="fetchPromoDetails">
+        <form @submit.prevent="applyPromoCode">
           <input v-model="promoCodeInput" type="text" />
           <input type="submit" value="Apply" />
         </form>
@@ -106,6 +106,20 @@ export default {
         return;
       }
       this.$router.push('/billing');
+    },
+    applyPromoCode() {
+      this.$axios.post('/promotioncode', { promoCode: this.promoCodeInput }).then(() => {
+        this.$axios.get('/cartitem').then((res) => {
+          this.cartItems = res.data.items;
+        });
+      }).catch((err) => {
+        console.log(err.response);
+        this.$notify({
+          type: 'error',
+          title: 'Invalid promo code',
+          text: err.response.data,
+        });
+      });
     },
   },
   computed: {
