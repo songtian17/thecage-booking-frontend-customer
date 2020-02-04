@@ -40,7 +40,14 @@ const actions = {
       .get('/venues')
       .then((res) => {
         const { data } = res;
-        const venues = data.map(venue => Object.assign(venue, { active: false }));
+        const venues = data.map((venue) => {
+          venue.fields.sort((a, b) => {
+            const vala = parseInt(a.field_type.split('-')[0], 10);
+            const valb = parseInt(b.field_type.split('-')[0], 10);
+            return vala - valb;
+          });
+          return Object.assign(venue, { active: false });
+        });
         commit('setVenues', venues);
         resolve(res);
       })
