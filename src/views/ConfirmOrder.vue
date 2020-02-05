@@ -130,6 +130,14 @@ export default {
                   // You can now show a confirmation message to the customer
                   vm.$store.dispatch('timer/clearTimer');
                   this.paymentSuccess = true;
+                })
+                .catch((err) => {
+                  this.$notify({
+                    type: 'error',
+                    title: 'Error',
+                    text: 'There was a problem resolving your payment',
+                  });
+                  console.log(err);
                 });
             },
           },
