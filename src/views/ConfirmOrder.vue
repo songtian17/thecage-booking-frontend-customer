@@ -21,9 +21,9 @@
           </div>
           <div class="billing">
             <span class="title">Bill to:</span>
-            <span>John Tan</span>
-            <span><v-icon class="contact-icon">mdi-phone</v-icon>98765432</span>
-            <span><v-icon class="contact-icon">mdi-email</v-icon>johntan@email.com</span>
+            <span>{{customer.name}}</span>
+            <span><v-icon class="contact-icon">mdi-phone</v-icon>customer.phone</span>
+            <span><v-icon class="contact-icon">mdi-email</v-icon>customer.email</span>
             <a href="">Change address ></a>
           </div>
         </div>
@@ -62,9 +62,29 @@ export default {
       cartItems: [],
       paymentSuccess: false,
       modalClosed: false,
+      customer: {
+        name: '',
+        phone: '',
+        email: '',
+      },
     };
   },
   methods: {
+    fetchCustomerData() {
+      this.$axios
+        .get(`/customer/${this.$store.getters['auth/userId']}`)
+        .then((res) => {
+          // eslint-disable-next-line no-shadow
+          const { email, name } = res.data;
+          const phone = res.data.phone_no;
+          this.customer.name = name;
+          this.customer.phone = phone;
+          this.customer.email = email;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     fetchCartItems() {
       this.$axios
         .get('/cartitem')
@@ -139,6 +159,7 @@ export default {
       this.$router.push('/cart');
     }
     this.fetchCartItems();
+    this.fetchCustomerData();
     this.renderPaypalButton();
   },
 };
