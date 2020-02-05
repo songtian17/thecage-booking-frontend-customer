@@ -27,12 +27,14 @@
         v-show="calendarType === 'day'"
         :date="selectedDate"
         :pitches="pitches"
+        :timings="timings"
       ></calendar-daily>
       <calendar-weekly
         v-if="isDesktop"
         v-show="calendarType === 'week'"
         :date="selectedDate"
         :pitches="pitches"
+        :timings="timings"
       ></calendar-weekly>
       <div class="btn-wrapper">
         <button id="add-btn" @click="openAddToCartModal">Add to cart</button>
@@ -54,6 +56,33 @@ import CalendarDaily from '@/components/CalendarDaily.vue';
 import CalendarWeekly from '@/components/CalendarWeekly.vue';
 import AddToCartModal from '@/components/AddToCartModal.vue';
 
+const timings = [
+  { time: '00:00', hours: 1 },
+  { time: '01:00', hours: 1 },
+  { time: '02:00', hours: 1 },
+  { time: '03:00', hours: 1 },
+  { time: '04:00', hours: 1 },
+  { time: '05:00', hours: 1 },
+  { time: '06:00', hours: 1 },
+  { time: '07:00', hours: 1 },
+  { time: '08:00', hours: 1 },
+  { time: '09:00', hours: 1 },
+  { time: '10:00', hours: 1 },
+  { time: '11:00', hours: 1 },
+  { time: '12:00', hours: 1 },
+  { time: '13:00', hours: 1 },
+  { time: '14:00', hours: 1 },
+  { time: '15:00', hours: 1 },
+  { time: '16:00', hours: 1 },
+  { time: '17:00', hours: 1 },
+  { time: '18:00', hours: 1 },
+  { time: '19:00', hours: 1 },
+  { time: '20:00', hours: 1 },
+  { time: '21:00', hours: 1 },
+  { time: '22:00', hours: 1 },
+  { time: '23:00', hours: 1 },
+];
+
 export default {
   name: 'Calendar',
   data() {
@@ -63,6 +92,7 @@ export default {
       showAddToCartModal: false,
       selectedSlots: [],
       pitches: [],
+      timings,
     };
   },
   components: {
@@ -80,6 +110,7 @@ export default {
       const { venues } = this.$store.state.home;
       if (!venues) {
         return '';
+        // add fallback to call api to get venue name
       }
       for (let i = 0; i < venues.length; i += 1) {
         const venue = venues[i];
@@ -123,6 +154,21 @@ export default {
           });
         });
     },
+    fetchCustomTimeslots() {
+      this.$axios.get(`/customtimeslots/${this.$route.params.id}`).then((res) => {
+        const customTimeslots = res.data;
+        console.log(customTimeslots);
+        customTimeslots.forEach((ct) => {
+          const i = this.timings.findIndex(
+            t => t.time.split(':')[0] === ct.start_time.split(':')[0],
+          );
+          this.timings.splice(i, ct.duration, {
+            time: ct.start_time.slice(0, 5),
+            hours: ct.duration,
+          });
+        });
+      });
+    },
   },
   watch: {
     isDesktop(bool) {
@@ -132,6 +178,7 @@ export default {
     },
   },
   mounted() {
+    this.fetchCustomTimeslots();
     this.fetchPitches(this.$route.params.id);
     if (!this.$store.getters['cart/products'].length) {
       this.$store.dispatch('cart/fetchProducts');

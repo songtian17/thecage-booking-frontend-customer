@@ -23,32 +23,6 @@
 </template>
 
 <script>
-const timings = () => [
-  { time: '00:00', hours: 1 },
-  { time: '01:00', hours: 1 },
-  { time: '02:00', hours: 1 },
-  { time: '03:00', hours: 1 },
-  { time: '04:00', hours: 1 },
-  { time: '05:00', hours: 1 },
-  { time: '06:00', hours: 1 },
-  { time: '07:00', hours: 1 },
-  { time: '08:00', hours: 1 },
-  { time: '09:00', hours: 1 },
-  { time: '10:00', hours: 1 },
-  { time: '11:00', hours: 1 },
-  { time: '12:00', hours: 2 },
-  // { time: '13:00', hours: 1 },
-  { time: '14:00', hours: 1 },
-  { time: '15:00', hours: 1 },
-  { time: '16:00', hours: 1 },
-  { time: '17:00', hours: 1 },
-  { time: '18:00', hours: 1 },
-  { time: '19:00', hours: 1 },
-  { time: '20:00', hours: 1 },
-  { time: '21:00', hours: 1 },
-  { time: '22:00', hours: 1 },
-  { time: '23:00', hours: 1 },
-];
 
 export default {
   name: 'CalendarDaily',
@@ -131,7 +105,7 @@ export default {
   props: {
     timings: {
       type: Array,
-      default: timings,
+      default: () => [],
     },
     pitches: {
       type: Array,
