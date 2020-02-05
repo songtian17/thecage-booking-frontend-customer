@@ -129,10 +129,10 @@ export default {
                   // The payment is complete!
                   // You can now show a confirmation message to the customer
                   vm.$store.dispatch('timer/clearTimer');
-                  this.paymentSuccess = true;
+                  vm.paymentSuccess = true;
                 })
                 .catch((err) => {
-                  this.$notify({
+                  vm.$notify({
                     type: 'error',
                     title: 'Error',
                     text: 'There was a problem resolving your payment',
