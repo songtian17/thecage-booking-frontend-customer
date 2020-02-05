@@ -1,4 +1,7 @@
 /* eslint no-shadow: ["error", { "allow": ["state", getters] }] */
+import axios from '@/plugins/axios';
+import router from '@/router/index';
+
 const state = {
   deadline: '',
   timerID: '',
@@ -13,13 +16,14 @@ const getters = {
 };
 
 const actions = {
-  startTimer: ({ commit, getters }) => {
+  startTimer: ({ dispatch, commit, getters }) => {
     commit('newDeadline');
     commit(
       'setTimer',
       window.setInterval(() => {
         commit('setTimerValues');
         if (getters.isTimeUp) {
+          dispatch('clearCart');
           commit('clearTimer');
         }
       }),
@@ -27,6 +31,17 @@ const actions = {
   },
   clearTimer: ({ commit }) => {
     commit('clearTimer');
+  },
+  clearCart: () => {
+    axios
+      .delete('/cartitem')
+      .then(() => {
+        router.push('/');
+        this.$notify({
+          type: 'warning',
+          text: 'Cart has been cleared due to inactivity.',
+        });
+      });
   },
 };
 
