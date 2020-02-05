@@ -21,9 +21,9 @@
           </div>
           <div class="billing">
             <span class="title">Bill to:</span>
-            <span>{{customer.name}}</span>
-            <span><v-icon class="contact-icon">mdi-phone</v-icon>customer.phone</span>
-            <span><v-icon class="contact-icon">mdi-email</v-icon>customer.email</span>
+            <span>{{ customer.name }}</span>
+            <span><v-icon class="contact-icon">mdi-phone</v-icon>{{ customer.phone }}</span>
+            <span><v-icon class="contact-icon">mdi-email</v-icon>{{ customer.email }}</span>
             <a href="">Change address ></a>
           </div>
         </div>
