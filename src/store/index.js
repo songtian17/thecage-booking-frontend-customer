@@ -4,6 +4,7 @@ import auth from './modules/auth';
 import timer from './modules/timer';
 import cart from './modules/cart';
 import home from './modules/home';
+import activeField from './modules/activeField';
 
 Vue.use(Vuex);
 
@@ -19,5 +20,6 @@ export default new Vuex.Store({
     timer,
     cart,
     home,
+    activeField,
   },
 });

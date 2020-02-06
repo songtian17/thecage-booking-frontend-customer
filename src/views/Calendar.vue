@@ -6,9 +6,20 @@
     </view-header>
     <div v-show="pitches.length" class="content-wrapper">
       <div class="legend">
-        <input type="checkbox" class="calendar-checkbox" @click.prevent />
+        <input
+          type="checkbox"
+          class="calendar-checkbox"
+          :style="{ 'background-color': themeColor }"
+          @click.prevent
+        />
         <label>Available</label>
-        <input type="checkbox" class="calendar-checkbox" checked @click.prevent />
+        <input
+          type="checkbox"
+          class="calendar-checkbox"
+          checked
+          :style="{ 'background-color': themeActiveColor }"
+          @click.prevent
+        />
         <label>Your slot</label>
         <input type="checkbox" class="calendar-checkbox" disabled />
         <label>Booked</label>
@@ -23,18 +34,11 @@
           </label>
         </div>
       </div>
-      <calendar-daily
-        v-show="calendarType === 'day'"
-        :date="selectedDate"
-        :pitches="pitches"
-        :timings="timings"
-      ></calendar-daily>
+      <calendar-daily v-show="calendarType === 'day'" :date="selectedDate"></calendar-daily>
       <calendar-weekly
         v-if="isDesktop"
         v-show="calendarType === 'week'"
         :date="selectedDate"
-        :pitches="pitches"
-        :timings="timings"
       ></calendar-weekly>
       <div class="btn-wrapper">
         <button id="add-btn" @click="openAddToCartModal">Add to cart</button>
@@ -56,33 +60,7 @@ import CalendarDaily from '@/components/CalendarDaily.vue';
 import CalendarWeekly from '@/components/CalendarWeekly.vue';
 import AddToCartModal from '@/components/AddToCartModal.vue';
 
-const timings = [
-  { time: '00:00', hours: 1 },
-  { time: '01:00', hours: 1 },
-  { time: '02:00', hours: 1 },
-  { time: '03:00', hours: 1 },
-  { time: '04:00', hours: 1 },
-  { time: '05:00', hours: 1 },
-  { time: '06:00', hours: 1 },
-  { time: '07:00', hours: 1 },
-  { time: '08:00', hours: 1 },
-  { time: '09:00', hours: 1 },
-  { time: '10:00', hours: 1 },
-  { time: '11:00', hours: 1 },
-  { time: '12:00', hours: 1 },
-  { time: '13:00', hours: 1 },
-  { time: '14:00', hours: 1 },
-  { time: '15:00', hours: 1 },
-  { time: '16:00', hours: 1 },
-  { time: '17:00', hours: 1 },
-  { time: '18:00', hours: 1 },
-  { time: '19:00', hours: 1 },
-  { time: '20:00', hours: 1 },
-  { time: '21:00', hours: 1 },
-  { time: '22:00', hours: 1 },
-  { time: '23:00', hours: 1 },
-];
-
+/* eslint no-bitwise: ["error", { "allow": ["&", "|", ">>", "<<"] }] */
 export default {
   name: 'Calendar',
   data() {
@@ -92,7 +70,8 @@ export default {
       showAddToCartModal: false,
       selectedSlots: [],
       pitches: [],
-      timings,
+      fieldName: '',
+      themeColor: '',
     };
   },
   components: {
@@ -106,20 +85,8 @@ export default {
     isDesktop() {
       return this.$vuetify.breakpoint.width >= 1440;
     },
-    fieldName() {
-      const { venues } = this.$store.state.home;
-      if (!venues) {
-        return '';
-        // add fallback to call api to get venue name
-      }
-      for (let i = 0; i < venues.length; i += 1) {
-        const venue = venues[i];
-        const field = venue.fields.find(f => String(f.id) === this.$route.params.id);
-        if (field) {
-          return field.name;
-        }
-      }
-      return '';
+    themeActiveColor() {
+      return this.lightenDarkenColor(this.themeColor, 180);
     },
   },
   methods: {
@@ -140,11 +107,17 @@ export default {
       this.$store.commit('cart/copySelectedTimeslots');
       this.selectedSlots = this.$store.getters['cart/selectedWithProduct'];
     },
-    fetchPitches(fieldId) {
+    fetchFieldData(fieldId) {
       this.$axios
         .get(`/field/${fieldId}`)
         .then((res) => {
           this.pitches = res.data.pitches;
+          this.themeColor = res.data.colour;
+          const themeActiveColor = this.lightenDarkenColor(this.themeColor, 100);
+          this.$store.commit('activeField/setPitches', this.pitches);
+          this.$store.commit('activeField/setThemeColor', this.themeColor);
+          this.$store.commit('activeField/setThemeActiveColor', themeActiveColor);
+          this.fieldName = res.data.name;
         })
         .catch((err) => {
           this.$notify({
@@ -157,17 +130,22 @@ export default {
     fetchCustomTimeslots() {
       this.$axios.get(`/customtimeslots/${this.$route.params.id}`).then((res) => {
         const customTimeslots = res.data;
-        console.log(customTimeslots);
-        customTimeslots.forEach((ct) => {
-          const i = this.timings.findIndex(
-            t => t.time.split(':')[0] === ct.start_time.split(':')[0],
-          );
-          this.timings.splice(i, ct.duration, {
-            time: ct.start_time.slice(0, 5),
-            hours: ct.duration,
-          });
-        });
+        this.$store.dispatch('activeField/setCustomTimeslots', customTimeslots);
       });
+    },
+    lightenDarkenColor(hexCol, amt) {
+      const col = hexCol.slice(1);
+      const num = parseInt(col, 16);
+      let r = (num >> 16) + amt;
+      if (r > 255) r = 255;
+      else if (r < 0) r = 0;
+      let b = ((num >> 8) & 0x00ff) + amt;
+      if (b > 255) b = 255;
+      else if (b < 0) b = 0;
+      let g = (num & 0x0000ff) + amt;
+      if (g > 255) g = 255;
+      else if (g < 0) g = 0;
+      return `#${(g | (b << 8) | (r << 16)).toString(16)}`;
     },
   },
   watch: {
@@ -179,7 +157,7 @@ export default {
   },
   mounted() {
     this.fetchCustomTimeslots();
-    this.fetchPitches(this.$route.params.id);
+    this.fetchFieldData(this.$route.params.id);
     if (!this.$store.getters['cart/products'].length) {
       this.$store.dispatch('cart/fetchProducts');
     }

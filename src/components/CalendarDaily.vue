@@ -12,6 +12,7 @@
             v-model="selectedTimeslots"
             :value="formatTimeslotObject(date, timing.time, timing.hours, pitch.id, pitch.name)"
             :class="`span-${timing.hours}`"
+            :style="themeStyle"
             type="checkbox"
             class="calendar-checkbox"
             :disabled="isBooked(timing, pitch.odoo_id)"
@@ -23,7 +24,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'CalendarDaily',
   data() {
@@ -96,6 +96,18 @@ export default {
         this.$store.commit('cart/setSelectedTimeslots', selectedTimeslots);
       },
     },
+    timings() {
+      return this.$store.state.activeField.timings;
+    },
+    pitches() {
+      return this.$store.state.activeField.pitches;
+    },
+    themeStyle() {
+      return {
+        '--color': this.$store.state.activeField.themeColor,
+        '--active-color': this.$store.state.activeField.themeActiveColor,
+      };
+    },
   },
   watch: {
     date() {
@@ -103,14 +115,6 @@ export default {
     },
   },
   props: {
-    timings: {
-      type: Array,
-      default: () => [],
-    },
-    pitches: {
-      type: Array,
-      default: () => [],
-    },
     date: {
       type: String,
       default: '',
@@ -153,7 +157,7 @@ export default {
 
 .calendar-checkbox {
   -webkit-appearance: none;
-  background-color: #9f0608;
+  background-color: var(--color);
   padding: 12px;
   display: inline-block;
   position: relative;
@@ -171,12 +175,11 @@ export default {
   }
 
   &:active {
-    background-color: #e9bfbf;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   &:checked {
-    background-color: #e9bfbf;
+    background-color: var(--active-color);
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05),
       inset 15px 10px -12px rgba(255, 255, 255, 0.1);
 

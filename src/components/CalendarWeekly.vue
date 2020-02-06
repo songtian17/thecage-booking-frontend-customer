@@ -17,8 +17,6 @@
     <calendar-weekly-day
       v-for="i in 7"
       :key="i"
-      :timings="timings"
-      :pitches="pitches"
       :date="weekDates[i - 1]"
       :bookedSlots="bookedSlots[i - 1]"
     ></calendar-weekly-day>
@@ -40,14 +38,6 @@ export default {
     };
   },
   props: {
-    timings: {
-      type: Array,
-      default: () => [],
-    },
-    pitches: {
-      type: Array,
-      default: () => [],
-    },
     date: {
       type: String,
       default: '',
@@ -68,6 +58,9 @@ export default {
         dates.push(formattedDate);
       }
       return dates;
+    },
+    timings() {
+      return this.$store.state.activeField.timings;
     },
   },
   methods: {
