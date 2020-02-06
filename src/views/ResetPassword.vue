@@ -8,18 +8,41 @@
       <div class="header">Reset Password</div>
       <form v-if="isValidToken && !isResetSuccess" @submit.prevent="submit">
         <p>Please enter and confirm your new password.</p>
-        <label for="password">Password</label>
-        <br />
-        <input id="password" v-model="password" type="password" name="password" />
-        <br />
-        <label for="confirm-pass">Confirm Password</label>
-        <br />
-        <input
-          id="confirm-pass"
-          v-model="confirmPassword"
-          type="confirm-pass"
-          name="confirm-pass"
-        />
+        <div class="form-group" :class="{ 'formgroup--error': $v.password.$error }">
+          <label class="form__label" for="password">Password</label>
+          <input
+            id="password"
+            v-model.lazy="password"
+            class="form__input"
+            type="password"
+            @change="$v.password.$touch"
+          />
+          <div v-if="$v.password.$error">
+            <div v-if="!$v.password.required" class="form__error">
+              Field is required.
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" :class="{ 'formgroup--error': $v.password.$error }">
+          <label class="form__label" for="confirm-pass">Confim Password</label>
+          <input
+            id="confirm-pass"
+            v-model.lazy="confirmPassword"
+            class="form__input"
+            type="password"
+            @change="$v.confirmPassword.$touch"
+          />
+          <div v-if="$v.confirmPassword.$error">
+            <div v-if="!$v.confirmPassword.required" class="form__error">
+              Field is required.
+            </div>
+            <div v-if="!$v.confirmPassword.sameAsPassword" class="form__error">
+              Passwords must match.
+            </div>
+          </div>
+        </div>
+
         <br />
         <div class="actions">
           <input id="submit" type="submit" value="Reset Password" />
@@ -38,6 +61,7 @@
 </template>
 
 <script>
+import { required, sameAs } from 'vuelidate/lib/validators';
 import ViewHeader from '@/components/ViewHeader.vue';
 
 export default {
@@ -57,14 +81,25 @@ export default {
   },
   methods: {
     submit() {
-      this.$axios
-        .post('/resetpassword', {
-          password: this.password,
-          token: this.userToken,
-        })
-        .then(() => {
-          this.isResetSuccess = true;
-        });
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.$axios
+          .post('/resetpassword', {
+            password: this.password,
+            token: this.userToken,
+          })
+          .then(() => {
+            this.isResetSuccess = true;
+          })
+          .catch((err) => {
+            console.log(err);
+            this.$notify({
+              type: 'error',
+              title: 'Password Reset Failed',
+              text: 'Contact the administrator',
+            });
+          });
+      }
     },
     verifyTokenValidity() {
       this.userToken = this.$route.query.token;
@@ -94,6 +129,15 @@ export default {
         });
     },
   },
+  validations: {
+    password: {
+      required,
+    },
+    confirmPassword: {
+      required,
+      sameAsPassword: sameAs('password'),
+    },
+  },
   mounted() {
     this.verifyTokenValidity();
   },
@@ -109,7 +153,7 @@ export default {
   box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14),
     0px 5px 22px 4px rgba(0, 0, 0, 0.12);
 
-  .info-msg{
+  .info-msg {
     @include montserrat($h5, 400);
   }
   .header {
@@ -141,9 +185,9 @@ export default {
       #submit {
         background-color: $primary;
         color: white;
-      padding: 10px 25px;
-      float: right;
-      @include montserrat($h5, 500);
+        padding: 10px 25px;
+        float: right;
+        @include montserrat($h5, 500);
         cursor: pointer;
         transition: 0.2s linear;
       }
