@@ -145,6 +145,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@include form-group;
+
 .container {
   margin: 40px auto;
   width: 400px;
