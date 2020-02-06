@@ -38,9 +38,17 @@ export default {
       return parseInt(hour, 10);
     },
     isProductTimingValid(product) {
-      const timeslotStartTime = this.getHourFromDate(this.timeslot.booking_start);
-      const isStartTimeValid = timeslotStartTime >= this.getHourFromTime(product.start_time);
-      const isEndTimeValid = timeslotStartTime <= this.getHourFromTime(product.end_time);
+      let timeslotStartTime = this.getHourFromDate(this.timeslot.booking_start);
+      const productStartTime = this.getHourFromTime(product.start_time);
+      let productEndTime = this.getHourFromTime(product.end_time);
+      if (productStartTime >= productEndTime) {
+        productEndTime += 24;
+        if (timeslotStartTime < productStartTime) {
+          timeslotStartTime += 24;
+        }
+      }
+      const isStartTimeValid = timeslotStartTime >= productStartTime;
+      const isEndTimeValid = timeslotStartTime <= productEndTime;
       return isStartTimeValid && isEndTimeValid;
     },
   },
