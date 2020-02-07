@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import dayjs from '@/plugins/dayjs';
+
 export default {
   name: 'AvailableProductOptions',
   data() {
@@ -25,7 +27,9 @@ export default {
   },
   computed: {
     products() {
-      return this.$store.getters['cart/products'].filter(product => this.isProductTimingValid(product));
+      return this.$store.getters['cart/products'].filter(
+        product => this.isProductTimingValid(product) && this.isProductWeekdayValid(product),
+      );
     },
   },
   methods: {
@@ -50,6 +54,12 @@ export default {
       const isStartTimeValid = timeslotStartTime >= productStartTime;
       const isEndTimeValid = timeslotStartTime <= productEndTime;
       return isStartTimeValid && isEndTimeValid;
+    },
+    isProductWeekdayValid(product) {
+      const validWeekdays = product.product_valid_day.map(d => d.day_of_week);
+      const timeslotDate = dayjs.utc(this.timeslot.booking_start.split(' ')[0]).add(8, 'hour');
+      const timeslotDayString = timeslotDate.format('dddd');
+      return validWeekdays.some(day => day === timeslotDayString);
     },
   },
   mounted() {
