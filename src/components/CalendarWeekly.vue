@@ -1,36 +1,59 @@
 <template>
-  <div class="weekly-calendar">
-    <div class="timings-wrapper">
-      <table class="timings">
-        <tr v-for="(timing, index) in timings" :key="index">
-          <td :class="`span-${timing.hours}`" class="timing">{{ timing.time }}</td>
-          <td>
-            <input
-              type="checkbox"
-              class="calendar-checkbox invis"
-              :class="`span-${timing.hours}`"
-            />
-          </td>
-        </tr>
-      </table>
+  <div class="grid-container">
+    <table class="timings">
+      <thead class="invis">
+        <td>P0</td>
+      </thead>
+      <tr v-for="(timing, index) in timings" :key="index">
+        <td :class="`span-${timing.hours}`" class="timing">{{ timing.time }}</td>
+        <td>
+          <input
+            type="checkbox"
+            class="calendar-checkbox"
+            style="padding-left: 0; padding-right: 0;"
+            :class="`span-${timing.hours}`"
+          />
+        </td>
+      </tr>
+    </table>
+
+    <div v-for="i in 7" :key="`day-${i}`" class="date-display" :class="`day${i - 1}`">
+      {{ toDateDisplayString(weekDates[i - 1]) }}
     </div>
-    <calendar-weekly-day
-      v-for="i in 7"
-      :key="i"
-      :date="weekDates[i - 1]"
-      :bookedSlots="bookedSlots[i - 1]"
-    ></calendar-weekly-day>
+    <table v-for="i in 7" :key="`slot-${i}`" :class="`slot${i - 1}`">
+      <thead>
+        <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
+      </thead>
+      <tr v-for="(timing, index) in timings" :key="index">
+        <td v-for="pitch in pitches" :key="pitch.id">
+          <input
+            v-model="selectedTimeslots"
+            :value="
+              formatTimeslotObject(
+                weekDates[i - 1],
+                timing.time,
+                timing.hours,
+                pitch.id,
+                pitch.name
+              )
+            "
+            type="checkbox"
+            class="calendar-checkbox"
+            :style="themeStyle"
+            :class="`span-${timing.hours}`"
+            :disabled="isBooked(timing, pitch.odoo_id)"
+          />
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 
 <script>
-import CalendarWeeklyDay from '@/components/CalendarWeeklyDay.vue';
+const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
 export default {
   name: 'CalendarWeekly',
-  components: {
-    CalendarWeeklyDay,
-  },
   data() {
     return {
       fieldId: '',
@@ -44,6 +67,14 @@ export default {
     },
   },
   computed: {
+    selectedTimeslots: {
+      get() {
+        return this.$store.state.cart.selectedTimeslots;
+      },
+      set(selectedTimeslots) {
+        this.$store.commit('cart/setSelectedTimeslots', selectedTimeslots);
+      },
+    },
     weekDates() {
       const dates = [];
 
@@ -62,8 +93,56 @@ export default {
     timings() {
       return this.$store.state.activeField.timings;
     },
+    pitches() {
+      return this.$store.state.activeField.pitches;
+    },
+    themeStyle() {
+      return {
+        '--color': this.$store.state.activeField.themeColor,
+        '--active-color': this.$store.state.activeField.themeActiveColor,
+      };
+    },
   },
   methods: {
+    toDateDisplayString(selectedDate) {
+      if (!selectedDate) {
+        return '';
+      }
+      const [d, m, y] = selectedDate.split('/');
+      const dateObject = new Date(y, m - 1, d);
+      const day = weekdays[dateObject.getDay()];
+      const date = String(dateObject.getDate()).padStart(2, '0');
+      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+      return `${day}, ${date}/${month}`;
+    },
+    isBooked(time, pitchId) {
+      return this.bookedSlots.find((slot) => {
+        const bookedPitch = slot.pitch_id === pitchId;
+        const bookedTime = time.time >= slot.booking_start
+          && (time.time < slot.booking_end || slot.booking_end === '00:00');
+        return bookedPitch && bookedTime;
+      });
+    },
+    formatTimeslotObject(date, startTime, hours, pitchId, pitchName) {
+      const [d, m, y] = date.split('/');
+      const formattedDate = `${y}-${m}-${d}`;
+      let formattedEndDate = `${y}-${m}-${d}`;
+      let endTimeHour = String(parseInt(startTime.split(':')[0], 10) + hours);
+      if (endTimeHour === '24') {
+        endTimeHour = '0';
+        const nextDate = new Date(y, m - 1, d);
+        nextDate.setDate(nextDate.getDate() + 1);
+        formattedEndDate = this.formatDateObject(nextDate);
+      }
+      return {
+        booking_start: `${formattedDate} ${startTime}:00`,
+        booking_end: `${formattedEndDate} ${
+          endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour
+        }:00:00`,
+        pitchId,
+        pitchName,
+      };
+    },
     toDateObject(displayDate) {
       const [day, month, year] = displayDate.split('/');
       return new Date(year, month - 1, day);
@@ -159,35 +238,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.weekly-calendar {
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.timings-wrapper {
-  display: inline-block;
-  padding: 6px;
+.grid-container {
+  display: grid;
+  grid-template-columns: 60px auto;
+  grid-template-rows: auto;
+  grid-template-areas:
+    ".        day0  day1  day2  day3  day4  day5  day6"
+    "timings  slot0 slot1 slot2 slot3 slot4 slot5 slot6";
+  align-items: center;
+  justify-items: center;
+  grid-gap: 10px 10px;
+  justify-content: center;
 }
 
 .timings {
-  display: inline-block;
-  margin: auto;
+  grid-area: timings;
+}
 
-  .timing {
-    @include montserrat($h5, 400);
-  }
+$days: 0, 1, 2, 3, 4, 5, 6;
 
-  td {
-    padding: 1px 1px;
-    vertical-align: top;
+@each $i in $days {
+  .day#{$i} {
+    grid-area: day#{$i};
   }
+  .slot#{$i} {
+    grid-area: slot#{$i};
+  }
+}
+
+td {
+  @include montserrat($h5, 400);
+  padding: 1px 1px;
+  vertical-align: top;
+}
+
+.date-display {
+  @include montserrat($h4, 400);
 }
 
 .calendar-checkbox {
   -webkit-appearance: none;
-  background-color: #9f0608;
-  padding: 9px 0;
+  background-color: var(--color);
+  padding: 9px;
   display: inline-block;
   position: relative;
   vertical-align: middle;
@@ -201,6 +293,21 @@ export default {
   &.span-3 {
     padding-top: 24px;
     padding-bottom: 24px;
+  }
+
+  &:active {
+    background-color: var(--active-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  &:checked {
+    background-color: var(--active-color);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05),
+      inset 15px 10px -12px rgba(255, 255, 255, 0.1);
+
+    &:active {
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);
+    }
   }
 }
 
