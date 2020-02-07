@@ -86,7 +86,7 @@ export default {
       return this.$vuetify.breakpoint.width >= 1440;
     },
     themeActiveColor() {
-      return this.lightenDarkenColor(this.themeColor, 180);
+      return this.$store.state.activeField.themeActiveColor;
     },
   },
   methods: {
@@ -113,7 +113,7 @@ export default {
         .then((res) => {
           this.pitches = res.data.pitches;
           this.themeColor = res.data.colour;
-          const themeActiveColor = this.lightenDarkenColor(this.themeColor, 100);
+          const themeActiveColor = this.lightenDarkenColor(this.themeColor, 120);
           this.$store.commit('activeField/setPitches', this.pitches);
           this.$store.commit('activeField/setThemeColor', this.themeColor);
           this.$store.commit('activeField/setThemeActiveColor', themeActiveColor);
