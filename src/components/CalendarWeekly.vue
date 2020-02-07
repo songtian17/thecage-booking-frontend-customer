@@ -176,7 +176,7 @@ export default {
         return;
       }
       let startDate;
-      const selDate = dayjs.utc(date).add(8, 'hour');
+      const selDate = dayjs.utc(date, 'DD/MM/YYYY').add(8, 'hour');
       const currDate = dayjs.utc(new Date()).add(8, 'hour');
       const endDate = selDate.add(3, 'day');
       if (endDate.isBefore(selDate, 'day')) {
