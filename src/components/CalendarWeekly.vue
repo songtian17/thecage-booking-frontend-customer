@@ -40,7 +40,10 @@
               "
               type="checkbox"
               class="calendar-checkbox"
-              :style="themeStyle"
+              :style="{
+                ...themeStyle,
+                visibility: isTimePast(weekDates[i - 1], timing) ? 'hidden' : 'visible'
+              }"
               :class="`span-${timing.hours}`"
               :disabled="isBooked(timing, pitch.odoo_id)"
             />
@@ -103,6 +106,16 @@ export default {
     },
   },
   methods: {
+    isTimePast(date, timing) {
+      const selectedDate = dayjs.utc(date, 'DD/MM/YYYY');
+      const today = dayjs.utc(new Date()).add(8, 'hour');
+      const isSameDay = selectedDate.isSame(today, 'day');
+      if (!isSameDay) {
+        return false;
+      }
+      const isPastTime = parseInt(timing.time.slice(0, 2), 10) <= today.hour();
+      return isPastTime;
+    },
     isPast(date) {
       const selectedDate = dayjs.utc(date, 'DD/MM/YYYY');
       const today = dayjs.utc(new Date()).add(8, 'hour');
