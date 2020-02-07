@@ -38,7 +38,7 @@ const getters = {
 
 const actions = {
   setCustomTimeslots: ({ commit, state }, customTimeslots) => {
-    const newTimings = state.defaultTimings;
+    const newTimings = [...state.defaultTimings];
     if (!customTimeslots) {
       commit('setTimings', newTimings);
       return;
