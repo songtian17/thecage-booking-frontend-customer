@@ -5,7 +5,7 @@
         <td></td>
         <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
       </thead>
-      <tr v-for="(timing, index) in timings" :key="index">
+      <tr v-for="(timing, index) in filterPast(timings)" :key="index">
         <td class="timing">{{ timing.time }}</td>
         <td v-for="pitch in pitches" :key="pitch.id">
           <input
@@ -85,6 +85,27 @@ export default {
       const month = String(dateObject.getMonth() + 1).padStart(2, '0');
       const day = String(dateObject.getDate()).padStart(2, '0');
       return `${year}-${month}-${day}`;
+    },
+    filterPast(timings) {
+      const today = new Date();
+      const todayDate = String(today.getDate()).padStart(2, '0');
+      const todayMonth = String(today.getMonth() + 1).padStart(2, '0'); // +1 ??
+      const todayYear = today.getFullYear();
+      const todayDateObj = new Date(todayYear, todayMonth - 1, todayDate);
+      const [d, m, y] = this.date.split('/');
+      const selectedDateObj = new Date(y, m - 1, d);
+      if (todayDateObj > selectedDateObj) {
+        return [];
+      }
+
+      const todayDateString = `${todayDate}/${todayMonth}/${todayYear}`;
+      const currTime = today.getHours();
+      let newTimings;
+      if (todayDateString === this.date) {
+        newTimings = timings.filter(t => parseInt(t.time.slice(0, 2), 10) >= currTime);
+        return newTimings;
+      }
+      return timings;
     },
   },
   computed: {
