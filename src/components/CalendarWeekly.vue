@@ -21,36 +21,38 @@
       {{ toDateDisplayString(weekDates[i - 1]) }}
     </div>
     <table v-for="i in 7" :key="`slot-${i}`" :class="`slot${i - 1}`">
-      <thead>
-        <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
-      </thead>
-      <tr v-for="(timing, index) in timings" :key="index">
-        <td v-for="pitch in pitches" :key="pitch.id">
-          <input
-            v-model="selectedTimeslots"
-            :value="
-              formatTimeslotObject(
-                weekDates[i - 1],
-                timing.time,
-                timing.hours,
-                pitch.id,
-                pitch.name
-              )
-            "
-            type="checkbox"
-            class="calendar-checkbox"
-            :style="themeStyle"
-            :class="`span-${timing.hours}`"
-            :disabled="isBooked(timing, pitch.odoo_id)"
-          />
-        </td>
-      </tr>
+      <div v-if="!isPast(weekDates[i - 1])">
+        <thead>
+          <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
+        </thead>
+        <tr v-for="(timing, index) in timings" :key="index">
+          <td v-for="pitch in pitches" :key="pitch.id">
+            <input
+              v-model="selectedTimeslots"
+              :value="
+                formatTimeslotObject(
+                  weekDates[i - 1],
+                  timing.time,
+                  timing.hours,
+                  pitch.id,
+                  pitch.name
+                )
+              "
+              type="checkbox"
+              class="calendar-checkbox"
+              :style="themeStyle"
+              :class="`span-${timing.hours}`"
+              :disabled="isBooked(timing, pitch.odoo_id)"
+            />
+          </td>
+        </tr>
+      </div>
     </table>
   </div>
 </template>
 
 <script>
-const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+import dayjs from '@/plugins/dayjs';
 
 export default {
   name: 'CalendarWeekly',
@@ -77,16 +79,13 @@ export default {
     },
     weekDates() {
       const dates = [];
-
       if (this.date === '') {
         return [];
       }
-
+      const selectedDate = dayjs.utc(this.date, 'DD/MM/YYYY');
       for (let i = -3; i <= 3; i += 1) {
-        const dateObject = this.toDateObject(this.date);
-        const shiftedDateObject = this.shiftDateByDays(dateObject, i);
-        const formattedDate = this.formatDateObject(shiftedDateObject, 'DD/MM/YY');
-        dates.push(formattedDate);
+        const newDate = selectedDate.add(i, 'day').format('DD/MM/YYYY');
+        dates.push(newDate);
       }
       return dates;
     },
@@ -104,16 +103,33 @@ export default {
     },
   },
   methods: {
-    toDateDisplayString(selectedDate) {
-      if (!selectedDate) {
+    isPast(date) {
+      const selectedDate = dayjs.utc(date, 'DD/MM/YYYY');
+      const today = dayjs.utc(new Date()).add(8, 'hour');
+      return selectedDate.isBefore(today, 'day');
+    },
+    filterPast(timings) {
+      if (!timings) {
+        return [];
+      }
+      const today = dayjs.utc(new Date()).add(8, 'hour');
+      const todayHour = today.utc().hour();
+      const selectedDay = dayjs.utc(this.date, 'DD/MM/YYYY');
+      const isDatePast = selectedDay.isBefore(today, 'day');
+      if (isDatePast) {
+        return [];
+      }
+      if (selectedDay.isSame(today, 'day')) {
+        const newTimings = timings.filter(t => parseInt(t.time.slice(0, 2), 10) > todayHour);
+        return newTimings;
+      }
+      return timings;
+    },
+    toDateDisplayString(dateStr) {
+      if (!dateStr) {
         return '';
       }
-      const [d, m, y] = selectedDate.split('/');
-      const dateObject = new Date(y, m - 1, d);
-      const day = weekdays[dateObject.getDay()];
-      const date = String(dateObject.getDate()).padStart(2, '0');
-      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-      return `${day}, ${date}/${month}`;
+      return dayjs.utc(dateStr, 'DD/MM/YYYY').format('ddd, DD/MM');
     },
     isBooked(time, pitchId) {
       return this.bookedSlots.find((slot) => {
@@ -124,90 +140,59 @@ export default {
       });
     },
     formatTimeslotObject(date, startTime, hours, pitchId, pitchName) {
-      const [d, m, y] = date.split('/');
-      const formattedDate = `${y}-${m}-${d}`;
-      let formattedEndDate = `${y}-${m}-${d}`;
+      const selDate = dayjs.utc(date, 'DD/MM/YYYY');
+      const startDate = selDate;
+      let endDate = selDate;
+
       let endTimeHour = String(parseInt(startTime.split(':')[0], 10) + hours);
       if (endTimeHour === '24') {
         endTimeHour = '0';
-        const nextDate = new Date(y, m - 1, d);
-        nextDate.setDate(nextDate.getDate() + 1);
-        formattedEndDate = this.formatDateObject(nextDate);
+        endDate = selDate.add(1, 'day');
       }
       return {
-        booking_start: `${formattedDate} ${startTime}:00`,
-        booking_end: `${formattedEndDate} ${
+        booking_start: `${startDate.format('YYYY-MM-DD')} ${startTime}:00`,
+        booking_end: `${endDate.format('YYYY-MM-DD')} ${
           endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour
         }:00:00`,
         pitchId,
         pitchName,
       };
     },
-    toDateObject(displayDate) {
-      const [day, month, year] = displayDate.split('/');
-      return new Date(year, month - 1, day);
-    },
-    formatDateObject(dateObject, format) {
-      const year = dateObject.getFullYear();
-      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObject.getDate()).padStart(2, '0');
-      switch (format) {
-        case 'DD/MM/YY':
-          return `${day}/${month}/${year}`;
-        case 'YY-MM-DD':
-          return `${year}-${month}-${day}`;
-        default:
-          return 'Invalid date format';
-      }
-    },
-    shiftDateByDays(dateObject, numDays) {
-      const newDateObject = new Date(dateObject.getTime());
-      newDateObject.setDate(newDateObject.getDate() + numDays);
-      return newDateObject;
-    },
     fetchBookedTimings(date) {
       if (!date) {
         return;
       }
-      const selDate = this.toDateObject(date);
-      const currDateTime = new Date();
-      const currDate = new Date(
-        currDateTime.getFullYear(),
-        currDateTime.getMonth(),
-        currDateTime.getDate(),
-      );
       let startDate;
-      const shiftDays = [-3, -2, -1, 0, 1, 2, 3];
-
-      const endDate = this.shiftDateByDays(selDate, 3);
-      if (endDate < currDate) {
+      const selDate = dayjs.utc(date).add(8, 'hour');
+      const currDate = dayjs.utc(new Date()).add(8, 'hour');
+      const endDate = selDate.add(3, 'day');
+      if (endDate.isBefore(selDate, 'day')) {
         return;
       }
-
-      for (let i = 0; i < shiftDays.length - 1; i += 1) {
-        const daysToShift = shiftDays[i];
-        startDate = this.shiftDateByDays(selDate, daysToShift);
-        if (startDate < currDate) {
-          startDate = null;
-        } else {
+      for (let i = -3; i <= 3; i += 1) {
+        startDate = selDate.add(i, 'day');
+        if (startDate.isAfter(currDate)) {
           break;
+        } else {
+          startDate = null;
         }
       }
-      if (startDate === null) {
+      if (!startDate) {
         return;
       }
       const payload = {
-        bookingDateStart: this.formatDateObject(startDate, 'YY-MM-DD'),
-        bookingDateEnd: this.formatDateObject(endDate, 'YY-MM-DD'),
+        bookingDateStart: startDate.format('YYYY-MM-DD'),
+        bookingDateEnd: endDate.format('YYYY-MM-DD'),
         fieldId: this.fieldId,
       };
       this.$axios.post('/calendar/week', payload).then((res) => {
         const bookedSlots = res.data;
+        const shiftDays = [-3, -2, -1, 0, 1, 2, 3];
         const bookedSlotsArray = [];
-        const datesArray = shiftDays.map(days => this.formatDateObject(this.shiftDateByDays(selDate, days), 'YY-MM-DD'));
         for (let i = 0; i < shiftDays.length; i += 1) {
           bookedSlotsArray.push([]);
         }
+        const datesArray = shiftDays.map(days => selDate.add(days, 'day'));
         bookedSlots.forEach((slot) => {
           const slotStartDate = slot.booking_start.split(' ')[0];
           const i = datesArray.findIndex(d => d === slotStartDate);

@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import dayjs from '@/plugins/dayjs';
+
 export default {
   name: 'CalendarDaily',
   data() {
@@ -61,19 +63,18 @@ export default {
       });
     },
     formatTimeslotObject(date, startTime, hours, pitchId, pitchName) {
-      const [d, m, y] = date.split('/');
-      const formattedDate = `${y}-${m}-${d}`;
-      let formattedEndDate = `${y}-${m}-${d}`;
+      const selDate = dayjs.utc(date, 'DD/MM/YYYY');
+      const startDate = selDate;
+      let endDate = selDate;
+
       let endTimeHour = String(parseInt(startTime.split(':')[0], 10) + hours);
       if (endTimeHour === '24') {
         endTimeHour = '0';
-        const nextDate = new Date(y, m - 1, d);
-        nextDate.setDate(nextDate.getDate() + 1);
-        formattedEndDate = this.formatDateObject(nextDate);
+        endDate = selDate.add(1, 'day');
       }
       return {
-        booking_start: `${formattedDate} ${startTime}:00`,
-        booking_end: `${formattedEndDate} ${
+        booking_start: `${startDate.format('YYYY-MM-DD')} ${startTime}:00`,
+        booking_end: `${endDate.format('YYYY-MM-DD')} ${
           endTimeHour < 10 ? `0${endTimeHour}` : endTimeHour
         }:00:00`,
         pitchId,
@@ -87,24 +88,21 @@ export default {
       return `${year}-${month}-${day}`;
     },
     filterPast(timings) {
-      const today = new Date();
-      const todayDate = String(today.getDate()).padStart(2, '0');
-      const todayMonth = String(today.getMonth() + 1).padStart(2, '0'); // +1 ??
-      const todayYear = today.getFullYear();
-      const todayDateObj = new Date(todayYear, todayMonth - 1, todayDate);
-      const [d, m, y] = this.date.split('/');
-      const selectedDateObj = new Date(y, m - 1, d);
-      if (todayDateObj > selectedDateObj) {
+      if (!timings) {
+        return timings;
+      }
+      const today = dayjs.utc(new Date()).add(8, 'hour');
+      const todayHour = today.utc().hour();
+      const selectedDay = dayjs.utc(this.date, 'DD/MM/YYYY');
+      const isDatePast = selectedDay.isBefore(today, 'day');
+      if (isDatePast) {
         return [];
       }
-
-      const todayDateString = `${todayDate}/${todayMonth}/${todayYear}`;
-      const currTime = today.getHours();
-      let newTimings;
-      if (todayDateString === this.date) {
-        newTimings = timings.filter(t => parseInt(t.time.slice(0, 2), 10) >= currTime);
+      if (selectedDay.isSame(today, 'day')) {
+        const newTimings = timings.filter(t => parseInt(t.time.slice(0, 2), 10) > todayHour);
         return newTimings;
       }
+
       return timings;
     },
   },
