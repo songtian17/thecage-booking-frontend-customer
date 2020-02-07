@@ -45,7 +45,7 @@
                 visibility: isTimePast(weekDates[i - 1], timing) ? 'hidden' : 'visible'
               }"
               :class="`span-${timing.hours}`"
-              :disabled="isBooked(timing, pitch.odoo_id)"
+              :disabled="isBooked(timing, pitch.odoo_id, i-1)"
             />
           </td>
         </tr>
@@ -144,8 +144,11 @@ export default {
       }
       return dayjs.utc(dateStr, 'DD/MM/YYYY').format('ddd, DD/MM');
     },
-    isBooked(time, pitchId) {
-      return this.bookedSlots.find((slot) => {
+    isBooked(time, pitchId, dayOfWeek) {
+      if (!this.bookedSlots.length) {
+        return false;
+      }
+      return this.bookedSlots[dayOfWeek].some((slot) => {
         const bookedPitch = slot.pitch_id === pitchId;
         const bookedTime = time.time >= slot.booking_start
           && (time.time < slot.booking_end || slot.booking_end === '00:00');
@@ -205,7 +208,7 @@ export default {
         for (let i = 0; i < shiftDays.length; i += 1) {
           bookedSlotsArray.push([]);
         }
-        const datesArray = shiftDays.map(days => selDate.add(days, 'day'));
+        const datesArray = shiftDays.map(days => selDate.add(days, 'day').format('YYYY-MM-DD'));
         bookedSlots.forEach((slot) => {
           const slotStartDate = slot.booking_start.split(' ')[0];
           const i = datesArray.findIndex(d => d === slotStartDate);
@@ -306,6 +309,10 @@ td {
     &:active {
       box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px 1px 3px rgba(0, 0, 0, 0.1);
     }
+  }
+
+  &:disabled {
+    background-color: #808080;
   }
 }
 
