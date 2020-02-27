@@ -5,9 +5,12 @@
         <td>P0</td>
       </thead>
       <tr v-for="(timing, index) in timings" :key="index">
-        <td :class="`span-${timing.hours}`" class="timing">{{ timing.time }}</td>
+        <td v-if="timing.hours <= 3" :class="`span-${timing.hours}`" class="timing">
+          {{ timing.time }}
+        </td>
         <td>
           <input
+            v-if="timing.hours <= 3"
             type="checkbox"
             class="calendar-checkbox"
             style="padding-left: 0; padding-right: 0;"
@@ -45,7 +48,7 @@
                 visibility: isTimePast(weekDates[i - 1], timing) ? 'hidden' : 'visible'
               }"
               :class="`span-${timing.hours}`"
-              :disabled="isBooked(timing, pitch.odoo_id, i-1)"
+              :disabled="isBooked(timing, pitch.odoo_id, i - 1)"
             />
           </td>
         </tr>

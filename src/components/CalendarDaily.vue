@@ -9,6 +9,7 @@
         <td class="timing">{{ timing.time }}</td>
         <td v-for="pitch in pitches" :key="pitch.id">
           <input
+            v-if="timing.hours <= 3"
             v-model="selectedTimeslots"
             :value="formatTimeslotObject(date, timing.time, timing.hours, pitch.id, pitch.name)"
             :class="`span-${timing.hours}`"
