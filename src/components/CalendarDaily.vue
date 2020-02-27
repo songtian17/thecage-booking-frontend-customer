@@ -6,7 +6,7 @@
         <td v-for="pitch in pitches" :key="pitch.id">{{ pitch.name }}</td>
       </thead>
       <tr v-for="(timing, index) in filterPast(timings)" :key="index">
-        <td class="timing">{{ timing.time }}</td>
+        <td v-if="timing.hours <= 3" class="timing">{{ timing.time }}</td>
         <td v-for="pitch in pitches" :key="pitch.id">
           <input
             v-if="timing.hours <= 3"
