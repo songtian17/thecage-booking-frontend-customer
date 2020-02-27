@@ -28,11 +28,18 @@
         </span>
       </div>
     </template>
-    <v-date-picker v-model="date" class="datepicker" @input="menu = false"></v-date-picker>
+    <v-date-picker
+      v-model="date"
+      class="datepicker"
+      :allowed-dates="allowedDates"
+      @input="menu = false"
+    ></v-date-picker>
   </v-menu>
 </template>
 
 <script>
+import dayjs from '@/plugins/dayjs';
+
 export default {
   name: 'CalendarDatePicker',
   data() {
@@ -41,42 +48,42 @@ export default {
       menu: false,
       date: '',
       selectedDate: '',
+      today: '',
     };
   },
   watch: {
     date() {
-      this.selectedDate = this.formatDatePickerDate(this.date);
+      this.selectedDate = dayjs.utc(this.date, 'YYYY-MM-DD').format('DD/MM/YYYY');
     },
     selectedDate() {
       this.$emit('change', this.selectedDate);
     },
   },
   methods: {
-    formatDatePickerDate(date) {
-      const [year, month, day] = date.split('-');
-      return `${day}/${month}/${year}`;
-    },
-    formatDateObject(dateObject) {
-      const year = dateObject.getFullYear();
-      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-      const day = String(dateObject.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    },
     selectNextDay() {
-      const [currentDay, currentMonth, currentYear] = this.selectedDate.split('/');
-      const currentDate = new Date(currentYear, currentMonth - 1, currentDay);
-      currentDate.setDate(currentDate.getDate() + 1);
-      this.date = this.formatDateObject(currentDate);
+      const selDate = dayjs.utc(this.selectedDate, 'DD/MM/YYYY');
+      const nextDate = selDate.add(1, 'day');
+      if (!nextDate.subtract(60 - 3, 'day').isBefore(this.today, 'day')) {
+        return;
+      }
+      this.date = nextDate.format('YYYY-MM-DD');
     },
     selectPrevDay() {
-      const [currentDay, currentMonth, currentYear] = this.selectedDate.split('/');
-      const currentDate = new Date(currentYear, currentMonth - 1, currentDay);
-      currentDate.setDate(currentDate.getDate() - 1);
-      this.date = this.formatDateObject(currentDate);
+      const selDate = dayjs.utc(this.selectedDate, 'DD/MM/YYYY');
+      const prevDate = selDate.subtract(1, 'day');
+      if (prevDate.isBefore(this.today, 'day')) {
+        return;
+      }
+      this.date = prevDate.format('YYYY-MM-DD');
+    },
+    allowedDates(val) {
+      const selDate = dayjs.utc(val, 'YYYY-MM-DD');
+      return selDate.subtract(60 - 3, 'day').isBefore(this.today, 'day') && selDate.isAfter(this.today.subtract(1, 'day'), 'day');
     },
   },
   mounted() {
-    this.date = this.formatDateObject(new Date());
+    this.today = dayjs.utc().add(8, 'hour');
+    this.date = dayjs.utc().add(8, 'hour').format('YYYY-MM-DD');
   },
 };
 </script>
